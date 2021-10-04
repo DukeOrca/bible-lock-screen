@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">성경 잠금화면</string>
+    <string name="allow">허용</string>
+    <string name="allow_appear_on_top_permission">다른 앱 위에 표시 권한을 허용하세요.</string>
+    <string name="appear_on_top">다른 앱 위에 표시</string>
+    <string name="bible">성경</string>
+    <string name="bible_lock_screen_is_running">성경 잠금화면이 실행 중입니다.</string>
+    <string name="colon">:</string>
+    <string name="copy">복사</string>
+    <string name="dark_mode">다크 모드</string>
+    <string name="deny">거부</string>
+    <string name="display">디스플레이</string>
+    <string name="display_after_unlocking">잠금 해제 후 표시</string>
+    <string name="drag_to_unlock">드래그해서 잠금 해제</string>
+    <string name="draw_unlock_pattern">잠금 해제 패턴을 그리세요.</string>
+    <string name="enter_password_or_pin">비밀번호 또는 PIN을 입력하세요.</string>
+    <string name="enter_two_or_more_characters">두 글자 이상 입력하세요.</string>
+    <string name="enter_your_search_term">검색어를 입력하세요.</string>
+    <string name="favorites">즐겨찾기</string>
+    <string name="format_12_hour">h:mm</string>
+    <string name="format_date">M월 d일 EEEE</string>
+    <string name="no_results_found">검색 결과가 없습니다.</string>
+    <string name="request_app_permissions">앱 권한 요청</string>
+    <string name="search">검색</string>
+    <string name="share">공유</string>
+
+    <string name="blind_screen_000">보안정책에 따라 홈 버튼으로 잠금 해제할 수 없습니다.</string>
+    <string name="fragment_permission_rationale_dialog_000">앱의 모든 기능을 사용하려면 다음 권한을 허용해야 합니다.</string>
+</resources>

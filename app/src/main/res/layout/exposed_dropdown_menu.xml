@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/height_exposed_dropdown_menu"
+    app:boxBackgroundColor="#40000000"
+    app:boxCornerRadiusBottomEnd="0dp"
+    app:boxCornerRadiusBottomStart="@dimen/box_corner_radius_bottom_end"
+    app:boxCornerRadiusTopEnd="0dp"
+    app:boxCornerRadiusTopStart="@dimen/box_corner_radius_top_start"
+    app:boxStrokeColor="@color/white"
+    app:boxStrokeWidth="0dp"
+    app:endIconTint="@color/white"
+    app:hintEnabled="false" >
+
+    <AutoCompleteTextView
+        android:id="@+id/auto_complete_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/negative_padding_8dp"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:fontFamily="@font/font_family_nanum_myeongjo"
+        android:gravity="center_vertical"
+        android:inputType="none"
+        android:maxLines="1"
+        android:paddingBottom="0dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="@dimen/padding_12dp"
+        android:paddingTop="0dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_14dp"
+        android:textStyle="bold"
+        tools:ignore="LabelFor"
+        tools:text="데살로니가후서"/>
+
+</com.google.android.material.textfield.TextInputLayout>

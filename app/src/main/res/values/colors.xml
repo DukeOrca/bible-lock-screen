@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Text legibility
+         https://material.io/design/color/text-legibility.html#color-theme-creation -->
+
+    <color name="primary">@color/deep_purple_400</color>
+    <color name="primary_variant">#4d2c91</color>
+    <color name="secondary">@color/light_blue_400</color>
+    <color name="secondary_variant">#0086c3</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="dark_grey">#121212</color>
+
+    <color name="background">@color/white</color>
+    <color name="background2">@color/grey_50</color>
+    <color name="on_background">@color/dark_grey</color>
+    <color name="surface">@color/white</color>
+    <color name="surface2">#99121212</color>
+
+    <color name="high_emphasis">#DE000000</color>
+    <color name="medium_emphasis">#99000000</color>
+    <color name="disabled">#61000000</color>
+
+    <color name="active">#DE000000</color>
+    <color name="inactive">#99000000</color>
+
+    <color name="helper_text">#99000000</color>
+    <color name="error_text">#B00020</color>
+
+    <color name="accent">@color/light_blue_400</color>
+
+    <color name="card_background">#99121212</color>
+
+    <color name="grey_50">#fafafa</color>
+
+    <color name="yellow_A_200">#FFFF00</color>
+
+    <color name="pink_300">#f06292</color>
+    <color name="purple_300">#ba68c8</color>
+    <color name="deep_purple_300">#9575cd</color>
+    <color name="cyan_300">#26c6da</color>
+    <color name="green_300">#81c784</color>
+    <color name="yellow_300">#fff176</color>
+    <color name="grey_300">#e0e0e0</color>
+
+    <color name="red_400">#ef5350</color>
+    <color name="pink_400">#ec407a</color>
+    <color name="purple_400">#ab47bc</color>
+    <color name="deep_purple_400">#7e57c2</color>
+    <color name="indigo_400">#5c6bc0</color>
+    <color name="blue_400">#42a5f5</color>
+    <color name="light_blue_400">#29b6f6</color>
+    <color name="cyan_400">#26c6da</color>
+    <color name="teal_400">#26a69a</color>
+    <color name="green_400">#66bb6a</color>
+    <color name="light_green_400">#9ccc65</color>
+    <color name="lime_400">#d4e157</color>
+    <color name="yellow_400">#ffee58</color>
+    <color name="amber_400">#ffca28</color>
+    <color name="orange_400">#ffa726</color>
+    <color name="deep_orange_400">#ff7043</color>
+    <color name="brown_400">#8d6e63</color>
+    <color name="grey_400">#bdbdbd</color>
+    <color name="blue_grey_400">#78909c</color>
+
+    <color name="deep_purple_500">#673ab7</color>
+    <color name="green_500">#4caf50</color>
+
+    <color name="deep_purple_700">#512da8</color>
+    <color name="green_700">#388e3c</color>
+
+    <color name="divider">#1F000000</color>
+    <color name="hint_text">#99FFFFFF</color>
+    <color name="icon">@color/medium_emphasis</color>
+    <color name="nothing_found">#61000000</color>
+    <color name="notification">@color/primary</color>
+    <color name="shadow">@color/dark_grey</color>
+    <color name="space">#1F000000</color>
+    <color name="system_ui">#40000000</color>
+    <color name="system_ui2">@color/primary_variant</color>
+    <color name="text">@color/high_emphasis</color>
+    <color name="title_text">@color/white</color>
+    <color name="toolbar">@color/primary</color>
+
+    <color name="like">@color/pink_300</color>
+    <color name="unlike">#61FFFFFF</color>
+    <color name="circle_end">@color/pink_300</color>
+    <color name="circle_start">@color/yellow_300</color>
+    <color name="dots_primary">@color/pink_300</color>
+    <color name="dots_secondary">@color/yellow_300</color>
+
+    <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
+</resources>

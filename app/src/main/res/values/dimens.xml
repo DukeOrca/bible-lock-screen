@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Component elevation values
+         1. Nav drawer: 16dp
+         2. App bar: 4dp
+         3. Card: 1dp to 8dp
+         4. FAB: 6dp
+         5. Button: 2dp to 8dp
+         6. Dialog: 24dp -->
+
+    <dimen name="elevation_1dp">1dp</dimen>
+    <dimen name="elevation_2dp">2dp</dimen>
+    <dimen name="elevation_3dp">3dp</dimen>
+    <dimen name="elevation_4dp">4dp</dimen>
+    <dimen name="elevation_5dp">5dp</dimen>
+    <dimen name="elevation_6dp">6dp</dimen>
+    <dimen name="elevation_7dp">7dp</dimen>
+    <dimen name="elevation_8dp">8dp</dimen>
+    <dimen name="elevation_16dp">16dp</dimen>
+    <dimen name="elevation_24dp">24dp</dimen>
+
+    <dimen name="height_0dp">0dp</dimen>
+    <dimen name="height_1dp">1dp</dimen>
+    <dimen name="height_2dp">2dp</dimen>
+    <dimen name="height_3dp">3dp</dimen>
+
+    <dimen name="height_4dp">4dp</dimen>
+    <dimen name="height_8dp">8dp</dimen>
+    <dimen name="height_12dp">12dp</dimen>
+    <dimen name="height_16dp">16dp</dimen>
+    <dimen name="height_20dp">20dp</dimen>
+    <dimen name="height_24dp">24dp</dimen>
+    <dimen name="height_28dp">28dp</dimen>
+    <dimen name="height_32dp">32dp</dimen>
+    <dimen name="height_36dp">36dp</dimen>
+    <dimen name="height_40dp">40dp</dimen>
+    <dimen name="height_44dp">44dp</dimen>
+    <dimen name="height_48dp">48dp</dimen>
+    <dimen name="height_52dp">52dp</dimen>
+    <dimen name="height_56dp">56dp</dimen>
+    <dimen name="height_60dp">60dp</dimen>
+    <dimen name="height_64dp">64dp</dimen>
+    <dimen name="height_68dp">68dp</dimen>
+    <dimen name="height_72dp">72dp</dimen>
+    <dimen name="height_76dp">76dp</dimen>
+    <dimen name="height_80dp">80dp</dimen>
+
+    <dimen name="height_88dp">88dp</dimen>
+    <dimen name="height_96dp">96dp</dimen>
+    <dimen name="height_104dp">104dp</dimen>
+    <dimen name="height_112dp">112dp</dimen>
+    <dimen name="height_120dp">120dp</dimen>
+    <dimen name="height_128dp">128dp</dimen>
+
+    <dimen name="height_144dp">144dp</dimen>
+    <dimen name="height_160dp">160dp</dimen>
+    <dimen name="height_176dp">176dp</dimen>
+    <dimen name="height_192dp">192dp</dimen>
+    <dimen name="height_208dp">208dp</dimen>
+    <dimen name="height_224dp">224dp</dimen>
+    <dimen name="height_240dp">240dp</dimen>
+    <dimen name="height_256dp">256dp</dimen>
+
+    <dimen name="height_288dp">288dp</dimen>
+    <dimen name="height_320dp">320dp</dimen>
+
+    <dimen name="height_exposed_dropdown_menu">@dimen/height_36dp</dimen>
+    <dimen name="height_status_bar">@dimen/height_24dp</dimen>
+
+    <dimen name="margin_0dp">0dp</dimen>
+    <dimen name="margin_1dp">1dp</dimen>
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_3dp">3dp</dimen>
+
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="margin_8dp">8dp</dimen>
+    <dimen name="margin_12dp">12dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_28dp">28dp</dimen>
+    <dimen name="margin_32dp">32dp</dimen>
+    <dimen name="margin_36dp">36dp</dimen>
+    <dimen name="margin_40dp">40dp</dimen>
+    <dimen name="margin_44dp">44dp</dimen>
+    <dimen name="margin_48dp">48dp</dimen>
+    <dimen name="margin_52dp">52dp</dimen>
+    <dimen name="margin_56dp">56dp</dimen>
+    <dimen name="margin_60dp">60dp</dimen>
+    <dimen name="margin_64dp">64dp</dimen>
+    <dimen name="margin_68dp">68dp</dimen>
+    <dimen name="margin_72dp">72dp</dimen>
+    <dimen name="margin_76dp">76dp</dimen>
+    <dimen name="margin_80dp">80dp</dimen>
+
+    <dimen name="margin_88dp">88dp</dimen>
+    <dimen name="margin_96dp">96dp</dimen>
+    <dimen name="margin_104dp">104dp</dimen>
+    <dimen name="margin_112dp">112dp</dimen>
+    <dimen name="margin_120dp">120dp</dimen>
+    <dimen name="margin_128dp">128dp</dimen>
+
+    <dimen name="margin_144dp">144dp</dimen>
+    <dimen name="margin_160dp">160dp</dimen>
+    <dimen name="margin_176dp">176dp</dimen>
+    <dimen name="margin_192dp">192dp</dimen>
+    <dimen name="margin_208dp">208dp</dimen>
+    <dimen name="margin_224dp">224dp</dimen>
+    <dimen name="margin_240dp">240dp</dimen>
+    <dimen name="margin_256dp">256dp</dimen>
+
+    <dimen name="padding_0dp">0dp</dimen>
+    <dimen name="padding_1dp">1dp</dimen>
+    <dimen name="padding_2dp">2dp</dimen>
+    <dimen name="padding_3dp">3dp</dimen>
+
+    <dimen name="padding_4dp">4dp</dimen>
+    <dimen name="padding_8dp">8dp</dimen>
+    <dimen name="padding_12dp">12dp</dimen>
+    <dimen name="padding_16dp">16dp</dimen>
+    <dimen name="padding_20dp">20dp</dimen>
+    <dimen name="padding_24dp">24dp</dimen>
+    <dimen name="padding_28dp">28dp</dimen>
+    <dimen name="padding_32dp">32dp</dimen>
+    <dimen name="padding_36dp">36dp</dimen>
+    <dimen name="padding_40dp">40dp</dimen>
+    <dimen name="padding_44dp">44dp</dimen>
+    <dimen name="padding_48dp">48dp</dimen>
+    <dimen name="padding_52dp">52dp</dimen>
+    <dimen name="padding_56dp">56dp</dimen>
+    <dimen name="padding_60dp">60dp</dimen>
+    <dimen name="padding_64dp">64dp</dimen>
+    <dimen name="padding_68dp">68dp</dimen>
+    <dimen name="padding_72dp">72dp</dimen>
+    <dimen name="padding_76dp">76dp</dimen>
+    <dimen name="padding_80dp">80dp</dimen>
+
+    <dimen name="negative_padding_8dp">-8dp</dimen>
+
+    <dimen name="width_0dp">0dp</dimen>
+    <dimen name="width_1dp">1dp</dimen>
+    <dimen name="width_2dp">2dp</dimen>
+    <dimen name="width_3dp">3dp</dimen>
+
+    <dimen name="width_4dp">4dp</dimen>
+    <dimen name="width_8dp">8dp</dimen>
+    <dimen name="width_12dp">12dp</dimen>
+    <dimen name="width_16dp">16dp</dimen>
+    <dimen name="width_20dp">20dp</dimen>
+    <dimen name="width_24dp">24dp</dimen>
+    <dimen name="width_28dp">28dp</dimen>
+    <dimen name="width_32dp">32dp</dimen>
+    <dimen name="width_36dp">36dp</dimen>
+    <dimen name="width_40dp">40dp</dimen>
+    <dimen name="width_44dp">44dp</dimen>
+    <dimen name="width_48dp">48dp</dimen>
+    <dimen name="width_52dp">52dp</dimen>
+    <dimen name="width_56dp">56dp</dimen>
+    <dimen name="width_60dp">60dp</dimen>
+    <dimen name="width_64dp">64dp</dimen>
+    <dimen name="width_68dp">68dp</dimen>
+    <dimen name="width_72dp">72dp</dimen>
+    <dimen name="width_76dp">76dp</dimen>
+    <dimen name="width_80dp">80dp</dimen>
+
+    <dimen name="width_88dp">88dp</dimen>
+    <dimen name="width_96dp">96dp</dimen>
+    <dimen name="width_104dp">104dp</dimen>
+    <dimen name="width_112dp">112dp</dimen>
+    <dimen name="width_120dp">120dp</dimen>
+    <dimen name="width_128dp">128dp</dimen>
+
+    <dimen name="width_144dp">144dp</dimen>
+    <dimen name="width_160dp">160dp</dimen>
+    <dimen name="width_176dp">176dp</dimen>
+    <dimen name="width_192dp">192dp</dimen>
+    <dimen name="width_208dp">208dp</dimen>
+    <dimen name="width_224dp">224dp</dimen>
+    <dimen name="width_240dp">240dp</dimen>
+    <dimen name="width_256dp">256dp</dimen>
+
+    <dimen name="text_size_12dp">12dp</dimen>
+    <dimen name="text_size_14dp">14dp</dimen>
+    <dimen name="text_size_16dp">16dp</dimen>
+    <dimen name="text_size_20dp">20dp</dimen>
+    <dimen name="text_size_24dp">24dp</dimen>
+
+    <dimen name="radius_4dp">4dp</dimen>
+    <dimen name="radius_8dp">8dp</dimen>
+    <dimen name="radius_16dp">16dp</dimen>
+
+    <dimen name="box_corner_radius_bottom_end">@dimen/radius_8dp</dimen>
+    <dimen name="box_corner_radius_bottom_start">@dimen/radius_8dp</dimen>
+    <dimen name="box_corner_radius_top_end">@dimen/radius_8dp</dimen>
+    <dimen name="box_corner_radius_top_start">@dimen/radius_8dp</dimen>
+    <dimen name="card_radius">@dimen/radius_8dp</dimen>
+    <dimen name="corner_radius">@dimen/radius_8dp</dimen>
+
+    <item name="line_spacing_multiplier" format="float" type="dimen">1.15</item>
+    <item name="shadow_dx" format="float" type="dimen">1.0</item>
+    <item name="shadow_dy" format="float" type="dimen">1.0</item>
+    <item name="shadow_radius" format="float" type="dimen">1.0</item>
+</resources>
