@@ -33,8 +33,8 @@ import kotlinx.coroutines.withContext
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
-import android.view.MenuInflater
 import androidx.drawerlayout.widget.DrawerLayout
+import com.duke.orca.android.kotlin.biblelockscreen.settings.views.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 
 
@@ -127,6 +127,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             R.id.item_bible -> {
 
             }
+            R.id.item_settings -> addFragment(SettingsFragment())
         }
 
         return true

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -33,6 +34,10 @@ import java.util.*
 class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBinding>(),
     BibleVerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
+    override val changeSystemUiColor: Boolean = true
+    override val onAnimationEnd: ((enter: Boolean) -> Unit)? = null
+    override val toolbar: Toolbar? = null
+
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -56,16 +61,6 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
         bind()
 
         return viewBinding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        activityViewModel.setSystemUiColor()
-    }
-
-    override fun onStop() {
-        activityViewModel.revertSystemUiColor()
-        super.onStop()
     }
 
     private fun observe() {

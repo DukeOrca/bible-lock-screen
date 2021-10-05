@@ -3,9 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_round_dark_mode_24.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable-v24/ic_round_keyboard_arrow_up_24.xml" value="0.10208333333333333" />
         <entry key="app/src/main/res/drawable-v24/ripple_unlock.xml" value="0.13229166666666667" />
         <entry key="app/src/main/res/drawable/ic_like_24.xml" value="0.14895833333333333" />
+        <entry key="app/src/main/res/drawable/ic_round_dark_mode_24.xml" value="0.25833333333333336" />
+        <entry key="app/src/main/res/drawable/ic_round_format_size_24.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable/ic_round_menu_24.xml" value="0.16458333333333333" />
         <entry key="app/src/main/res/drawable/ic_unlike_24.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/drawable/oval_stroke.xml" value="0.11018518518518519" />

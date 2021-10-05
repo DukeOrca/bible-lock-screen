@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -17,11 +18,22 @@ import com.duke.orca.android.kotlin.biblelockscreen.bibleverses.share
 import com.duke.orca.android.kotlin.biblelockscreen.bibleverses.viewmodel.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     BibleVerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
+    override val changeSystemUiColor: Boolean = true
+    override val onAnimationEnd: ((enter: Boolean) -> Unit)
+        get() = { enter ->
+            if (enter) {
+                observe()
+            }
+        }
+
+    override val toolbar: Toolbar by lazy { viewBinding.toolbar }
+
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -32,6 +44,7 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     private val viewModel by viewModels<FavoritesViewModel>()
     private val bibleVerseAdapter by lazy { BibleVerseAdapter(activityViewModel.books) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
+    private val isLayoutAnimationScheduled = AtomicBoolean(false)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +53,6 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         viewModel.getFavorites()
-        observe()
         bind()
 
         return viewBinding.root
@@ -48,16 +60,16 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
 
     private fun observe() {
         viewModel.adapterItems.observe(viewLifecycleOwner, {
+            if (isLayoutAnimationScheduled.compareAndSet(false, true)) {
+                viewBinding.recyclerView.scheduleLayoutAnimation()
+            }
+
             bibleVerseAdapter.submitList(it)
         })
     }
 
     private fun bind() {
         bibleVerseAdapter.setOnIconClickListener(this)
-
-        viewBinding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
 
         viewBinding.recyclerView.apply {
             adapter = bibleVerseAdapter
