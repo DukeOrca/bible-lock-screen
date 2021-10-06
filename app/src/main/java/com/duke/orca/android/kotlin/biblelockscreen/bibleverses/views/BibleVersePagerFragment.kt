@@ -37,7 +37,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 
-
 @AndroidEntryPoint
 @RequireDeviceCredential
 class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
@@ -192,12 +191,12 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         }
 
         viewBinding.viewPager2.adapter = bibleVersePagerAdapter
-        viewBinding.viewPager2.offscreenPageLimit = 5
+        viewBinding.viewPager2.offscreenPageLimit = 2
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
         viewBinding.viewPager2.setPageTransformer(PageTransformer(
-            resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat()
+            resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(),
+            false
         ))
-
         viewBinding.viewPager2.setCurrentItem(DataStore.BibleVerse.getCurrentItem(requireContext()), false)
 
         viewBinding.linearLayoutUnlock.setOnTouchListener { _, event ->
@@ -205,6 +204,11 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 MotionEvent.ACTION_DOWN -> {
                     Unlock.x = event.x
                     Unlock.y = event.y
+
+                    viewBinding.viewPager2.setPageTransformer(PageTransformer(
+                        resources.getDimensionPixelOffset(R.dimen.margin_16dp).toFloat(),
+                        true
+                    ))
                 }
                 MotionEvent.ACTION_MOVE -> {
                     viewBinding.frameLayoutUnlock.showRipple()
@@ -357,7 +361,16 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     private fun restoreVisibility() {
         viewBinding.frameLayoutUnlock.hideRipple()
         viewBinding.imageViewUnlock.scale(1.0F, duration)
-        viewBinding.linearLayout.scale(1.0F, duration)
+        viewBinding.linearLayout.scale(1.0F, duration) {
+            with(viewBinding.linearLayout) {
+                if (scaleX == 1.0F && scaleY == 1.0F) {
+                    viewBinding.viewPager2.setPageTransformer(PageTransformer(
+                        resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(),
+                        true
+                    ))
+                }
+            }
+        }
     }
 
     companion object {

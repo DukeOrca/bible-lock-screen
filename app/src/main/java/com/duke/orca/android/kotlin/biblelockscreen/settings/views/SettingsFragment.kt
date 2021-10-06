@@ -6,19 +6,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
-import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
 
 class SettingsFragment : PreferenceFragment() {
     override val changeSystemUiColor: Boolean = true
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.settings
+
+    private var onBackPressedTimeMillis = 0L
+
+    private val onBackPressedCallback by lazy {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - onBackPressedTimeMillis >= Duration.MEDIUM) {
+                    onBackPressedTimeMillis = System.currentTimeMillis()
+                    parentFragmentManager.popBackStackImmediate()
+                }
+            }
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,6 +50,11 @@ class SettingsFragment : PreferenceFragment() {
         bind()
 
         return viewBinding.root
+    }
+
+    override fun onDetach() {
+        onBackPressedCallback.remove()
+        super.onDetach()
     }
 
     private fun initData() {

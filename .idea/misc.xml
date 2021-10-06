@@ -26,7 +26,7 @@
         <entry key="app/src/main/res/layout/exposed_dropdown_menu3.xml" value="1.0" />
         <entry key="app/src/main/res/layout/fragment_base_list_dialog.xml" value="0.16847826086956522" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.125" />
+        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_verses.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />

@@ -186,7 +186,7 @@ fun View.rotate(
         .start()
 }
 
-fun View.scale(scale: Float, duration: Number = 150, alpha: Float = 1F) {
+fun View.scale(scale: Float, duration: Number = 150, alpha: Float = 1F, onAnimationEnd: (() -> Unit)? = null) {
     show()
 
     this.animate()
@@ -194,6 +194,12 @@ fun View.scale(scale: Float, duration: Number = 150, alpha: Float = 1F) {
         .scaleY(scale)
         .alpha(alpha)
         .setDuration(duration.toLong())
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                onAnimationEnd?.invoke()
+                super.onAnimationEnd(animation)
+            }
+        })
         .start()
 }
 
