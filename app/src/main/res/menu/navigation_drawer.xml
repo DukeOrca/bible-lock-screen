@@ -23,4 +23,19 @@
             android:icon="@drawable/ic_round_settings_24"
             android:title="@string/settings" />
     </group>
+
+    <group
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/item_lock_screen"
+            android:icon="@drawable/ic_round_screen_lock_portrait_24"
+            android:title="@string/lock_setting" />
+
+        <item
+            android:id="@+id/item_font"
+            android:icon="@drawable/ic_typography_48px"
+            android:title="@string/font_setting" />
+
+    </group>
 </menu>

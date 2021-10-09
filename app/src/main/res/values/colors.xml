@@ -14,6 +14,7 @@
     <color name="dark_grey">#121212</color>
 
     <color name="background">@color/white</color>
+    <color name="background_translucent">#40000000</color>
     <color name="background2">@color/grey_50</color>
     <color name="on_background">@color/dark_grey</color>
     <color name="surface">@color/white</color>
@@ -78,8 +79,7 @@
     <color name="notification">@color/primary</color>
     <color name="shadow">@color/dark_grey</color>
     <color name="space">#1F000000</color>
-    <color name="system_ui">#40000000</color>
-    <color name="system_ui2">@color/primary_variant</color>
+    <color name="system_ui">@color/primary_variant</color>
     <color name="text">@color/high_emphasis</color>
     <color name="title_text">@color/white</color>
     <color name="toolbar">@color/primary</color>
@@ -90,6 +90,9 @@
     <color name="circle_start">@color/yellow_300</color>
     <color name="dots_primary">@color/pink_300</color>
     <color name="dots_secondary">@color/yellow_300</color>
+
+    <color name="bookmarked">@color/secondary</color>
+    <color name="unbookmarked">#61FFFFFF</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
 </resources>

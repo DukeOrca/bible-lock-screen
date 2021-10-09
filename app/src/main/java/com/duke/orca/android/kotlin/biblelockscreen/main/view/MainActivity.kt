@@ -9,14 +9,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.SystemUiColorAction
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.LockScreenActivity
-import com.duke.orca.android.kotlin.biblelockscreen.bibleverses.views.BibleVersePagerFragment
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
 import com.duke.orca.android.kotlin.biblelockscreen.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
@@ -33,6 +32,15 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        savedInstanceState?.let {
+            val systemUiColor = it.getInt(Key.SYSTEM_UI_COLOR)
+
+            with(window) {
+                statusBarColor = systemUiColor
+                navigationBarColor = systemUiColor
+            }
+        }
+
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
             PermissionRationaleDialogFragment().also {
                 it.show(supportFragmentManager, it.tag)
@@ -40,10 +48,6 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
         }
 
         startService()
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container_view, BibleVersePagerFragment())
-            .commit()
 
         viewModel.systemUiColorChanged.observe(this, {
             when(it) {
@@ -55,9 +59,14 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(Key.SYSTEM_UI_COLOR, window.statusBarColor)
+    }
+
     private fun setSystemUiColor() {
-        val startValue = ContextCompat.getColor(this, R.color.system_ui)
-        val endValue = ContextCompat.getColor(this, R.color.system_ui2)
+        val startValue = ContextCompat.getColor(this, R.color.background_translucent)
+        val endValue = ContextCompat.getColor(this, R.color.system_ui)
 
         if (window.statusBarColor == endValue) return
 
@@ -78,8 +87,8 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
     }
 
     private fun revertSystemUiColor() {
-        val startValue = ContextCompat.getColor(this, R.color.system_ui2)
-        val endValue = ContextCompat.getColor(this, R.color.system_ui)
+        val startValue = ContextCompat.getColor(this, R.color.system_ui)
+        val endValue = ContextCompat.getColor(this, R.color.background_translucent)
 
         if (window.statusBarColor == endValue) return
 
@@ -156,6 +165,14 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
                     handler?.postDelayed(this, Duration.LONG)
                 }
             }, Duration.LONG)
+        }
+    }
+
+    companion object {
+        private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.main.view"
+
+        object Key {
+            const val SYSTEM_UI_COLOR = "$PACKAGE_NAME.Key.SYSTEM_UI_COLOR"
         }
     }
 }

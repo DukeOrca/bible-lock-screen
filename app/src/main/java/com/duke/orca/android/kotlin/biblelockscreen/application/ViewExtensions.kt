@@ -1,22 +1,24 @@
 package com.duke.orca.android.kotlin.biblelockscreen.application
 
+import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.graphics.PorterDuff
 import android.graphics.drawable.RippleDrawable
 import android.os.Handler
 import android.os.Looper
 import android.text.Html
 import android.view.View
 import android.view.View.MeasureSpec
+import android.view.ViewPropertyAnimator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Transformation
-import android.widget.CheckBox
-import android.widget.FrameLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
 
 fun FrameLayout.animateRipple() {
@@ -186,10 +188,15 @@ fun View.rotate(
         .start()
 }
 
-fun View.scale(scale: Float, duration: Number = 150, alpha: Float = 1F, onAnimationEnd: (() -> Unit)? = null) {
+fun View.scale(
+    scale: Float,
+    duration: Number = 150,
+    alpha: Float = 1F,
+    onAnimationEnd: (() -> Unit)? = null
+): ViewPropertyAnimator {
     show()
 
-    this.animate()
+    val viewPropertyAnimator = this.animate()
         .scaleX(scale)
         .scaleY(scale)
         .alpha(alpha)
@@ -200,7 +207,10 @@ fun View.scale(scale: Float, duration: Number = 150, alpha: Float = 1F, onAnimat
                 super.onAnimationEnd(animation)
             }
         })
-        .start()
+
+    viewPropertyAnimator.start()
+
+    return viewPropertyAnimator
 }
 
 fun View.hide(invisible: Boolean = false) {
@@ -286,14 +296,19 @@ fun View.setBackgroundTint(@ColorRes id: Int) {
     backgroundTintList = ContextCompat.getColorStateList(this.context, id)
 }
 
+fun ImageView.setTint(@ColorRes id: Int) {
+    setColorFilter(ContextCompat.getColor(context, id), PorterDuff.Mode.SRC_IN)
+}
+
 fun CheckBox.setButtonTint(@ColorRes id: Int) {
     buttonTintList = ContextCompat.getColorStateList(this.context, id)
 }
 
-fun TextView.setText(
+fun TextView.setTextWithSearchWord(
     text: String,
     searchWord: String,
-    @ColorInt color: Int?) {
+    @ColorInt color: Int?
+) {
     if (color == null) {
         this.text = text
         return
@@ -315,4 +330,16 @@ fun TextView.setText(
         @Suppress("DEPRECATION")
         this.text = Html.fromHtml(htmlText)
     }
+}
+
+fun AutoCompleteTextView.setIntegerArrayAdapter(itemCount: Int, @LayoutRes layoutRes: Int) {
+    val intRange = 1..itemCount
+
+    setAdapter(
+        ArrayAdapter(
+            context,
+            layoutRes,
+            intRange.map { it.toString() }
+        )
+    )
 }

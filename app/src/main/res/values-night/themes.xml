@@ -10,8 +10,8 @@
         <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:navigationBarColor">@color/system_ui</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
+        <item name="android:navigationBarColor">@color/background_translucent</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/background_translucent</item>
         <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>

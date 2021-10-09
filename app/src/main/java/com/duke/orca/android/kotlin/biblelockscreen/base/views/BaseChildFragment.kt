@@ -22,7 +22,6 @@ abstract class BaseChildFragment<VB: ViewBinding> : BaseFragment<VB>() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
         toolbar?.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }

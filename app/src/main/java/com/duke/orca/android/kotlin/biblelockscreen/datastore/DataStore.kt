@@ -44,7 +44,8 @@ object DataStore {
     }
 
     object Display {
-        fun getFontSize(context: Context) = getFloat(context, PreferencesKeys.Display.fontSize, 16F)
+        const val DEFAULT_FONT_SIZE = 16.0F
+        fun getFontSize(context: Context) = getFloat(context, PreferencesKeys.Display.fontSize, DEFAULT_FONT_SIZE)
         fun isDarkMode(context: Context): Boolean {
             val defValue = when(context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
                 AppCompatDelegate.MODE_NIGHT_YES, Configuration.UI_MODE_NIGHT_YES -> true

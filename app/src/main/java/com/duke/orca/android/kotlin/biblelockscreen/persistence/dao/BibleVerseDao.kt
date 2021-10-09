@@ -3,7 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.persistence.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
-import com.duke.orca.android.kotlin.biblelockscreen.bibleverses.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import kotlinx.coroutines.flow.Flow
 
 @Dao

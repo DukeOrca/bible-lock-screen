@@ -109,6 +109,8 @@
     <dimen name="margin_240dp">240dp</dimen>
     <dimen name="margin_256dp">256dp</dimen>
 
+    <dimen name="margin_180dp">180dp</dimen>
+
     <dimen name="padding_0dp">0dp</dimen>
     <dimen name="padding_1dp">1dp</dimen>
     <dimen name="padding_2dp">2dp</dimen>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_bible_chapter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layoutAnimation="@anim/layout_animation"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="@dimen/elevation_2dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center_vertical|end"
+        android:padding="@dimen/padding_16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/image_view_bookmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/image_view_more_vert"
+            app:layout_constraintEnd_toStartOf="@+id/image_view_more_vert"
+            app:layout_constraintTop_toTopOf="@+id/image_view_more_vert"
+            app:srcCompat="@drawable/ic_round_bookmark_24"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/image_view_more_vert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/padding_8dp"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_word"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
+            app:srcCompat="@drawable/ic_round_more_vert_24"
+            app:tint="@color/white"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

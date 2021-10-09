@@ -27,7 +27,7 @@ class SettingsFragment : PreferenceFragment() {
     private val onBackPressedCallback by lazy {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - onBackPressedTimeMillis >= Duration.MEDIUM) {
+                if (System.currentTimeMillis() - onBackPressedTimeMillis >= Duration.LONG) {
                     onBackPressedTimeMillis = System.currentTimeMillis()
                     parentFragmentManager.popBackStackImmediate()
                 }

@@ -10,8 +10,8 @@
         <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:navigationBarColor">@color/system_ui</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
+        <item name="android:navigationBarColor">@color/background_translucent</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/background_translucent</item>
         <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
@@ -25,8 +25,7 @@
     </style>
 
     <style name="EditTextStyle" parent="android:Widget.EditText">
-        <item name="android:fontFamily">@font/font_family_nanum_myeongjo</item>
-        <item name="android:includeFontPadding">false</item>
+        <item name="android:includeFontPadding">true</item>
         <item name="android:lineSpacingMultiplier">@dimen/line_spacing_multiplier</item>
     </style>
 
@@ -35,16 +34,14 @@
     </style>
 
     <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font_family_nanum_myeongjo</item>
-        <item name="android:includeFontPadding">false</item>
+        <item name="android:includeFontPadding">true</item>
         <item name="android:textColor">@color/text</item>
         <item name="android:textSize">@dimen/text_size_14dp</item>
         <item name="android:lineSpacingMultiplier">@dimen/line_spacing_multiplier</item>
     </style>
 
     <style name="TextViewStyle.Button" parent="@android:style/Widget.DeviceDefault.TextView">
-        <item name="android:fontFamily">@font/font_family_nanum_myeongjo</item>
-        <item name="android:includeFontPadding">false</item>
+        <item name="android:includeFontPadding">true</item>
         <item name="android:padding">@dimen/padding_8dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textColor">@color/text</item>
