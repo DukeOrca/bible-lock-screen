@@ -8,5 +8,6 @@ interface BibleChapterRepository {
     fun get(id: Int): Flow<BibleChapter>
     fun get(book: Int, chapter: Int): Flow<BibleChapter>
     fun getAll(): Flow<List<BookChapter>>
+    fun getBookmarks(): Flow<List<BibleChapter>>
     suspend fun updateBookmark(id: Int, bookmark: Boolean)
 }

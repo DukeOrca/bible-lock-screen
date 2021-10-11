@@ -15,10 +15,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.ONE_SECOND
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
@@ -64,25 +63,32 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
         return viewBinding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        with(viewBinding.searchView) {
+            post {
+                isIconified = false
+            }
+        }
+    }
+
     private fun observe() {
         viewModel.searchResult.observe(viewLifecycleOwner, { searchResult ->
             val searchResults = searchResult.searchResults
             val searchWord = searchResult.searchWord
 
-            if (searchResults.isNotEmpty()) {
-                if (viewBinding.linearLayout.isVisible) {
-                    viewBinding.linearLayout.fadeOut(Duration.SHORT)
-                }
-            } else {
-                if (viewBinding.linearLayout.isVisible.not()) {
-                    viewBinding.linearLayout.fadeIn(Duration.SHORT)
+            viewBinding.circularProgressIndicator.fadeOut(Duration.SHORT)
+            viewBinding.recyclerView.fadeIn(Duration.MEDIUM) {
+                bibleVerseAdapter.submitList(
+                    searchResults.map { it.toAdapterItem() }, searchWord, color
+                ) {
+                    delayOnLifecycle(Duration.SHORT) {
+                        if (searchResults.isEmpty()) {
+                            viewBinding.linearLayout.fadeIn(Duration.SHORT)
+                        }
+                    }
                 }
             }
-
-            viewBinding.recyclerView.scheduleLayoutAnimation()
-            bibleVerseAdapter.submitList(
-                searchResults.map { it.toAdapterItem() }, searchWord, color
-            )
         })
     }
 
@@ -139,7 +145,19 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private fun search(text: String) {
-        viewModel.search(text)
+        viewBinding.recyclerView.fadeOut(Duration.SHORT) {
+            viewBinding.circularProgressIndicator.fadeIn(Duration.SHORT)
+
+            bibleVerseAdapter.submitList(null)
+
+            if (viewBinding.linearLayout.isVisible) {
+                viewBinding.linearLayout.fadeOut(Duration.SHORT) {
+                    viewModel.search(text)
+                }
+            } else {
+                viewModel.search(text)
+            }
+        }
     }
 
     override fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean) {

@@ -12,6 +12,6 @@ class BibleVersePagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment
     }
 
     companion object {
-        private const val ITEM_COUNT = Int.MAX_VALUE
+        private const val ITEM_COUNT = 31102
     }
 }

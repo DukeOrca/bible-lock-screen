@@ -5,10 +5,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
+import android.widget.Toast
+import androidx.annotation.MainThread
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.NEWLINE
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 
+@MainThread
 fun copyToClipboard(context: Context, bibleVerse: BibleVerse) {
     val books = context.resources.getStringArray(R.array.books)
     val clipboard: ClipboardManager? = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
@@ -18,9 +21,10 @@ fun copyToClipboard(context: Context, bibleVerse: BibleVerse) {
     stringBuilder.append("$NEWLINE$NEWLINE")
     stringBuilder.append("${books[bibleVerse.book.dec()]}  ${bibleVerse.chapter} : ${bibleVerse.verse}")
 
-    val clipData = ClipData.newPlainText("label", stringBuilder.toString())
-
-    clipboard?.setPrimaryClip(clipData)
+    with(ClipData.newPlainText("label", stringBuilder.toString())) {
+        clipboard?.setPrimaryClip(this)
+        Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show()
+    }
 }
 
 fun share(context: Context, bibleVerse: BibleVerse) {

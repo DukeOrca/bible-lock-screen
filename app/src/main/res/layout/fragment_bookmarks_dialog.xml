@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/surface"
+    android:paddingBottom="@dimen/padding_8dp">
+
+    <TextView
+        android:id="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_64dp"
+        android:background="@drawable/rounded_top_corners"
+        android:backgroundTint="@color/surface"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/padding_24dp"
+        android:paddingStart="@dimen/padding_24dp"
+        android:text="@string/bookmarks"
+        android:textSize="@dimen/text_size_20dp"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_below="@+id/text_view_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_animation"/>
+
+</RelativeLayout>

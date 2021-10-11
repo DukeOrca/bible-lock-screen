@@ -1,10 +1,13 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -44,12 +47,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
-        activityViewModel.settings.observe(viewLifecycleOwner, {
-            val fontSize = it[PreferencesKeys.Display.fontSize] ?: DataStore.Display.DEFAULT_FONT_SIZE
-
-            viewBinding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
-        })
+        observe()
 
         lifecycleScope.launch {
             val bibleVerse = viewModel.get(arguments?.getInt(Key.ID) ?: 0)
@@ -60,6 +58,28 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         }
 
         return viewBinding.root
+    }
+
+    private fun observe() {
+        activityViewModel.settings.observe(viewLifecycleOwner, {
+            val typeface = viewBinding.textViewWord.typeface
+
+            val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
+            val bold = it[PreferencesKeys.Font.bold] ?: false
+            val textAlignment = it[PreferencesKeys.Font.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
+
+            viewBinding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
+            viewBinding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+            viewBinding.textViewWord.gravity = textAlignment
+
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                gravity = textAlignment
+                viewBinding.linearLayout.layoutParams = this
+            }
+        })
     }
 
     private fun bind(bibleVerse: BibleVerse) {

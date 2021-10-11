@@ -165,6 +165,12 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                 viewBinding.textViewSummary.text = summary
             }
         }
+
+        fun updateDrawable(drawable: Drawable?) {
+            if (viewBinding is PreferenceBinding) {
+                viewBinding.imageViewIcon.setImageDrawable(drawable)
+            }
+        }
     }
 
     private fun createViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
@@ -211,7 +217,7 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
 
     fun getPosition(id: Long) = currentList.indexOf(getItem(id))
 
-    fun updateSummary(id: Long, description: String) {
+    fun updateDrawable(id: Long, drawable: Drawable?) {
         val item = currentList.find { it.id == id } ?: return
         val index = currentList.indexOf(item)
 
@@ -219,7 +225,20 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
             val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
 
             if (viewHolder is ViewHolder) {
-                viewHolder.updateSummary(description)
+                viewHolder.updateDrawable(drawable)
+            }
+        }
+    }
+
+    fun updateSummary(id: Long, summary: String) {
+        val item = currentList.find { it.id == id } ?: return
+        val index = currentList.indexOf(item)
+
+        if (item is AdapterItem.Preference) {
+            val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
+
+            if (viewHolder is ViewHolder) {
+                viewHolder.updateSummary(summary)
             }
         }
     }

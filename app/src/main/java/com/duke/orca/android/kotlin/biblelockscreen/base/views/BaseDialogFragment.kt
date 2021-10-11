@@ -10,8 +10,13 @@ import android.view.Window
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
     private var _viewBinding: VB? = null
@@ -30,6 +35,7 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
 
         return viewBinding.root
     }
@@ -39,6 +45,17 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
         dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
         _viewBinding = null
         super.onDestroyView()
+    }
+
+    protected fun delayOnLifecycle(
+        timeMillis: Long,
+        dispatcher: CoroutineDispatcher = Dispatchers.Main,
+        block: () -> Unit
+    ) {
+        viewLifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
+            delay(timeMillis)
+            block()
+        }
     }
 
     protected fun showToast(text: String, duration: Int = Toast.LENGTH_SHORT) {

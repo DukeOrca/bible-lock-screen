@@ -19,6 +19,10 @@ class BibleChapterDatasourceImpl @Inject constructor(private val database: Bible
         return database.bibleChapterDao().getAll()
     }
 
+    override fun getBookmarks(): Flow<List<BibleChapter>> {
+        return database.bibleChapterDao().getBookmarks()
+    }
+
     override suspend fun updateBookmark(id: Int, bookmark: Boolean) {
         database.bibleChapterDao().updateBookmark(id, bookmark)
     }

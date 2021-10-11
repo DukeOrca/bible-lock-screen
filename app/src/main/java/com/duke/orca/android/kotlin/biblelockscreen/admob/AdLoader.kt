@@ -37,27 +37,36 @@ object AdLoader {
     }
 
     fun populateNativeAdView(viewBinding: NativeAdBinding, nativeAd: NativeAd) {
+        viewBinding.headline.text = nativeAd.headline
+
+        nativeAd.body?.let {
+            viewBinding.headline.hide()
+
+            viewBinding.body.text = it
+            viewBinding.body.show()
+        } ?: let { viewBinding.body.hide() }
+
+        nativeAd.starRating?.let {
+            viewBinding.starRating.rating = it.toFloat()
+            viewBinding.starRating.show()
+        } ?: let { viewBinding.advertiser.hide() }
+
+        nativeAd.advertiser?.let {
+            viewBinding.starRating.hide()
+
+            viewBinding.advertiser.text = it
+            viewBinding.advertiser.show()
+        } ?: let { viewBinding.advertiser.hide() }
+
         nativeAd.icon?.let {
             viewBinding.icon.show()
             viewBinding.icon.setImageDrawable(it.drawable)
         } ?: let { viewBinding.icon.hide() }
 
-        nativeAd.advertiser?.let {
-            viewBinding.advertiser.text = it
-            viewBinding.advertiser.show()
-        } ?: let { viewBinding.advertiser.hide(false) }
-
-        nativeAd.body?.let {
-            viewBinding.body.text = it
-            viewBinding.body.show()
-        } ?: let { viewBinding.body.hide(true) }
-
         nativeAd.callToAction?.let {
             viewBinding.callToAction.text = it
             viewBinding.callToAction.show()
-        } ?: let { viewBinding.callToAction.hide(true) }
-
-        viewBinding.headline.text = nativeAd.headline
+        } ?: let { viewBinding.callToAction.hide() }
 
         viewBinding.nativeAdView.callToActionView = viewBinding.callToAction
         viewBinding.nativeAdView.setNativeAd(nativeAd)

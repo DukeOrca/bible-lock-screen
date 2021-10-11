@@ -14,8 +14,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     @get:LayoutRes
     abstract val layoutResource: Int
+    abstract val showCircularProgressIndicator: Boolean
 
-    private val duration = 600L
+    private val duration = 200L
 
     private var viewStub: ViewStub? = null
     private var onResumed = AtomicBoolean(false)
@@ -37,9 +38,14 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
+        if (showCircularProgressIndicator) {
+            viewBinding.circularProgressIndicator.show()
+        } else {
+            viewBinding.circularProgressIndicator.hide()
+        }
+
         viewStub = viewBinding.root.findViewById(R.id.view_stub)
         viewStub?.layoutResource = layoutResource
-
         inflate()
 
         return viewBinding.root
@@ -48,22 +54,18 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     override fun onResume() {
         super.onResume()
         onResumed.set(true)
-        viewStub?.let {
-            if (isInflated.get().not()) {
-                with(it.inflate()) {
-                    viewBinding.circularProgressIndicator.fadeOut(duration) {
-                        onInflated(this)
-                        afterOnInflated()
-                    }
-                }
-            }
-        }
+        inflate()
     }
 
     private fun inflate() {
         if (onResumed.get() && isInflated.get().not()) {
             viewStub?.inflate()?.let {
-                viewBinding.circularProgressIndicator.fadeOut(duration) {
+                if (showCircularProgressIndicator) {
+                    viewBinding.circularProgressIndicator.fadeOut(duration) {
+                        onInflated(it)
+                        afterOnInflated()
+                    }
+                } else {
                     onInflated(it)
                     afterOnInflated()
                 }

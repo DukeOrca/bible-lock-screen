@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
+        android:id="@+id/group_features"
         android:checkableBehavior="none">
 
         <item
@@ -17,25 +18,40 @@
             android:id="@+id/item_bible"
             android:icon="@drawable/ic_holy_bible_48px"
             android:title="@string/bible" />
+    </group>
+
+    <group
+        android:id="@+id/group_settings"
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/item_settings"
             android:icon="@drawable/ic_round_settings_24"
             android:title="@string/settings" />
-    </group>
-
-    <group
-        android:checkableBehavior="none">
 
         <item
             android:id="@+id/item_lock_screen"
             android:icon="@drawable/ic_round_screen_lock_portrait_24"
-            android:title="@string/lock_setting" />
+            android:title="@string/lock_screen" />
 
         <item
             android:id="@+id/item_font"
             android:icon="@drawable/ic_typography_48px"
-            android:title="@string/font_setting" />
+            android:title="@string/font" />
+    </group>
 
+    <group
+        android:id="@+id/group_app"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/item_share_the_app"
+            android:icon="@drawable/ic_round_share_24"
+            android:title="@string/share_the_app" />
+
+        <item
+            android:id="@+id/item_write_review"
+            android:icon="@drawable/ic_round_rate_review_24"
+            android:title="@string/write_review" />
     </group>
 </menu>

@@ -2,6 +2,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.datastore
 
 import android.content.Context
 import android.content.res.Configuration
+import android.view.Gravity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -33,6 +34,16 @@ object DataStore {
         }.first()
     }
 
+    object BibleChapter {
+        fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentItem, 0)
+
+        fun putCurrentItem(context: Context, value: Int) = runBlocking {
+            context.dataStore.edit {
+                it[PreferencesKeys.BibleChapter.currentItem] = value
+            }
+        }
+    }
+
     object BibleVerse {
         fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleVerse.currentItem, 0)
 
@@ -44,8 +55,6 @@ object DataStore {
     }
 
     object Display {
-        const val DEFAULT_FONT_SIZE = 16.0F
-        fun getFontSize(context: Context) = getFloat(context, PreferencesKeys.Display.fontSize, DEFAULT_FONT_SIZE)
         fun isDarkMode(context: Context): Boolean {
             val defValue = when(context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
                 AppCompatDelegate.MODE_NIGHT_YES, Configuration.UI_MODE_NIGHT_YES -> true
@@ -57,15 +66,41 @@ object DataStore {
             return getBoolean(context, PreferencesKeys.Display.isDarkMode, defValue)
         }
 
-        suspend fun putFontSize(context: Context, value: Float) {
-            context.dataStore.edit {
-                it[PreferencesKeys.Display.fontSize] = value
-            }
-        }
-
         suspend fun putDarkMode(context: Context, value: Boolean) {
             context.dataStore.edit {
                 it[PreferencesKeys.Display.isDarkMode] = value
+            }
+        }
+    }
+
+    object Font {
+        const val DEFAULT_FONT_SIZE = 16.0F
+
+        object TextAlignment {
+            const val CENTER = Gravity.CENTER
+            const val LEFT = Gravity.LEFT
+            const val RIGHT = Gravity.RIGHT
+        }
+
+        fun getFontSize(context: Context) = getFloat(context, PreferencesKeys.Font.fontSize, DEFAULT_FONT_SIZE)
+        fun getBold(context: Context) = getBoolean(context, PreferencesKeys.Font.bold, false)
+        fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.textAlignment, TextAlignment.LEFT)
+
+        suspend fun putFontSize(context: Context, value: Float) {
+            context.dataStore.edit {
+                it[PreferencesKeys.Font.fontSize] = value
+            }
+        }
+
+        suspend fun putBold(context: Context, value: Boolean) {
+            context.dataStore.edit {
+                it[PreferencesKeys.Font.bold] = value
+            }
+        }
+
+        suspend fun putTextAlignment(context: Context, value: Int) {
+            context.dataStore.edit {
+                it[PreferencesKeys.Font.textAlignment] = value
             }
         }
     }

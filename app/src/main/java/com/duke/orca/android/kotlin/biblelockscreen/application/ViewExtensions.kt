@@ -1,6 +1,5 @@
 package com.duke.orca.android.kotlin.biblelockscreen.application
 
-import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
@@ -121,8 +120,8 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
 fun View.fadeIn(
     duration: Number,
-    onAnimationEnd: (() -> Unit)? = null,
     alphaFrom: Float = 0F,
+    onAnimationEnd: (() -> Unit)? = null
 ) {
     this.apply {
         alpha = alphaFrom

@@ -1,10 +1,18 @@
 <resources>
     <string name="app_name">성경 잠금화면</string>
+
+    <string name="ad">Ad</string>
+    <string name="align_center">가운데 정렬</string>
+    <string name="align_left">왼쪽 정렬</string>
+    <string name="align_right">오른쪽 정렬</string>
     <string name="allow">허용</string>
     <string name="allow_appear_on_top_permission">다른 앱 위에 표시 권한을 허용하세요.</string>
     <string name="appear_on_top">다른 앱 위에 표시</string>
     <string name="bible">성경</string>
     <string name="bible_lock_screen_is_running">성경 잠금화면이 실행 중입니다.</string>
+    <string name="bold">굵은 글꼴</string>
+    <string name="bookmarks">북마크</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다.</string>
     <string name="colon">:</string>
     <string name="copy">복사</string>
     <string name="dark_mode">다크 모드</string>
@@ -17,7 +25,7 @@
     <string name="enter_two_or_more_characters">두 글자 이상 입력하세요.</string>
     <string name="enter_your_search_term">검색어를 입력하세요.</string>
     <string name="favorites">즐겨찾기</string>
-    <string name="font_setting">글꼴 설정</string>
+    <string name="font">글꼴</string>
     <string name="font_size">글꼴 크기</string>
     <string name="format_12_hour">h:mm</string>
     <string name="format_date">M월 d일 EEEE</string>
@@ -31,6 +39,7 @@
     <string name="settings">설정</string>
     <string name="share_the_app">앱 공유하기</string>
     <string name="show_on_lock_screen">잠금화면에 표시</string>
+    <string name="text_alignment">텍스트 정렬</string>
     <string name="unlock_with_back_button">백 버튼으로 잠금해제</string>
     <string name="version">버전</string>
     <string name="write_review">리뷰 쓰기</string>
@@ -38,4 +47,6 @@
     <string name="blind_screen_000">보안정책에 따라 홈 버튼으로 잠금 해제할 수 없습니다.</string>
     <string name="fragment_permission_rationale_dialog_000">앱의 모든 기능을 사용하려면 다음 권한을 허용해야 합니다.</string>
     <string name="review_000">소중한 리뷰 감사합니다.</string>
+
+    <string name="format_bible_chapter">%s %d장</string>
 </resources>

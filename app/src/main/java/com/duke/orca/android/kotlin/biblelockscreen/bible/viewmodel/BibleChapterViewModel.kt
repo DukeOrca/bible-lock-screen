@@ -56,6 +56,12 @@ class BibleChapterViewModel @Inject constructor(
         }
     }
 
+    fun updateFavorites(id: Int, favorites: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bibleVerseRepository.updateFavorites(id, favorites)
+        }
+    }
+
     private fun combine(
         source1: LiveData<List<BibleVerse>>,
         source2: LiveData<List<NativeAd>>

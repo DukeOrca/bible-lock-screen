@@ -19,6 +19,10 @@ interface BibleChapterDao {
     @Query("SELECT book, chapter FROM bible_chapter ORDER BY id ASC")
     fun getAll(): Flow<List<BookChapter>>
 
+    @Transaction
+    @Query("SELECT * FROM bible_chapter WHERE bookmark LIKE 1 ORDER BY id ASC")
+    fun getBookmarks(): Flow<List<BibleChapter>>
+
     @Query("UPDATE bible_chapter SET bookmark = :bookmark WHERE id = :id")
     suspend fun updateBookmark(id: Int, bookmark: Boolean)
 }

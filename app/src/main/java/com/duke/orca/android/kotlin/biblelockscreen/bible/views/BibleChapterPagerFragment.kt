@@ -1,9 +1,10 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
-import android.view.View
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -16,15 +17,41 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterP
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterPagerBinding
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class BibleChapterPagerFragment : BaseViewStubFragment() {
+class BibleChapterPagerFragment : BaseViewStubFragment(),
+    BookmarksDialogFragment.OnBookmarkClickListener {
     override val layoutResource: Int
         get() = R.layout.fragment_bible_chapter_pager
+    override val showCircularProgressIndicator: Boolean
+        get() = true
+
+    private val viewModel by viewModels<BibleChapterPagerViewModel>()
+
+    private var binding: FragmentBibleChapterPagerBinding? = null
+    private var currentItem: BibleChapter? = null
+
+    private val bookAdapter by lazy {
+        ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_item,
+            activityViewModel.books
+        )
+    }
+
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            super.onPageSelected(position)
+            viewModel.get(position)
+        }
+    }
+
+    private var bibleChapterPagerAdapter: BibleChapterPagerAdapter? = null
 
     override fun onInflated(view: View) {
         binding = FragmentBibleChapterPagerBinding.bind(view)
@@ -57,61 +84,46 @@ class BibleChapterPagerFragment : BaseViewStubFragment() {
         }
     }
 
-    private val viewModel by viewModels<BibleChapterPagerViewModel>()
-
-    private var binding: FragmentBibleChapterPagerBinding? = null
-    private var currentItem: BibleChapter? = null
-
-    private val bookAdapter by lazy {
-        ArrayAdapter(
-            requireContext(),
-            R.layout.dropdown_item,
-            activityViewModel.books
-        )
+    override fun onPause() {
+        DataStore.BibleChapter.putCurrentItem(requireContext(), currentItem?.id ?: 0)
+        super.onPause()
     }
 
-    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            super.onPageSelected(position)
-            viewModel.get(position)
-        }
+    override fun onBookmarkClick(id: Int) {
+        binding?.viewPager2?.setCurrentItem(id, false)
     }
-
-    private var bibleChapterPagerAdapter: BibleChapterPagerAdapter? = null
 
     private fun observe(binding: FragmentBibleChapterPagerBinding) {
-        lifecycleScope.launchWhenResumed {
-            bibleChapterPagerAdapter = BibleChapterPagerAdapter(
-                this@BibleChapterPagerFragment,
-                viewModel.getAll()
-            )
+        viewModel.currentItem.observe(viewLifecycleOwner, { bibleChapter ->
+            bibleChapter?.let {
+                binding.exposedDropdownMenuBook.autoCompleteTextView.setText(
+                    activityViewModel.getBook(it.book),
+                    false
+                )
+                binding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
+                    it.chapter.toString(),
+                    false
+                )
 
-            binding.viewPager2.adapter = null
-            binding.viewPager2.adapter = bibleChapterPagerAdapter
-            binding.viewPager2.offscreenPageLimit = 2
-            binding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
+                binding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
 
-            viewModel.currentItem.observe(viewLifecycleOwner, { bibleVerse ->
-                bibleVerse?.let {
-                    binding.exposedDropdownMenuBook.autoCompleteTextView.setText(
-                        activityViewModel.getBook(it.book),
-                        false
+                if (currentItem?.book != it.book) {
+                    binding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
+                        activityViewModel.chapters[it.book.dec()], R.layout.dropdown_item
                     )
-                    binding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
-                        it.chapter.toString(),
-                        false
-                    )
-
-                    if (currentItem?.book != it.book) {
-                        binding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
-                            activityViewModel.chapters[it.book.dec()], R.layout.dropdown_item
-                        )
-                    }
-
-                    currentItem = it
                 }
-            })
-        }
+
+                with(binding.constraintLayout) {
+                    if (isInvisible) {
+                        delayOnLifecycle(Duration.SHORT) {
+                            fadeIn(Duration.SHORT)
+                        }
+                    }
+                }
+
+                currentItem = it
+            }
+        })
     }
 
     private fun bind(binding: FragmentBibleChapterPagerBinding) {
@@ -119,7 +131,12 @@ class BibleChapterPagerFragment : BaseViewStubFragment() {
             requireActivity().onBackPressed()
         }
 
-        binding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
+        binding.imageViewBookmarks.setOnClickListener {
+            BookmarksDialogFragment().also {
+                it.show(childFragmentManager, it.tag)
+            }
+        }
+
         binding.exposedDropdownMenuBook.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
             val chapter = 1
 
@@ -132,7 +149,33 @@ class BibleChapterPagerFragment : BaseViewStubFragment() {
             binding.viewPager2.moveTo(book, position.inc())
         }
 
-        binding.constraintLayout.fadeIn(Duration.LONG)
+        with(binding.viewPager2) {
+            delayOnLifecycle(Duration.SHORT) {
+                fadeIn(Duration.SHORT) {
+                    setAdapter(this)
+                }
+            }
+        }
+    }
+
+    private fun setAdapter(viewPager2: ViewPager2) {
+        lifecycleScope.launch {
+            val bookChapters = viewModel.getAll()
+
+            bibleChapterPagerAdapter = BibleChapterPagerAdapter(
+                this@BibleChapterPagerFragment,
+                bookChapters
+            )
+
+            viewPager2.adapter = null
+            viewPager2.adapter = bibleChapterPagerAdapter
+            viewPager2.offscreenPageLimit = 2
+            viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
+            viewPager2.setCurrentItem(
+                DataStore.BibleChapter.getCurrentItem(requireContext()),
+                false
+            )
+        }
     }
 
     private fun ViewPager2.moveTo(book: Int, chapter: Int) {

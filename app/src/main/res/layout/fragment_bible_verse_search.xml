@@ -24,11 +24,23 @@
         app:queryBackground="@android:color/transparent"
         app:queryHint="@string/enter_your_search_term"/>
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/circular_progress_indicator"
+        android:layout_width="@dimen/width_40dp"
+        android:layout_height="@dimen/height_40dp"
+        android:layout_marginBottom="@dimen/margin_160dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_view" />
+
     <LinearLayout
         android:id="@+id/linear_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_56dp"
+        android:layout_marginBottom="@dimen/margin_112dp"
         android:orientation="vertical"
         android:elevation="@dimen/elevation_8dp"
         android:gravity="center_horizontal"
@@ -51,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_16dp"
+            android:fontFamily="sans-serif-light"
             android:text="@string/no_results_found"
             android:textColor="@color/nothing_found"
             android:textSize="@dimen/text_size_24dp"

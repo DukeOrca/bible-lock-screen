@@ -14,21 +14,23 @@
         android:layoutAnimation="@anim/layout_animation"
         android:clipChildren="false"
         android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linear_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:elevation="@dimen/elevation_2dp"
+        android:background="@color/surface"
+        android:elevation="@dimen/elevation_4dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:gravity="center_vertical|end"
-        android:padding="@dimen/padding_16dp"
+        android:padding="@dimen/padding_8dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

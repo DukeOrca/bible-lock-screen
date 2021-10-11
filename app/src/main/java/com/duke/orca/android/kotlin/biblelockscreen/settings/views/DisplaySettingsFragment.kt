@@ -6,24 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceChildFragment
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DisplaySettingsFragment : PreferenceChildFragment(), FontSizeChoiceDialogFragment.OnItemClickListener {
-    private object Id {
-        const val FONT_SIZE = 0L
-    }
-
+class DisplaySettingsFragment : PreferenceChildFragment() {
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.display
 
@@ -40,7 +35,6 @@ class DisplaySettingsFragment : PreferenceChildFragment(), FontSizeChoiceDialogF
     }
 
     private fun initData() {
-        val fontSize = DataStore.Display.getFontSize(requireContext())
         val isDarkMode = DataStore.Display.isDarkMode(requireContext())
 
         val list: List<AdapterItem> = arrayListOf(
@@ -64,18 +58,7 @@ class DisplaySettingsFragment : PreferenceChildFragment(), FontSizeChoiceDialogF
                     }
                 },
                 title = getString(R.string.dark_mode)
-            ),
-            AdapterItem.Preference(
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_round_format_size_24),
-                id = Id.FONT_SIZE,
-                summary = "${fontSize}dp",
-                onClick = {
-                    FontSizeChoiceDialogFragment().also {
-                        it.show(childFragmentManager, it.tag)
-                    }
-                },
-                title = getString(R.string.font_size)
-            ),
+            )
         )
 
         preferenceAdapter.submitList(list)
@@ -87,14 +70,5 @@ class DisplaySettingsFragment : PreferenceChildFragment(), FontSizeChoiceDialogF
             layoutManager = LinearLayoutManagerWrapper(requireContext())
             setHasFixedSize(true)
         }
-    }
-
-    override fun onItemClick(dialogFragment: DialogFragment, item: Float) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            DataStore.Display.putFontSize(requireContext(), item)
-        }
-
-        preferenceAdapter.updateSummary(Id.FONT_SIZE, "${item}dp")
-        dialogFragment.dismiss()
     }
 }

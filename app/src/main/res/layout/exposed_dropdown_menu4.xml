@@ -6,14 +6,14 @@
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/height_48dp"
-    app:boxBackgroundColor="@color/background"
+    app:boxBackgroundColor="@color/surface"
     app:boxCornerRadiusBottomEnd="0dp"
     app:boxCornerRadiusBottomStart="0dp"
     app:boxCornerRadiusTopEnd="0dp"
     app:boxCornerRadiusTopStart="0dp"
     app:boxStrokeColor="@color/white"
     app:boxStrokeWidth="0dp"
-    app:endIconTint="@color/white"
+    app:endIconTint="@color/icon"
     app:hintEnabled="false" >
 
     <AutoCompleteTextView
@@ -24,7 +24,7 @@
         android:ellipsize="end"
         android:focusable="false"
         android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:inputType="none"
         android:maxLines="1"
         android:paddingBottom="0dp"

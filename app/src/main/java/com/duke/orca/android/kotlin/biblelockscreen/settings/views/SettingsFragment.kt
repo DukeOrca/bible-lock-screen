@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
+import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
@@ -29,7 +30,13 @@ class SettingsFragment : PreferenceFragment() {
             override fun handleOnBackPressed() {
                 if (System.currentTimeMillis() - onBackPressedTimeMillis >= Duration.LONG) {
                     onBackPressedTimeMillis = System.currentTimeMillis()
-                    parentFragmentManager.popBackStackImmediate()
+                    with(childFragmentManager) {
+                        if (backStackEntryCount < 1) {
+                            parentFragmentManager.popBackStackImmediate()
+                        } else {
+                            popBackStackImmediate()
+                        }
+                    }
                 }
             }
         }
@@ -65,11 +72,25 @@ class SettingsFragment : PreferenceFragment() {
                         requireContext(),
                         R.drawable.ic_round_stay_primary_portrait_24
                     ),
-                    summary = "${getString(R.string.dark_mode)}, ${getString(R.string.font_size)}",
+                    summary = getString(R.string.dark_mode),
                     onClick = {
                         addFragment(DisplaySettingsFragment())
                     },
                     title = getString(R.string.display)
+                ),
+                AdapterItem.Preference(
+                    drawable = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_typography_48px
+                    ),
+                    onClick = {
+                        addFragment(FontSettingsFragment())
+                    },
+                    summary = "${getString(R.string.bold)}," +
+                            " ${getString(R.string.font_size)}," +
+                            " ${getString(R.string.text_alignment)}"
+                    ,
+                    title = getString(R.string.font)
                 ),
                 AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
@@ -128,7 +149,7 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun addFragment(fragment: Fragment) {
-        parentFragmentManager.beginTransaction()
+        childFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.slide_in_right,
                 R.anim.slide_out_left,
@@ -139,18 +160,5 @@ class SettingsFragment : PreferenceFragment() {
             .add(R.id.fragment_container_view, fragment, fragment.tag)
             .addToBackStack(null)
             .commit()
-    }
-
-    private fun shareApplication(context: Context) {
-        val intent = Intent(Intent.ACTION_SEND)
-        val text = "https://play.google.com/store/apps/details?id=${context.packageName}"
-
-        intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-
-        Intent.createChooser(intent, context.getString(R.string.share_the_app)).also {
-            it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            context.startActivity(it)
-        }
     }
 }

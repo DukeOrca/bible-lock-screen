@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
@@ -47,9 +48,12 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        viewModel.getFavorites()
-        observe()
-        bind()
+
+        viewBinding.circularProgressIndicator.fadeOut(Duration.LONG) {
+            viewModel.getFavorites()
+            observe()
+            bind()
+        }
 
         return viewBinding.root
     }

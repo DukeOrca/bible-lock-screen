@@ -17,7 +17,7 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linear_layout_options"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,6 +38,7 @@
                 android:layout_marginStart="@dimen/margin_24dp"
                 android:layout_marginTop="@dimen/margin_24dp"
                 android:layout_marginEnd="@dimen/margin_24dp"
+                android:fontFamily="@font/font_family_nanum_myeongjo"
                 android:scrollbars="vertical"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_20dp"
@@ -46,67 +47,82 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="태초에 하나님이 천지를 창조하시니라" />
 
-            <TextView
-                android:id="@+id/text_view_book"
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_24dp"
                 android:layout_marginStart="@dimen/margin_1dp"
                 android:layout_marginTop="@dimen/margin_16dp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16dp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/text_view_word"
                 app:layout_constraintStart_toStartOf="@+id/text_view_word"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_word"
-                tools:text="창세기" />
+                app:layout_constraintTop_toBottomOf="@+id/text_view_word">
 
-            <TextView
-                android:id="@+id/text_view_chapter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_8dp"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_book"
-                app:layout_constraintStart_toEndOf="@+id/text_view_book"
-                app:layout_constraintTop_toTopOf="@+id/text_view_book"
-                tools:text="1" />
+                <LinearLayout
+                    android:id="@+id/linear_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/text_view_word"
+                    app:layout_constraintStart_toStartOf="@+id/text_view_word"
+                    app:layout_constraintTop_toBottomOf="@+id/text_view_word"
+                    tools:ignore="UselessParent">
 
-            <TextView
-                android:id="@+id/text_view_colon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingEnd="@dimen/padding_4dp"
-                android:paddingStart="@dimen/padding_4dp"
-                android:text="@string/colon"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_chapter"
-                app:layout_constraintStart_toEndOf="@+id/text_view_chapter"
-                app:layout_constraintTop_toTopOf="@+id/text_view_chapter" />
+                    <TextView
+                        android:id="@+id/text_view_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="창세기" />
 
-            <TextView
-                android:id="@+id/text_view_verse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16dp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/text_view_colon"
-                app:layout_constraintStart_toEndOf="@+id/text_view_colon"
-                app:layout_constraintTop_toTopOf="@+id/text_view_colon"
-                tools:text="1" />
+                    <TextView
+                        android:id="@+id/text_view_chapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                    <TextView
+                        android:id="@+id/text_view_colon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:gravity="center"
+                        android:paddingEnd="@dimen/padding_4dp"
+                        android:paddingStart="@dimen/padding_4dp"
+                        android:text="@string/colon"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text_view_verse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/linear_layout_options"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -143,7 +159,8 @@
             app:layout_constraintEnd_toEndOf="@+id/text_view_word"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
             app:srcCompat="@drawable/ic_round_more_vert_24"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 

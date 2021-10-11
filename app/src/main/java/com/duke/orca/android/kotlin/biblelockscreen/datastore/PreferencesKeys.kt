@@ -11,14 +11,25 @@ object PreferencesKeys {
 
     val isFirstTime = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isFirstTime")
 
+    object BibleChapter {
+        private const val OBJECT_NAME = "BibleChapter"
+        val currentItem = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentItem")
+    }
+
     object BibleVerse {
         private const val OBJECT_NAME = "BibleVerse"
         val currentItem = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentItem")
     }
 
+    object Font {
+        private const val OBJECT_NAME = "Font"
+        val fontSize = floatPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fontSize")
+        val bold = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.bold")
+        val textAlignment = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.textAlignment")
+    }
+
     object Display {
         private const val OBJECT_NAME = "Display"
-        val fontSize = floatPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fontSize")
         val isDarkMode = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isDarkMode")
     }
 

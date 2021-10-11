@@ -19,6 +19,7 @@ import com.like.OnLikeListener
 class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVerseAdapter.AdapterItem, BibleVerseAdapter.ViewHolder>(DiffCallback()) {
     private var inflater: LayoutInflater? = null
     private var onIconClickListener: OnIconClickListener? = null
+    private var recyclerView: RecyclerView? = null
 
     private var searchWord = BLANK
     @ColorInt
@@ -42,6 +43,7 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
         submitList(emptyList()) {
             this.searchWord = searchWord
             this.color = color
+            recyclerView?.scheduleLayoutAnimation()
             submitList(list) {
                 commitCallback?.invoke()
             }
@@ -98,6 +100,11 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
                 }
             }
         }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -25,6 +25,9 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVer
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.annotation.RequireDeviceCredential
+import com.duke.orca.android.kotlin.biblelockscreen.review.Review
+import com.duke.orca.android.kotlin.biblelockscreen.settings.views.FontSettingsFragment
+import com.duke.orca.android.kotlin.biblelockscreen.settings.views.LockScreenSettingsFragment
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +37,6 @@ import kotlinx.coroutines.withContext
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
-
 
 @AndroidEntryPoint
 @RequireDeviceCredential
@@ -122,6 +124,10 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             R.id.item_favorites -> addFragment(FavoritesFragment())
             R.id.item_bible -> addFragment(BibleChapterPagerFragment())
             R.id.item_settings -> addFragment(SettingsFragment())
+            R.id.item_lock_screen -> addFragment(LockScreenSettingsFragment())
+            R.id.item_font -> addFragment(FontSettingsFragment())
+            R.id.item_share_the_app -> shareApplication(requireContext())
+            R.id.item_write_review -> Review.launchReviewFlow(requireActivity())
         }
 
         return true
