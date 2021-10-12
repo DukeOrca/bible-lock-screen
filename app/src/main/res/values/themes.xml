@@ -24,6 +24,30 @@
         <item name="android:windowShowWallpaper">true</item>
     </style>
 
+    <style name="Theme.DisplaySettingsActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:navigationBarColor">@color/system_ui</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.DisplaySettingsActivity</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+
     <style name="EditTextStyle" parent="android:Widget.EditText">
         <item name="android:includeFontPadding">true</item>
         <item name="android:lineSpacingMultiplier">@dimen/line_spacing_multiplier</item>
@@ -56,7 +80,8 @@
     </style>
 
     <style name="WindowAnimation">
-        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <style name="WindowAnimation.BlindScreen">
@@ -66,5 +91,19 @@
     <style name="WindowAnimation.DialogFragment">
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <style name="WindowAnimation.DisplaySettingsActivity">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
+    </style>
+
+    <style name="SelectableItemTheme">
+        <item name="colorControlHighlight">@color/ripple_material_dark</item>
+    </style>
+
+    <style name="SelectableItemBackgroundBorderless">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
     </style>
 </resources>

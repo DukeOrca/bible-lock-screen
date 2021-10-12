@@ -17,6 +17,9 @@ class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRa
     private val permissionsDenied = mutableListOf<Permission>()
     private var onPermissionAllowClickListener: OnPermissionAllowClickListener? = null
 
+    override val setWindowAnimation: Boolean
+        get() = true
+
     interface OnPermissionAllowClickListener {
         fun onPermissionAllowClick()
         fun onPermissionDenyClick()

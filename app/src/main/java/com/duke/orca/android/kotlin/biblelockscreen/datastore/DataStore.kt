@@ -8,7 +8,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import com.duke.orca.android.kotlin.biblelockscreen.application.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -66,7 +66,7 @@ object DataStore {
             return getBoolean(context, PreferencesKeys.Display.isDarkMode, defValue)
         }
 
-        suspend fun putDarkMode(context: Context, value: Boolean) {
+        fun putDarkMode(context: Context, value: Boolean) = runBlocking {
             context.dataStore.edit {
                 it[PreferencesKeys.Display.isDarkMode] = value
             }

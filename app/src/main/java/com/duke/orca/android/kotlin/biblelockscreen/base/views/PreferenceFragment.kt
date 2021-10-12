@@ -28,4 +28,8 @@ abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>
 
         return viewBinding.root
     }
+
+    protected fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {
+        requireActivity().overridePendingTransition(enterAnim, exitAnim)
+    }
 }

@@ -14,8 +14,9 @@
     <color name="dark_grey">#121212</color>
 
     <color name="background">@color/white</color>
-    <color name="background_translucent">#40000000</color>
     <color name="background2">@color/grey_50</color>
+    <color name="background_translucent">#40000000</color>
+    <color name="background_translucent2">#61000000</color>
     <color name="on_background">@color/dark_grey</color>
     <color name="surface">@color/white</color>
     <color name="surface2">#99121212</color>
@@ -76,23 +77,27 @@
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="nothing_found">#61000000</color>
-    <color name="notification">@color/primary</color>
+    <color name="notification">@color/deep_purple_400</color>
     <color name="shadow">@color/dark_grey</color>
     <color name="space">#1F000000</color>
+    <color name="subtitle">@color/medium_emphasis</color>
     <color name="system_ui">@color/primary_variant</color>
     <color name="text">@color/high_emphasis</color>
     <color name="title_text">@color/white</color>
     <color name="toolbar">@color/primary</color>
 
     <color name="like">@color/pink_300</color>
-    <color name="unlike">#61FFFFFF</color>
+    <color name="unlike">@color/disabled</color>
     <color name="circle_end">@color/pink_300</color>
     <color name="circle_start">@color/yellow_300</color>
     <color name="dots_primary">@color/pink_300</color>
     <color name="dots_secondary">@color/yellow_300</color>
 
     <color name="bookmarked">@color/secondary</color>
-    <color name="unbookmarked">#61FFFFFF</color>
+    <color name="unbookmarked">#61000000</color>
+
+    <color name="ripple_material_dark">#33FFFFFF</color>
+    <color name="ripple_material_light">#1F000000</color>`
 
     <color name="mtrl_textinput_default_box_stroke_color">@color/white</color>
 </resources>

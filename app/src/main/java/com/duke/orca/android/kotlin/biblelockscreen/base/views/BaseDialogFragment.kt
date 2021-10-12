@@ -23,6 +23,7 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
     protected val viewBinding: VB
         get() = _viewBinding!!
 
+    abstract val setWindowAnimation: Boolean
     abstract fun inflate(inflater: LayoutInflater, container: ViewGroup?): VB
 
     @CallSuper
@@ -35,14 +36,16 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
 
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
+
+        if (setWindowAnimation) {
+            dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
+        }
 
         return viewBinding.root
     }
 
     @CallSuper
     override fun onDestroyView() {
-        dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
         _viewBinding = null
         super.onDestroyView()
     }

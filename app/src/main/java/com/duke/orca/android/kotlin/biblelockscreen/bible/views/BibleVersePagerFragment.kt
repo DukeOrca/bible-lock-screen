@@ -3,11 +3,17 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat.END
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -16,6 +22,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVersePagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -83,8 +91,17 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 if (drawerLayout.isDrawerOpen(END)) {
                     drawerLayout.closeDrawer(END)
                 } else {
-                    isEnabled = false
-                    onBackPressed()
+                    if (childFragmentManager.backStackEntryCount > 0) {
+                        childFragmentManager.popBackStackImmediate()
+                    } else {
+                        val unlockWithBackKey = DataStore.LockScreen.getUnlockWithBackKey(requireContext())
+
+                        if (unlockWithBackKey) {
+                            finish()
+                        } else {
+                            viewBinding.frameLayoutUnlock.animateRipple()
+                        }
+                    }
                 }
             }
         }
@@ -135,21 +152,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     @SuppressLint("ClickableViewAccessibility")
     private fun bind() {
-        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
-                onBackPressedCallback.isEnabled = true
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-                onBackPressedCallback.isEnabled = false
-            }
-
-            override fun onDrawerStateChanged(newState: Int) {
-            }
-        })
+        viewBinding.constraintLayoutExposedDropdownMenu.fadeIn(Duration.LONG)
+        viewBinding.viewPager2.fadeIn(Duration.LONG)
 
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
@@ -197,7 +201,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.viewPager2.adapter = bibleVersePagerAdapter
         viewBinding.viewPager2.offscreenPageLimit = 2
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
-        setPageTransformer(resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(), false)
+        setPageTransformer(resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(), true)
         viewBinding.viewPager2.setCurrentItem(DataStore.BibleVerse.getCurrentItem(requireContext()), false)
 
         viewBinding.linearLayoutUnlock.setOnTouchListener { _, event ->
@@ -219,11 +223,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                         scale < 0.75F -> scale = 0.75F
                     }
 
-                    var alpha = (scale - 0.75F) * 4.0F
-
-                    if (alpha < 1.0F) {
-                        alpha *= 0.9F
-                    }
+                    val alpha = (scale - 0.75F) * 4.0F
 
                     viewBinding.linearLayout.alpha = alpha
                     viewBinding.linearLayout.scaleX = scale

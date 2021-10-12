@@ -16,8 +16,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.application.ONE_SECOND
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.ONE_SECOND
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter

@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+    android:id="@+id/text_input_layout"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/height_exposed_dropdown_menu"
     app:boxBackgroundColor="#40000000"

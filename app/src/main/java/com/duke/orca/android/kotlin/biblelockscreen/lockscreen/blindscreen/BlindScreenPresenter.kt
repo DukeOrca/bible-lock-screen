@@ -10,6 +10,7 @@ import android.view.WindowInsets
 import android.view.WindowManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.toPx
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BlindScreenBinding
 import kotlin.math.abs
 import kotlin.math.pow

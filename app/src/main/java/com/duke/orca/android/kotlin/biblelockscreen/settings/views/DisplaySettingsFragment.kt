@@ -4,19 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DisplaySettingsFragment : PreferenceChildFragment() {
     override val toolbar by lazy { viewBinding.toolbar }
@@ -43,18 +40,9 @@ class DisplaySettingsFragment : PreferenceChildFragment() {
                 isChecked = isDarkMode,
                 onCheckedChange = { isChecked ->
                     lifecycleScope.launch {
-                        val darkMode = if (isChecked) {
-                            AppCompatDelegate.MODE_NIGHT_YES
-                        } else {
-                            AppCompatDelegate.MODE_NIGHT_NO
-                        }
-
-                        withContext(Dispatchers.IO) {
-                            DataStore.Display.putDarkMode(requireContext(), isChecked)
-                            delay(Duration.MEDIUM)
-                        }
-
-                        AppCompatDelegate.setDefaultNightMode(darkMode)
+                        DataStore.Display.putDarkMode(requireContext(), isChecked)
+                        delay(Duration.MEDIUM)
+                        recreate()
                     }
                 },
                 title = getString(R.string.dark_mode)

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
-import com.duke.orca.android.kotlin.biblelockscreen.application.BLANK
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.*
 

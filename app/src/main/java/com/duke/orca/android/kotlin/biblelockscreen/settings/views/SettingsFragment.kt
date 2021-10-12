@@ -10,7 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -74,9 +74,24 @@ class SettingsFragment : PreferenceFragment() {
                     ),
                     summary = getString(R.string.dark_mode),
                     onClick = {
-                        addFragment(DisplaySettingsFragment())
+                        Intent(requireContext(), DisplaySettingsActivity::class.java).also {
+                            it.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+                            startActivity(it)
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.hold)
+                        }
                     },
                     title = getString(R.string.display)
+                ),
+                AdapterItem.Preference(
+                    drawable = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_round_screen_lock_portrait_24
+                    ),
+                    summary = "${getString(R.string.lock_setting)}, ${getString(R.string.lock_type)}",
+                    onClick = {
+                        addFragment(LockScreenSettingsFragment())
+                    },
+                    title = getString(R.string.lock_screen)
                 ),
                 AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
@@ -91,17 +106,6 @@ class SettingsFragment : PreferenceFragment() {
                             " ${getString(R.string.text_alignment)}"
                     ,
                     title = getString(R.string.font)
-                ),
-                AdapterItem.Preference(
-                    drawable = ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.ic_round_screen_lock_portrait_24
-                    ),
-                    summary = "${getString(R.string.lock_setting)}, ${getString(R.string.lock_type)}",
-                    onClick = {
-                        addFragment(LockScreenSettingsFragment())
-                    },
-                    title = getString(R.string.lock_screen)
                 ),
                 AdapterItem.Space(),
                 AdapterItem.ContentPreference(

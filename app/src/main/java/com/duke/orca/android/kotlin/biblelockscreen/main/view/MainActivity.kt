@@ -10,12 +10,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.Application
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.SystemUiColorAction
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.LockScreenActivity
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
 import com.duke.orca.android.kotlin.biblelockscreen.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
@@ -29,6 +31,14 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
     private var handler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mode = if (DataStore.Display.isDarkMode(this)) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+
+        AppCompatDelegate.setDefaultNightMode(mode)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -65,10 +75,10 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
     }
 
     private fun setSystemUiColor() {
-        val startValue = ContextCompat.getColor(this, R.color.background_translucent)
+        val startValue = window.statusBarColor
         val endValue = ContextCompat.getColor(this, R.color.system_ui)
 
-        if (window.statusBarColor == endValue) return
+        if (startValue == endValue) return
 
         with(ValueAnimator.ofObject(ArgbEvaluator(), startValue, endValue)) {
             duration = Duration.SHORT
@@ -87,10 +97,10 @@ class MainActivity : LockScreenActivity(), PermissionRationaleDialogFragment.OnP
     }
 
     private fun revertSystemUiColor() {
-        val startValue = ContextCompat.getColor(this, R.color.system_ui)
+        val startValue = window.statusBarColor
         val endValue = ContextCompat.getColor(this, R.color.background_translucent)
 
-        if (window.statusBarColor == endValue) return
+        if (startValue == endValue) return
 
         with(ValueAnimator.ofObject(ArgbEvaluator(), startValue, endValue)) {
             duration = Duration.SHORT

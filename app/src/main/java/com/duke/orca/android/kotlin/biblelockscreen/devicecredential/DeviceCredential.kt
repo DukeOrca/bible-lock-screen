@@ -12,7 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import timber.log.Timber
 
 object DeviceCredential {

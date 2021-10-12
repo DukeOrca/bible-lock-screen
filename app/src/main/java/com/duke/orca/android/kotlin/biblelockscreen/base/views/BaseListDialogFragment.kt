@@ -14,6 +14,9 @@ abstract class BaseListDialogFragment<VB : ViewBinding, T> : BaseDialogFragment<
     abstract fun bind(viewBinding: VB, item: T)
     abstract val items: Array<T>
 
+    override val setWindowAnimation: Boolean
+        get() = false
+
     override fun inflate(inflater: LayoutInflater, container: ViewGroup?): FragmentBaseListDialogBinding {
         return FragmentBaseListDialogBinding.inflate(inflater, container, false)
     }

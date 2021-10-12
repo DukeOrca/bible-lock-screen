@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterAdapter
@@ -17,6 +17,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBinding>(),
     BibleChapterAdapter.OnItemClickListener {
+    override val setWindowAnimation: Boolean
+        get() = true
+
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
     private val bibleChapterAdapter by lazy { BibleChapterAdapter(requireContext()) }
 

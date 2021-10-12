@@ -11,12 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
+import com.duke.orca.android.kotlin.biblelockscreen.billing.listener.RemoveAdsPurchaseStateListener
 import com.duke.orca.android.kotlin.biblelockscreen.main.viewmodel.MainViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
+import kotlinx.coroutines.*
 
 abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     private var _viewBinding: VB? = null
@@ -43,6 +40,16 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     ): View? {
         _viewBinding = inflate(inflater, container)
 
+        if (this is RemoveAdsPurchaseStateListener) {
+            activityViewModel.removeAds.observe(viewLifecycleOwner, {
+                if (it) {
+                    removeAdsPurchased()
+                } else {
+                    removeAdsPending()
+                }
+            })
+        }
+
         return viewBinding.root
     }
 
@@ -63,11 +70,11 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         }
     }
 
-    protected fun onBackPressed() {
-        requireActivity().onBackPressed()
-    }
-
     protected fun finish() {
         requireActivity().finish()
+    }
+
+    protected fun recreate() {
+        requireActivity().recreate()
     }
 }

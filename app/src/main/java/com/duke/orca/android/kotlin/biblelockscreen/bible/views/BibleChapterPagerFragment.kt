@@ -1,18 +1,19 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.os.Bundle
 import android.view.*
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.application.setIntegerArrayAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterPagerViewModel
@@ -24,17 +25,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class BibleChapterPagerFragment : BaseViewStubFragment(),
+class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
     BookmarksDialogFragment.OnBookmarkClickListener {
-    override val layoutResource: Int
-        get() = R.layout.fragment_bible_chapter_pager
-    override val showCircularProgressIndicator: Boolean
+    override val changeSystemUiColor: Boolean
         get() = true
+    override val onAnimationEnd: ((enter: Boolean) -> Unit)? = null
+    override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
-
-    private var binding: FragmentBibleChapterPagerBinding? = null
-    private var currentItem: BibleChapter? = null
 
     private val bookAdapter by lazy {
         ArrayAdapter(
@@ -52,36 +50,27 @@ class BibleChapterPagerFragment : BaseViewStubFragment(),
     }
 
     private var bibleChapterPagerAdapter: BibleChapterPagerAdapter? = null
+    private var currentItem: BibleChapter? = null
 
-    override fun onInflated(view: View) {
-        binding = FragmentBibleChapterPagerBinding.bind(view)
-        binding?.let {
-            observe(it)
-            bind(it)
-        }
+    override fun inflate(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentBibleChapterPagerBinding {
+        return FragmentBibleChapterPagerBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreateAnimation(transit: Int, enter: Boolean, nextAnim: Int): Animation? {
-        return AnimationUtils.loadAnimation(requireContext(), nextAnim).apply {
-            setAnimationListener( object: Animation.AnimationListener {
-                override fun onAnimationRepeat(animation: Animation?) {
-                }
-
-                override fun onAnimationEnd(animation: Animation?) {
-                    if (enter) {
-                        activityViewModel.callCloseDrawer()
-                    }
-                }
-
-                override fun onAnimationStart(animation: Animation?) {
-                    if (enter) {
-                        activityViewModel.setSystemUiColor()
-                    } else {
-                        activityViewModel.revertSystemUiColor()
-                    }
-                }
-            })
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        observe()
+        viewBinding.viewPager2.fadeIn(Duration.LONG) {
+            bind()
         }
+
+        return viewBinding.root
     }
 
     override fun onPause() {
@@ -90,33 +79,33 @@ class BibleChapterPagerFragment : BaseViewStubFragment(),
     }
 
     override fun onBookmarkClick(id: Int) {
-        binding?.viewPager2?.setCurrentItem(id, false)
+        viewBinding.viewPager2.setCurrentItem(id, false)
     }
 
-    private fun observe(binding: FragmentBibleChapterPagerBinding) {
+    private fun observe() {
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleChapter ->
             bibleChapter?.let {
-                binding.exposedDropdownMenuBook.autoCompleteTextView.setText(
+                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setText(
                     activityViewModel.getBook(it.book),
                     false
                 )
-                binding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
+                viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
                     it.chapter.toString(),
                     false
                 )
 
-                binding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
+                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
 
                 if (currentItem?.book != it.book) {
-                    binding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
+                    viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
                         activityViewModel.chapters[it.book.dec()], R.layout.dropdown_item
                     )
                 }
 
-                with(binding.constraintLayout) {
+                with(viewBinding.constraintLayout) {
                     if (isInvisible) {
                         delayOnLifecycle(Duration.SHORT) {
-                            fadeIn(Duration.SHORT)
+                            fadeIn(Duration.MEDIUM)
                         }
                     }
                 }
@@ -126,36 +115,30 @@ class BibleChapterPagerFragment : BaseViewStubFragment(),
         })
     }
 
-    private fun bind(binding: FragmentBibleChapterPagerBinding) {
-        binding.toolbar.setNavigationOnClickListener {
+    private fun bind() {
+        viewBinding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
 
-        binding.imageViewBookmarks.setOnClickListener {
+        viewBinding.imageViewBookmarks.setOnClickListener {
             BookmarksDialogFragment().also {
                 it.show(childFragmentManager, it.tag)
             }
         }
 
-        binding.exposedDropdownMenuBook.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+        viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
             val chapter = 1
 
-            binding.viewPager2.moveTo(position.inc(), chapter)
+            viewBinding.viewPager2.moveTo(position.inc(), chapter)
         }
 
-        binding.exposedDropdownMenuChapter.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+        viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
             val book = currentItem?.book ?: 1
 
-            binding.viewPager2.moveTo(book, position.inc())
+            viewBinding.viewPager2.moveTo(book, position.inc())
         }
 
-        with(binding.viewPager2) {
-            delayOnLifecycle(Duration.SHORT) {
-                fadeIn(Duration.SHORT) {
-                    setAdapter(this)
-                }
-            }
-        }
+        setAdapter(viewBinding.viewPager2)
     }
 
     private fun setAdapter(viewPager2: ViewPager2) {

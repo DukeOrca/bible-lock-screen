@@ -3,7 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer
 import android.animation.Animator
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import java.util.concurrent.atomic.AtomicBoolean
 
 class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean) : ViewPager2.PageTransformer {

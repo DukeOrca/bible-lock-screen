@@ -8,7 +8,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.MainThread
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.NEWLINE
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.NEWLINE
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 
 @MainThread

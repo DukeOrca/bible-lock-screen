@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@drawable/rounded_corners"
     android:backgroundTint="#40000000"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:clipChildren="true"
+    android:clipToPadding="true">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linear_layout_options"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_weight="1"
+        android:clipChildren="true"
+        android:clipToPadding="true"
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:clipToPadding="false">
 
             <TextView
                 android:id="@+id/text_view_word"
@@ -42,31 +39,21 @@
                 android:scrollbars="vertical"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:text="태초에 하나님이 천지를 창조하시니라" />
 
             <FrameLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_24dp"
-                android:layout_marginStart="@dimen/margin_1dp"
-                android:layout_marginTop="@dimen/margin_16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/text_view_word"
-                app:layout_constraintStart_toStartOf="@+id/text_view_word"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_word">
+                android:layout_marginEnd="@dimen/margin_24dp"
+                android:layout_marginBottom="@dimen/margin_25dp"
+                android:layout_marginStart="@dimen/margin_25dp"
+                android:layout_marginTop="@dimen/margin_16dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/text_view_word"
-                    app:layout_constraintStart_toStartOf="@+id/text_view_word"
-                    app:layout_constraintTop_toBottomOf="@+id/text_view_word"
                     tools:ignore="UselessParent">
 
                     <TextView
@@ -117,7 +104,7 @@
 
             </FrameLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -148,13 +135,13 @@
             app:layout_constraintEnd_toStartOf="@+id/image_view_more_vert"
             app:layout_constraintTop_toTopOf="@+id/image_view_more_vert"
             app:like_drawable="@drawable/ic_like_24"
-            app:unlike_drawable="@drawable/ic_unlike_24" />
+            app:unlike_drawable="@drawable/ic_unlike_dark_24" />
 
         <ImageView
+            style="@style/SelectableItemBackgroundBorderless"
             android:id="@+id/image_view_more_vert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_8dp"
             app:layout_constraintEnd_toEndOf="@+id/text_view_word"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
@@ -164,4 +151,4 @@
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

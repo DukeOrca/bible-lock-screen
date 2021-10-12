@@ -1,0 +1,89 @@
+package com.duke.orca.android.kotlin.biblelockscreen.settings.views
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.ActivityPreferenceBinding
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.PreferenceAdapter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+class DisplaySettingsActivity : AppCompatActivity() {
+    private var _viewBinding: ActivityPreferenceBinding? = null
+    private val viewBinding: ActivityPreferenceBinding
+        get() = _viewBinding!!
+
+    private val preferenceAdapter = PreferenceAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val mode = if (DataStore.Display.isDarkMode(this)) {
+            AppCompatDelegate.MODE_NIGHT_YES
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO
+        }
+
+        AppCompatDelegate.setDefaultNightMode(mode)
+
+        super.onCreate(savedInstanceState)
+        _viewBinding = ActivityPreferenceBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+
+        initData()
+        bind()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.hold, R.anim.slide_out_right)
+    }
+
+    override fun onDestroy() {
+        _viewBinding = null
+        super.onDestroy()
+    }
+
+    private fun initData() {
+        val isDarkMode = DataStore.Display.isDarkMode(this)
+
+        val list: List<AdapterItem> = arrayListOf(
+            AdapterItem.SwitchPreference(
+                drawable = ContextCompat.getDrawable(this, R.drawable.ic_round_dark_mode_24),
+                isChecked = isDarkMode,
+                onCheckedChange = { isChecked ->
+                    lifecycleScope.launch {
+                        DataStore.Display.putDarkMode(this@DisplaySettingsActivity, isChecked)
+
+                        delay(Duration.MEDIUM)
+                        recreate()
+                    }
+                },
+                title = getString(R.string.dark_mode)
+            )
+        )
+
+        preferenceAdapter.submitList(list)
+    }
+
+    private fun bind() {
+        with(viewBinding.toolbar) {
+            setTitle(R.string.display)
+
+            setNavigationOnClickListener {
+                onBackPressed()
+            }
+        }
+
+        viewBinding.recyclerView.apply {
+            adapter = preferenceAdapter
+            layoutManager = LinearLayoutManagerWrapper(context)
+            setHasFixedSize(true)
+        }
+    }
+}

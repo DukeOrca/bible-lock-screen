@@ -80,6 +80,7 @@
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_25dp">25dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="margin_32dp">32dp</dimen>
     <dimen name="margin_36dp">36dp</dimen>

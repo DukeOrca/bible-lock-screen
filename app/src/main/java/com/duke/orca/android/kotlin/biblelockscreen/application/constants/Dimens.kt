@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.application
+package com.duke.orca.android.kotlin.biblelockscreen.application.constants
 
 import android.content.res.Resources
 

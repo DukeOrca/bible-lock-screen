@@ -3,7 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.datastore
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
-import com.duke.orca.android.kotlin.biblelockscreen.application.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 
 object PreferencesKeys {
     private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.datastore"

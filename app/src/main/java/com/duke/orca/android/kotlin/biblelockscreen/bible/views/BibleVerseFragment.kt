@@ -7,14 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.Application
-import com.duke.orca.android.kotlin.biblelockscreen.application.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -31,6 +29,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     OptionChoiceDialogFragment.OnOptionChoiceListener {
+    private val viewModel by viewModels<BibleVerseViewModel>()
+    private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
+
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -38,60 +39,59 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         return FragmentBibleVerseBinding.inflate(inflater, container, false)
     }
 
-    private val viewModel by viewModels<BibleVerseViewModel>()
-    private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        observe()
+
+        observe(viewBinding)
 
         lifecycleScope.launch {
-            val bibleVerse = viewModel.get(arguments?.getInt(Key.ID) ?: 0)
-
-            bibleVerse?.let {
-                bind(bibleVerse)
+            viewModel.get(arguments?.getInt(Key.ID) ?: 0)?.let {
+                bind(viewBinding, it)
             }
         }
 
         return viewBinding.root
     }
 
-    private fun observe() {
+    private fun observe(binding: FragmentBibleVerseBinding) {
         activityViewModel.settings.observe(viewLifecycleOwner, {
-            val typeface = viewBinding.textViewWord.typeface
+            val typeface = binding.textViewWord.typeface
 
             val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
             val bold = it[PreferencesKeys.Font.bold] ?: false
             val textAlignment = it[PreferencesKeys.Font.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
 
-            viewBinding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
-            viewBinding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
-            viewBinding.textViewWord.gravity = textAlignment
+            binding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
+            binding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+            binding.textViewWord.gravity = textAlignment
+
+            binding.textViewBook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
+            binding.textViewChapter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
+            binding.textViewColon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
+            binding.textViewVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
 
             FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.WRAP_CONTENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
             ).apply {
                 gravity = textAlignment
-                viewBinding.linearLayout.layoutParams = this
+                binding.linearLayout.layoutParams = this
             }
         })
     }
 
-    private fun bind(bibleVerse: BibleVerse) {
-        viewBinding.textViewWord.text = bibleVerse.word
-        viewBinding.textViewBook.text = activityViewModel.getBook(bibleVerse.book)
-        viewBinding.textViewChapter.text = bibleVerse.chapter.toString()
-        viewBinding.textViewVerse.text = bibleVerse.verse.toString()
+    private fun bind(binding: FragmentBibleVerseBinding, bibleVerse: BibleVerse) {
+        binding.textViewWord.text = bibleVerse.word
+        binding.textViewBook.text = activityViewModel.getBook(bibleVerse.book)
+        binding.textViewChapter.text = bibleVerse.chapter.toString()
+        binding.textViewVerse.text = bibleVerse.verse.toString()
 
-        viewBinding.constraintLayout.fadeIn(Duration.SHORT)
-
-        viewBinding.likeButton.isLiked = bibleVerse.favorites
-        viewBinding.likeButton.setOnLikeListener(object : OnLikeListener {
+        binding.likeButton.isLiked = bibleVerse.favorites
+        binding.likeButton.setOnLikeListener(object : OnLikeListener {
             override fun liked(likeButton: LikeButton?) {
                 addToFavorites(bibleVerse.id)
             }
@@ -101,7 +101,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
             }
         })
 
-        viewBinding.imageViewMoreVert.setOnClickListener {
+        binding.imageViewMoreVert.setOnClickListener {
             OptionChoiceDialogFragment.newInstance(options, bibleVerse).also {
                 it.show(childFragmentManager, it.tag)
             }

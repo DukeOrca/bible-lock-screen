@@ -8,7 +8,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.provider.Settings
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.duke.orca.android.kotlin.biblelockscreen.application.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.blindscreen.BlindScreenPresenter
@@ -85,7 +85,11 @@ class LockScreenService : Service() {
         override fun onReceive(context: Context?, intent: Intent) {
             when (intent.action) {
                 Action.HOME_KEY_PRESSED, Action.RECENT_APPS_PRESSED -> {
-                    if (Settings.canDrawOverlays(context)) {
+                    context ?: return
+
+                    val showOnLockScreen = DataStore.LockScreen.getShowOnLockScreen(context)
+
+                    if (showOnLockScreen && Settings.canDrawOverlays(context)) {
                         blindScreenPresenter.show()
                     }
                 }
