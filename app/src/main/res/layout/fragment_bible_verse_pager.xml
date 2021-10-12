@@ -22,14 +22,38 @@
             android:clipChildren="false"
             android:clipToPadding="false">
 
+            <View
+                android:id="@+id/view_left_fake"
+                android:layout_width="@dimen/width_8dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_180dp"
+                android:background="@drawable/rounded_right_corners"
+                android:backgroundTint="@color/background_translucent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/view_right_fake"
+                android:layout_width="@dimen/width_8dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_180dp"
+                android:background="@drawable/rounded_left_corners"
+                android:backgroundTint="@color/background_translucent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
             <LinearLayout
                 android:id="@+id/linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:orientation="vertical"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/linear_layout_unlock"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -99,8 +123,8 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            style="@style/SelectableItemBackgroundBorderless"
                             android:id="@+id/image_view_search"
+                            style="@style/SelectableItemBackgroundBorderless"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/elevation_4dp"
@@ -110,8 +134,8 @@
                             tools:ignore="ContentDescription" />
 
                         <ImageView
-                            style="@style/SelectableItemBackgroundBorderless"
                             android:id="@+id/image_view_favorite"
+                            style="@style/SelectableItemBackgroundBorderless"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/elevation_4dp"
@@ -122,8 +146,8 @@
                             tools:ignore="ContentDescription" />
 
                         <ImageView
-                            style="@style/SelectableItemBackgroundBorderless"
                             android:id="@+id/image_view_menu"
+                            style="@style/SelectableItemBackgroundBorderless"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:elevation="@dimen/elevation_4dp"
@@ -139,17 +163,17 @@
                     android:id="@+id/constraint_layout_exposed_dropdown_menu"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/height_36dp"
-                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:layout_marginStart="@dimen/margin_16dp"
                     android:layout_marginTop="@dimen/margin_8dp"
-                    android:orientation="horizontal"
+                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:visibility="invisible"
                     tools:visibility="visible">
 
                     <include
-                        layout="@layout/exposed_dropdown_menu"
                         android:id="@+id/exposed_dropdown_menu_book"
+                        layout="@layout/exposed_dropdown_menu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -158,8 +182,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <include
-                        layout="@layout/exposed_dropdown_menu2"
                         android:id="@+id/exposed_dropdown_menu_chapter"
+                        layout="@layout/exposed_dropdown_menu2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -167,8 +191,8 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <include
-                        layout="@layout/exposed_dropdown_menu3"
                         android:id="@+id/exposed_dropdown_menu_verse"
+                        layout="@layout/exposed_dropdown_menu3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -181,13 +205,13 @@
                     android:id="@+id/view_pager2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:layout_marginStart="@dimen/margin_16dp"
                     android:layout_marginTop="@dimen/margin_8dp"
+                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:visibility="invisible"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
             </LinearLayout>
 
@@ -244,6 +268,6 @@
         android:id="@+id/fragment_container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/elevation_8dp" />
+        android:elevation="@dimen/elevation_6dp" />
 
 </RelativeLayout>

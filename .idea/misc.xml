@@ -46,7 +46,7 @@
         <entry key="app/src/main/res/layout/fragment_bible_chapter.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.2874828060522696" />
+        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_view_stub.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_bible_verses.xml" value="0.1" />

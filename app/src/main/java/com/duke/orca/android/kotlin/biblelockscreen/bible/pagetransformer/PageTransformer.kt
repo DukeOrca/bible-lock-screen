@@ -9,10 +9,20 @@ import java.util.concurrent.atomic.AtomicBoolean
 class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean) : ViewPager2.PageTransformer {
     private val isAnimationScheduled = AtomicBoolean(scheduleAnimation)
 
-    override fun transformPage(view: View, position: Float) {
-        view.apply {
+    private var pageAnimatorListener: PageAnimatorListener? = null
+
+    interface PageAnimatorListener {
+        fun onPageAnimationEnd()
+    }
+
+    fun setPageAnimatorListener(pageAnimatorListener: PageAnimatorListener) {
+        this.pageAnimatorListener = pageAnimatorListener
+    }
+
+    override fun transformPage(page: View, position: Float) {
+        page.apply {
             if (isAnimationScheduled.get()) {
-                this.animate()
+               this.animate()
                     .translationX(position * pageMargin)
                     .setDuration(Duration.SHORT)
                     .setListener(object : Animator.AnimatorListener {
@@ -21,6 +31,7 @@ class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean)
 
                         override fun onAnimationEnd(animation: Animator?) {
                             if (position >= 1.0F) {
+                                pageAnimatorListener?.onPageAnimationEnd()
                                 isAnimationScheduled.set(false)
                             }
                         }

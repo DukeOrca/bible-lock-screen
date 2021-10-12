@@ -10,3 +10,9 @@ internal const val CHAPTER_COUNT = 1189
 internal object Application {
     const val PACKAGE_NAME = "com.duke.orca.android.kotlin.biblelockscreen"
 }
+
+internal object PageMargin {
+    val small = 8.0F.toPx
+    val medium = 16.0F.toPx
+    val large = 24.0F.toPx
+}

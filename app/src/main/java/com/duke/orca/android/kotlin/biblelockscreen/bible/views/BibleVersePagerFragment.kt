@@ -3,19 +3,12 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.drawable.RippleDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat.END
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -24,6 +17,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.PageMargin
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.toPx
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVersePagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -152,9 +147,6 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     @SuppressLint("ClickableViewAccessibility")
     private fun bind() {
-        viewBinding.constraintLayoutExposedDropdownMenu.fadeIn(Duration.LONG)
-        viewBinding.viewPager2.fadeIn(Duration.LONG)
-
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
         viewBinding.imageViewSearch.setOnClickListener {
@@ -198,17 +190,37 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             moveTo(book, chapter, position.inc())
         }
 
+        viewBinding.constraintLayoutExposedDropdownMenu.fadeIn(Duration.LONG)
+
         viewBinding.viewPager2.adapter = bibleVersePagerAdapter
         viewBinding.viewPager2.offscreenPageLimit = 2
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
-        setPageTransformer(resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(), true)
         viewBinding.viewPager2.setCurrentItem(DataStore.BibleVerse.getCurrentItem(requireContext()), false)
+
+        setPageTransformer(PageMargin.medium, false)
+
+        viewBinding.viewPager2.fadeIn(Duration.LONG) {
+            setPageTransformer(PageMargin.small, true) {
+                with(viewBinding.viewLeftFake) {
+                    viewTreeObserver.addOnDrawListener {
+                        if (abs(translationX) == 0.0F) {
+                            setPageTransformer(PageMargin.small, false)
+                            hide(true)
+                            viewBinding.viewRightFake.hide(true)
+                        } else {
+                            show()
+                            viewBinding.viewRightFake.show()
+                            setPageTransformer(PageMargin.medium, false)
+                        }
+                    }
+                }
+            }
+        }
 
         viewBinding.linearLayoutUnlock.setOnTouchListener { _, event ->
             when(event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    setPageTransformer(resources.getDimensionPixelOffset(R.dimen.margin_16dp).toFloat(), true)
-
+                    disableUserInput()
                     Unlock.x = event.x
                     Unlock.y = event.y
                 }
@@ -216,14 +228,14 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                     viewBinding.frameLayoutUnlock.showRipple()
 
                     val distance = sqrt((Unlock.x - event.x).pow(2) + (Unlock.y - event.y).pow(2))
-                    var scale = abs(Unlock.endRange - distance * 0.40F) / Unlock.endRange
+                    var scale = abs(Unlock.endRange - distance * 0.4F) / Unlock.endRange
 
                     when {
                         scale >= 1.0F -> scale = 1.0F
-                        scale < 0.75F -> scale = 0.75F
+                        scale < 0.8F -> scale = 0.8F
                     }
 
-                    val alpha = (scale - 0.75F) * 4.0F
+                    val alpha = (scale - 0.80F) * 5.0F
 
                     viewBinding.linearLayout.alpha = alpha
                     viewBinding.linearLayout.scaleX = scale
@@ -231,6 +243,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                     viewBinding.imageViewUnlock.alpha = alpha
                     viewBinding.imageViewUnlock.scaleX = scale
                     viewBinding.imageViewUnlock.scaleY = scale
+
+                    translateFakeViews(alpha)
 
                     Unlock.outOfEndRange = distance * 1.25F > Unlock.endRange * 0.75F
                 }
@@ -350,19 +364,49 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         }
     }
 
-    private fun setPageTransformer(pageMargin: Float, scheduleAnimation: Boolean) {
+    private fun setPageTransformer(
+        pageMargin: Float,
+        scheduleAnimation: Boolean,
+        onPageAnimationEnd: (() -> Unit)? = null
+    ) {
         viewBinding.viewPager2.setPageTransformer(PageTransformer(
             pageMargin,
             scheduleAnimation
-        ))
+        ).apply {
+            onPageAnimationEnd?.let {
+                setPageAnimatorListener(object : PageTransformer.PageAnimatorListener {
+                    override fun onPageAnimationEnd() {
+                        it.invoke()
+                    }
+                })
+            }
+        })
+    }
+
+    private fun translateFakeViews(alpha: Float) {
+        viewBinding.viewLeftFake.alpha = alpha
+        viewBinding.viewRightFake.alpha = alpha
+
+        viewBinding.viewLeftFake.translationX = ((1.0F - alpha) * -8.0F).toPx
+        viewBinding.viewRightFake.translationX = ((1.0F - alpha) * 8.0F).toPx
     }
 
     private fun restoreVisibility() {
         viewBinding.frameLayoutUnlock.hideRipple()
-        viewBinding.imageViewUnlock.scale(1.0F, Duration.MEDIUM)
-        viewBinding.linearLayout.scale(1.0F, Duration.MEDIUM) {
-            setPageTransformer(resources.getDimensionPixelOffset(R.dimen.margin_8dp).toFloat(), true)
+        viewBinding.imageViewUnlock.scale(1.0F, duration = Duration.MEDIUM)
+        viewBinding.linearLayout.scale(1.0F, duration =  Duration.MEDIUM)
+        viewBinding.viewLeftFake.translateX(0.0F, duration = Duration.MEDIUM)
+        viewBinding.viewRightFake.translateX(0.0F, duration = Duration.MEDIUM) {
+            enableUserInput()
         }
+    }
+
+    private fun disableUserInput() {
+        viewBinding.viewPager2.isUserInputEnabled = false
+    }
+
+    private fun enableUserInput() {
+        viewBinding.viewPager2.isUserInputEnabled = true
     }
 
     companion object {

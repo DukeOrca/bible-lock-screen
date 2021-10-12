@@ -189,8 +189,8 @@ fun View.rotate(
 
 fun View.scale(
     scale: Float,
-    duration: Number = 150,
-    alpha: Float = 1F,
+    alpha: Float = 1.0F,
+    duration: Long = 200L,
     onAnimationEnd: (() -> Unit)? = null
 ): ViewPropertyAnimator {
     show()
@@ -329,6 +329,25 @@ fun TextView.setTextWithSearchWord(
         @Suppress("DEPRECATION")
         this.text = Html.fromHtml(htmlText)
     }
+}
+
+fun View.translateX(
+    value: Float,
+    alpha: Float = 1.0F,
+    duration: Long = 150L,
+    onAnimationEnd: (() -> Unit)? = null
+) {
+    animate()
+        .translationX(value)
+        .alpha(alpha)
+        .setDuration(duration)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                onAnimationEnd?.invoke()
+                super.onAnimationEnd(animation)
+            }
+        })
+        .start()
 }
 
 fun AutoCompleteTextView.setIntegerArrayAdapter(itemCount: Int, @LayoutRes layoutRes: Int) {

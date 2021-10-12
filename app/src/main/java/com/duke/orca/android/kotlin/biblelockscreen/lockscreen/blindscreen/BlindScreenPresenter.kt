@@ -39,8 +39,8 @@ class BlindScreenPresenter {
 
     private fun restoreVisibility(duration: Long) {
         viewBinding.frameLayoutUnlock.hideRipple()
-        viewBinding.linearLayout.scale(1F, duration)
-        viewBinding.imageViewUnlock.scale(1F, duration)
+        viewBinding.linearLayout.scale(1.0F, duration = duration)
+        viewBinding.imageViewUnlock.scale(1.0F, duration = duration)
     }
 
     @SuppressLint("ClickableViewAccessibility")
