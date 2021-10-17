@@ -33,8 +33,6 @@ import java.util.*
 class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBinding>(),
     BibleVerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
-    override val changeSystemUiColor: Boolean = true
-    override val onAnimationEnd: ((enter: Boolean) -> Unit)? = null
     override val toolbar: Toolbar? = null
 
     override fun inflate(
@@ -45,7 +43,7 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private val viewModel by viewModels<BibleVerseSearchViewModel>()
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(activityViewModel.books) }
+    private val bibleVerseAdapter by lazy { BibleVerseAdapter(books) }
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -77,14 +75,15 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
             val searchResults = searchResult.searchResults
             val searchWord = searchResult.searchWord
 
-            viewBinding.circularProgressIndicator.fadeOut(Duration.SHORT)
-            viewBinding.recyclerView.fadeIn(Duration.MEDIUM) {
-                bibleVerseAdapter.submitList(
-                    searchResults.map { it.toAdapterItem() }, searchWord, color
-                ) {
-                    delayOnLifecycle(Duration.SHORT) {
-                        if (searchResults.isEmpty()) {
-                            viewBinding.linearLayout.fadeIn(Duration.SHORT)
+            viewBinding.circularProgressIndicator.fadeOut(Duration.SHORT) {
+                viewBinding.recyclerView.fadeIn(Duration.MEDIUM) {
+                    bibleVerseAdapter.submitList(
+                        searchResults.map { it.toAdapterItem() }, searchWord, color
+                    ) {
+                        delayOnLifecycle(Duration.SHORT) {
+                            if (searchResults.isEmpty()) {
+                                viewBinding.linearLayout.fadeIn(Duration.MEDIUM)
+                            }
                         }
                     }
                 }
@@ -145,8 +144,8 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private fun search(text: String) {
-        viewBinding.recyclerView.fadeOut(Duration.SHORT) {
-            viewBinding.circularProgressIndicator.fadeIn(Duration.SHORT)
+        viewBinding.recyclerView.fadeOut(Duration.SHORT, true) {
+            viewBinding.circularProgressIndicator.fadeIn(Duration.MEDIUM)
 
             bibleVerseAdapter.submitList(null)
 

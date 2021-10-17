@@ -11,9 +11,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.PreferenceA
 abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>() {
     abstract val toolbarTitleResId: Int
 
-    override val onAnimationEnd: ((enter: Boolean) -> Unit)?
-        get() = null
-
     protected val dataStore by lazy { requireContext().dataStore }
     protected val preferenceAdapter = PreferenceAdapter()
 
@@ -27,9 +24,5 @@ abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>
         viewBinding.toolbar.setTitle(toolbarTitleResId)
 
         return viewBinding.root
-    }
-
-    protected fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {
-        requireActivity().overridePendingTransition(enterAnim, exitAnim)
     }
 }

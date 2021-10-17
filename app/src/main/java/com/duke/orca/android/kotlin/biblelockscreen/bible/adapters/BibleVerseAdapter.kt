@@ -40,13 +40,13 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
         @ColorInt color: Int,
         commitCallback: (() -> Unit)? = null
     ) {
-        submitList(emptyList()) {
-            this.searchWord = searchWord
-            this.color = color
-            recyclerView?.scheduleLayoutAnimation()
-            submitList(list) {
-                commitCallback?.invoke()
-            }
+        this.searchWord = searchWord
+        this.color = color
+
+        recyclerView?.scheduleLayoutAnimation()
+
+        submitList(list) {
+            commitCallback?.invoke()
         }
     }
 
@@ -94,9 +94,6 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
                     }
                 }
                 is AdapterItem.AdapterNativeAd -> {
-                    if (viewBinding is NativeAdBinding) {
-
-                    }
                 }
             }
         }

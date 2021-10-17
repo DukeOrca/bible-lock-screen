@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterAdapter
@@ -13,6 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookmarksDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBinding>(),
@@ -22,6 +25,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
     private val bibleChapterAdapter by lazy { BibleChapterAdapter(requireContext()) }
+    private val isLayoutAnimationScheduled = AtomicBoolean(false)
 
     private var onBookmarkClickListener: OnBookmarkClickListener? = null
 
@@ -70,7 +74,17 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
 
     private fun observe() {
         viewModel.getBookmarks().observe(viewLifecycleOwner, {
-            bibleChapterAdapter.submitList(it)
+            if (isLayoutAnimationScheduled.compareAndSet(false, true)) {
+                viewBinding.recyclerView.scheduleLayoutAnimation()
+            }
+
+            bibleChapterAdapter.submitList(it) {
+                if (it.isEmpty()) {
+                    delayOnLifecycle(Duration.SHORT) {
+                        viewBinding.textViewNoBookmarks.fadeIn(Duration.MEDIUM)
+                    }
+                }
+            }
         })
     }
 
@@ -81,6 +95,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
             adapter = bibleChapterAdapter
             layoutManager = LinearLayoutManagerWrapper(requireContext())
             scheduleLayoutAnimation()
+            setHasFixedSize(true)
         }
     }
 }

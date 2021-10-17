@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:clipChildren="false"
-    android:clipToPadding="false"
-    android:clickable="true"
-    android:focusable="true">
+    android:clipToPadding="false">
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
@@ -24,13 +22,14 @@
         app:queryBackground="@android:color/transparent"
         app:queryHint="@string/enter_your_search_term"/>
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/circular_progress_indicator"
-        android:layout_width="@dimen/width_40dp"
-        android:layout_height="@dimen/height_40dp"
-        android:layout_marginBottom="@dimen/margin_160dp"
-        android:indeterminate="true"
-        android:visibility="gone"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/background"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layoutAnimation="@anim/layout_animation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,13 +70,13 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:layoutAnimation="@anim/layout_animation"
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/circular_progress_indicator"
+        android:layout_width="@dimen/width_40dp"
+        android:layout_height="@dimen/height_40dp"
+        android:layout_marginBottom="@dimen/margin_160dp"
+        android:indeterminate="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

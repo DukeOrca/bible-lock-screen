@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:interpolator/accelerate_decelerate"
-    android:startOffset="@integer/short_anim_time">
+    android:interpolator="@android:interpolator/decelerate_quad">
     <translate android:fromXDelta="50%p" android:toXDelta="0"
-        android:duration="@integer/medium_anim_time"/>
+        android:duration="@android:integer/config_mediumAnimTime" />
     <alpha android:fromAlpha="0.0" android:toAlpha="1.0"
-        android:duration="@integer/medium_anim_time" />
+        android:duration="@android:integer/config_mediumAnimTime" />
 </set>

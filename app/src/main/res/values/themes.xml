@@ -10,8 +10,8 @@
         <item name="colorSecondaryVariant">@color/secondary_variant</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:navigationBarColor">@color/background_translucent</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/background_translucent</item>
+        <item name="android:navigationBarColor">@color/translucent</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/translucent</item>
         <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
@@ -41,7 +41,30 @@
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
-        <item name="android:windowAnimationStyle">@style/WindowAnimation.DisplaySettingsActivity</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Sliding</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+
+    <style name="Theme.FragmentContainerActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:navigationBarColor">@color/system_ui</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
@@ -88,12 +111,12 @@
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
-    <style name="WindowAnimation.DialogFragment">
+    <style name="WindowAnimation.Fading">
         <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
-    <style name="WindowAnimation.DisplaySettingsActivity">
+    <style name="WindowAnimation.Sliding">
         <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
         <item name="android:windowExitAnimation">@anim/slide_out_left</item>
     </style>

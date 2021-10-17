@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/rounded_corners"
     android:backgroundTint="@color/surface"
     android:paddingBottom="@dimen/padding_8dp">
@@ -20,11 +20,31 @@
         android:textSize="@dimen/text_size_20dp"
         android:textStyle="bold"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_below="@+id/text_view_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutAnimation="@anim/layout_animation"/>
+        android:layout_height="@dimen/height_280dp"
+        android:layout_below="@+id/text_view_title">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layoutAnimation="@anim/layout_animation" />
+
+        <TextView
+            android:id="@+id/text_view_no_bookmarks"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_56dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/surface"
+            android:gravity="center"
+            android:text="@string/no_bookmarks"
+            android:textColor="@color/medium_emphasis"
+            android:textSize="@dimen/text_size_16dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
 </RelativeLayout>

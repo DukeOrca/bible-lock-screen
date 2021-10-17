@@ -11,6 +11,7 @@ import android.text.Html
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewPropertyAnimator
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.Transformation
@@ -19,6 +20,14 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+
+fun View.enable() {
+    isEnabled = true
+}
+
+fun View.disable() {
+    isEnabled = false
+}
 
 fun FrameLayout.animateRipple() {
     if (foreground is RippleDrawable) {
@@ -119,7 +128,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 }
 
 fun View.fadeIn(
-    duration: Number,
+    duration: Long,
     alphaFrom: Float = 0F,
     onAnimationEnd: (() -> Unit)? = null
 ) {
@@ -129,23 +138,24 @@ fun View.fadeIn(
 
         animate()
             .alpha(1F)
-            .setDuration(duration.toLong())
+            .setDuration(duration)
+            .setInterpolator(DecelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     onAnimationEnd?.invoke()
-                    super.onAnimationEnd(animation)
                 }
             })
     }
 }
 
-fun View.fadeOut(duration: Number, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null) {
+fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null) {
     this.apply {
         alpha = 1F
 
         animate()
             .alpha(0F)
-            .setDuration(duration.toLong())
+            .setDuration(duration)
+            .setInterpolator(AccelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     this@fadeOut.visibility = if (invisible)
@@ -187,6 +197,28 @@ fun View.rotate(
         .start()
 }
 
+fun View.fade(
+    alpha: Float,
+    duration: Long = 200L,
+    onAnimationEnd: (() -> Unit)? = null
+): ViewPropertyAnimator {
+    show()
+
+    val viewPropertyAnimator = this.animate()
+        .alpha(alpha)
+        .setDuration(duration)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                onAnimationEnd?.invoke()
+                super.onAnimationEnd(animation)
+            }
+        })
+
+    viewPropertyAnimator.start()
+
+    return viewPropertyAnimator
+}
+
 fun View.scale(
     scale: Float,
     alpha: Float = 1.0F,
@@ -199,7 +231,7 @@ fun View.scale(
         .scaleX(scale)
         .scaleY(scale)
         .alpha(alpha)
-        .setDuration(duration.toLong())
+        .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 onAnimationEnd?.invoke()
@@ -319,7 +351,7 @@ fun TextView.setTextWithSearchWord(
     }
 
     val hexColor = color.toHexColor()
-    val htmlText = text.replaceFirst(
+    val htmlText = text.replace(
         searchWord,
         "<font color='$hexColor'>$searchWord</font>"
     )
@@ -358,6 +390,16 @@ fun AutoCompleteTextView.setIntegerArrayAdapter(itemCount: Int, @LayoutRes layou
             context,
             layoutRes,
             intRange.map { it.toString() }
+        )
+    )
+}
+
+fun AutoCompleteTextView.setStringArrayAdapter(stringArray: Array<String>, @LayoutRes layoutRes: Int) {
+    setAdapter(
+        ArrayAdapter(
+            context,
+            layoutRes,
+            stringArray
         )
     )
 }

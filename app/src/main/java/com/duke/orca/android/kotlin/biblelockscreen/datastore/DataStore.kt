@@ -16,31 +16,71 @@ import kotlinx.coroutines.runBlocking
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "${Application.PACKAGE_NAME}.settings")
 
 object DataStore {
-    fun getBoolean(context: Context, key: Preferences.Key<Boolean>, defValue: Boolean): Boolean = runBlocking {
+    private fun getBoolean(context: Context, key: Preferences.Key<Boolean>, defValue: Boolean): Boolean = runBlocking {
         context.dataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
-    fun getInt(context: Context, key: Preferences.Key<Int>, defValue: Int): Int = runBlocking {
+    private fun getInt(context: Context, key: Preferences.Key<Int>, defValue: Int): Int = runBlocking {
         context.dataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
-    fun getFloat(context: Context, key: Preferences.Key<Float>, defValue: Float): Float = runBlocking {
+    private fun getFloat(context: Context, key: Preferences.Key<Float>, defValue: Float): Float = runBlocking {
         context.dataStore.data.map {
             it[key] ?: defValue
         }.first()
+    }
+
+    private fun getLong(context: Context, key: Preferences.Key<Long>, defValue: Long): Long = runBlocking {
+        context.dataStore.data.map {
+            it[key] ?: defValue
+        }.first()
+    }
+
+    suspend fun putBoolean(context: Context, key: Preferences.Key<Boolean>, value: Boolean) {
+        context.dataStore.edit {
+            it[key] = value
+        }
+    }
+
+    suspend fun putInt(context: Context, key: Preferences.Key<Int>, value: Int) {
+        context.dataStore.edit {
+            it[key] = value
+        }
+    }
+
+    suspend fun putFloat(context: Context, key: Preferences.Key<Float>, value: Float) {
+        context.dataStore.edit {
+            it[key] = value
+        }
+    }
+
+    suspend fun putLong(context: Context, key: Preferences.Key<Long>, value: Long) {
+        context.dataStore.edit {
+            it[key] = value
+        }
+    }
+
+    fun isFirstTime(context: Context): Boolean = getBoolean(context, PreferencesKeys.isFirstTime, true)
+
+    fun putFirstTime(context: Context, value: Boolean) = runBlocking {
+        putBoolean(context, PreferencesKeys.isFirstTime, value)
+    }
+
+    fun getBegin(context: Context): Long = getLong(context, PreferencesKeys.begin, System.currentTimeMillis())
+
+    fun putBegin(context: Context, value: Long) = runBlocking {
+        putLong(context, PreferencesKeys.begin, value)
     }
 
     object BibleChapter {
         fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentItem, 0)
 
         fun putCurrentItem(context: Context, value: Int) = runBlocking {
-            context.dataStore.edit {
-                it[PreferencesKeys.BibleChapter.currentItem] = value
-            }
+            putInt(context, PreferencesKeys.BibleChapter.currentItem, value)
         }
     }
 
@@ -48,9 +88,7 @@ object DataStore {
         fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleVerse.currentItem, 0)
 
         fun putCurrentItem(context: Context, value: Int) = runBlocking {
-            context.dataStore.edit {
-                it[PreferencesKeys.BibleVerse.currentItem] = value
-            }
+            putInt(context, PreferencesKeys.BibleVerse.currentItem, value)
         }
     }
 
@@ -67,9 +105,7 @@ object DataStore {
         }
 
         fun putDarkMode(context: Context, value: Boolean) = runBlocking {
-            context.dataStore.edit {
-                it[PreferencesKeys.Display.isDarkMode] = value
-            }
+            putBoolean(context, PreferencesKeys.Display.isDarkMode, value)
         }
     }
 
@@ -87,21 +123,15 @@ object DataStore {
         fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.textAlignment, TextAlignment.LEFT)
 
         suspend fun putFontSize(context: Context, value: Float) {
-            context.dataStore.edit {
-                it[PreferencesKeys.Font.fontSize] = value
-            }
+            putFloat(context, PreferencesKeys.Font.fontSize, value)
         }
 
         suspend fun putBold(context: Context, value: Boolean) {
-            context.dataStore.edit {
-                it[PreferencesKeys.Font.bold] = value
-            }
+            putBoolean(context, PreferencesKeys.Font.bold, value)
         }
 
         suspend fun putTextAlignment(context: Context, value: Int) {
-            context.dataStore.edit {
-                it[PreferencesKeys.Font.textAlignment] = value
-            }
+            putInt(context, PreferencesKeys.Font.textAlignment, value)
         }
     }
 
@@ -111,20 +141,14 @@ object DataStore {
         fun getUnlockWithBackKey(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, false)
 
         suspend fun putDisplayAfterUnlocking(context: Context, value: Boolean) {
-            context.dataStore.edit {
-                it[PreferencesKeys.LockScreen.displayAfterUnlocking] = value
-            }
+            putBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, value)
         }
 
         suspend fun putShowOnLockScreen(context: Context, value: Boolean) {
-            context.dataStore.edit {
-                it[PreferencesKeys.LockScreen.showOnLockScreen] = value
-            }
+            putBoolean(context, PreferencesKeys.LockScreen.showOnLockScreen, value)
         }
         suspend fun putUnlockWithBackKey(context: Context, value: Boolean) {
-            context.dataStore.edit {
-                it[PreferencesKeys.LockScreen.unlockWithBackKey] = value
-            }
+            putBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, value)
         }
     }
 }

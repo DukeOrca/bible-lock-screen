@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.transition.TransitionManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTint
-import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
@@ -33,14 +31,12 @@ class BibleChapterFragment : BaseViewStubFragment(),
 {
     override val layoutResource: Int
         get() = R.layout.fragment_bible_chapter
-    override val showCircularProgressIndicator: Boolean
-        get() = true
 
     private val viewModel by viewModels<BibleChapterViewModel>()
     private val bookChapter by lazy { arguments?.getParcelable<BookChapter>(Key.BOOK_CHAPTER) }
     private val book by lazy { bookChapter?.book ?: 1 }
     private val chapter by lazy { bookChapter?.chapter ?: 1 }
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(activityViewModel.books) }
+    private val bibleVerseAdapter by lazy { BibleVerseAdapter(books) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     private var bibleChapter: BibleChapter? = null
@@ -51,32 +47,39 @@ class BibleChapterFragment : BaseViewStubFragment(),
     override fun onInflated(view: View) {
         bibleVerseAdapter.setOnIconClickListener(this)
 
-        with(FragmentBibleChapterBinding.bind(view)){
-            _binding = this
+        _binding = FragmentBibleChapterBinding.bind(view)
 
-            observe(binding)
+        viewModel.bibleChapter.observe(viewLifecycleOwner, {
+            bibleChapter = it
 
-            recyclerViewBibleChapter.apply {
-                adapter = bibleVerseAdapter
-                layoutManager = LinearLayoutManagerWrapper(requireContext())
-                scheduleLayoutAnimation()
-                setHasFixedSize(true)
+            binding.imageViewBookmark.setTint(
+                if (it.bookmark) {
+                    R.color.bookmarked
+                } else {
+                    R.color.unbookmarked
+                }
+            )
+        })
 
-                with(itemAnimator) {
-                    if (this is SimpleItemAnimator) {
-                        supportsChangeAnimations = false
-                    }
+        binding.linearLayout.fadeIn(Duration.MEDIUM)
+
+        binding.recyclerViewBibleChapter.apply {
+            adapter = bibleVerseAdapter
+            layoutManager = LinearLayoutManagerWrapper(requireContext())
+            scheduleLayoutAnimation()
+            setHasFixedSize(true)
+
+            with(itemAnimator) {
+                if (this is SimpleItemAnimator) {
+                    supportsChangeAnimations = false
                 }
             }
+        }
 
-            imageViewBookmark.setOnClickListener {
-                bibleChapter?.let { bibleChapter ->
-                    viewModel.updateBookmark(bibleChapter.id, bibleChapter.bookmark.not())
-                }
+        binding.imageViewBookmark.setOnClickListener {
+            bibleChapter?.let { bibleChapter ->
+                viewModel.updateBookmark(bibleChapter.id, bibleChapter.bookmark.not())
             }
-
-            TransitionManager.beginDelayedTransition(root)
-            linearLayout.show()
         }
 
         viewModel.getBibleChapter(book, chapter)
@@ -89,6 +92,7 @@ class BibleChapterFragment : BaseViewStubFragment(),
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         initData()
+        observe()
 
         return viewBinding.root
     }
@@ -103,24 +107,10 @@ class BibleChapterFragment : BaseViewStubFragment(),
         viewModel.getBibleVerses(book, chapter)
     }
 
-    private fun observe(binding: FragmentBibleChapterBinding) {
-        lifecycleScope.launchWhenResumed {
-            viewModel.adapterItems.observe(viewLifecycleOwner, {
-                bibleVerseAdapter.submitList(it)
-            })
-
-            viewModel.bibleChapter.observe(viewLifecycleOwner, {
-                bibleChapter = it
-
-                binding.imageViewBookmark.setTint(
-                    if (it.bookmark) {
-                        R.color.bookmarked
-                    } else {
-                        R.color.unbookmarked
-                    }
-                )
-            })
-        }
+    private fun observe() {
+        viewModel.adapterItems.observe(viewLifecycleOwner, {
+            bibleVerseAdapter.submitList(it)
+        })
     }
 
     override fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean) {

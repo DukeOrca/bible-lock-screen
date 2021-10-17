@@ -6,7 +6,6 @@
     <color name="secondary_variant">#0086C3</color>
 
     <color name="background">@color/dark_grey</color>
-    <color name="background2">@color/dark_grey</color>
     <color name="on_background">@color/white</color>
     <color name="surface">#2E2E2E</color>
 
@@ -20,7 +19,7 @@
     <color name="helper_text">#99FFFFFF</color>
     <color name="error_text">#CF6679</color>
 
-    <color name="card_background">#99121212</color>
+    <color name="card_background">#61000000</color>
     <color name="divider">#33FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="notification">@color/deep_purple_300</color>

@@ -64,14 +64,14 @@ class BlindScreenPresenter {
                     viewBinding.frameLayoutUnlock.showRipple()
 
                     val distance = sqrt((Unlock.x - event.x).pow(2) + (Unlock.y - event.y).pow(2))
-                    var scale = abs(Unlock.endRange - distance * 0.45F) / Unlock.endRange
+                    var scale = abs(Unlock.endRange - distance * 0.4F) / Unlock.endRange
 
                     when {
                         scale >= 1.0F -> scale = 1.0F
-                        scale < 0.75F -> scale = 0.75F
+                        scale < 0.8F -> scale = 0.8F
                     }
 
-                    val alpha = (scale - 0.75F) * 4.0F
+                    val alpha = (scale - 0.8F) * 5.0F
 
                     viewBinding.linearLayout.alpha = alpha
                     viewBinding.linearLayout.scaleX = scale

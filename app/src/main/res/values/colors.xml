@@ -14,12 +14,9 @@
     <color name="dark_grey">#121212</color>
 
     <color name="background">@color/white</color>
-    <color name="background2">@color/grey_50</color>
-    <color name="background_translucent">#40000000</color>
-    <color name="background_translucent2">#61000000</color>
+    <color name="translucent">#40000000</color>
     <color name="on_background">@color/dark_grey</color>
     <color name="surface">@color/white</color>
-    <color name="surface2">#99121212</color>
 
     <color name="high_emphasis">#DE000000</color>
     <color name="medium_emphasis">#99000000</color>
@@ -32,8 +29,6 @@
     <color name="error_text">#B00020</color>
 
     <color name="accent">@color/light_blue_400</color>
-
-    <color name="card_background">#99121212</color>
 
     <color name="grey_50">#fafafa</color>
 
@@ -73,6 +68,7 @@
     <color name="deep_purple_700">#512da8</color>
     <color name="green_700">#388e3c</color>
 
+    <color name="card_background">#61000000</color>
     <color name="divider">#1F000000</color>
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>

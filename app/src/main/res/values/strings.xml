@@ -27,11 +27,10 @@
     <string name="favorites">즐겨찾기</string>
     <string name="font">글꼴</string>
     <string name="font_size">글꼴 크기</string>
-    <string name="format_12_hour">h:mm</string>
-    <string name="format_date">M월 d일 EEEE</string>
     <string name="lock_screen">잠금화면</string>
     <string name="lock_setting">잠금 설정</string>
     <string name="lock_type">잠금 방식</string>
+    <string name="no_bookmarks">북마크가 없습니다.</string>
     <string name="no_results_found">검색 결과가 없습니다.</string>
     <string name="request_app_permissions">앱 권한 요청</string>
     <string name="search">검색</string>
@@ -49,4 +48,8 @@
     <string name="review_000">소중한 리뷰 감사합니다.</string>
 
     <string name="format_bible_chapter">%s %d장</string>
+
+    <string name="pattern_format_12_hour_000">M월 d일 EEEE</string>
+    <string name="pattern_format_12_hour_001">h:mm</string>
+    <string name="pattern_format_12_hour_002">h:mm:ss</string>
 </resources>

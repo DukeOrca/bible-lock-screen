@@ -3,9 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_bible_chapter"
@@ -26,11 +24,9 @@
         android:orientation="horizontal"
         android:background="@color/surface"
         android:elevation="@dimen/elevation_4dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
         android:gravity="center_vertical|end"
         android:padding="@dimen/padding_8dp"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

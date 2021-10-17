@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.application.setIntegerArrayAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
@@ -27,9 +26,6 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
     BookmarksDialogFragment.OnBookmarkClickListener {
-    override val changeSystemUiColor: Boolean
-        get() = true
-    override val onAnimationEnd: ((enter: Boolean) -> Unit)? = null
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
@@ -38,7 +34,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         ArrayAdapter(
             requireContext(),
             R.layout.dropdown_item,
-            activityViewModel.books
+            books
         )
     }
 
@@ -66,9 +62,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         observe()
-        viewBinding.viewPager2.fadeIn(Duration.LONG) {
-            bind()
-        }
+        bind()
 
         return viewBinding.root
     }
@@ -86,7 +80,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleChapter ->
             bibleChapter?.let {
                 viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setText(
-                    activityViewModel.getBook(it.book),
+                    getBook(it.book),
                     false
                 )
                 viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
@@ -98,7 +92,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 
                 if (currentItem?.book != it.book) {
                     viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
-                        activityViewModel.chapters[it.book.dec()], R.layout.dropdown_item
+                        chapters[it.book.dec()], R.layout.dropdown_item
                     )
                 }
 
@@ -138,10 +132,6 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             viewBinding.viewPager2.moveTo(book, position.inc())
         }
 
-        setAdapter(viewBinding.viewPager2)
-    }
-
-    private fun setAdapter(viewPager2: ViewPager2) {
         lifecycleScope.launch {
             val bookChapters = viewModel.getAll()
 
@@ -150,14 +140,15 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
                 bookChapters
             )
 
-            viewPager2.adapter = null
-            viewPager2.adapter = bibleChapterPagerAdapter
-            viewPager2.offscreenPageLimit = 2
-            viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
-            viewPager2.setCurrentItem(
-                DataStore.BibleChapter.getCurrentItem(requireContext()),
-                false
-            )
+            viewBinding.viewPager2.apply {
+                adapter = bibleChapterPagerAdapter
+                offscreenPageLimit = 2
+                registerOnPageChangeCallback(onPageChangeCallback)
+                setCurrentItem(
+                    DataStore.BibleChapter.getCurrentItem(requireContext()),
+                    false
+                )
+            }
         }
     }
 

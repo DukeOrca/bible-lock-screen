@@ -19,33 +19,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
 
 class SettingsFragment : PreferenceFragment() {
-    override val changeSystemUiColor: Boolean = true
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.settings
-
-    private var onBackPressedTimeMillis = 0L
-
-    private val onBackPressedCallback by lazy {
-        object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - onBackPressedTimeMillis >= Duration.LONG) {
-                    onBackPressedTimeMillis = System.currentTimeMillis()
-                    with(childFragmentManager) {
-                        if (backStackEntryCount < 1) {
-                            parentFragmentManager.popBackStackImmediate()
-                        } else {
-                            popBackStackImmediate()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,11 +32,6 @@ class SettingsFragment : PreferenceFragment() {
         bind()
 
         return viewBinding.root
-    }
-
-    override fun onDetach() {
-        onBackPressedCallback.remove()
-        super.onDetach()
     }
 
     private fun initData() {
@@ -153,7 +123,7 @@ class SettingsFragment : PreferenceFragment() {
     }
 
     private fun addFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
+        parentFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.slide_in_right,
                 R.anim.slide_out_left,

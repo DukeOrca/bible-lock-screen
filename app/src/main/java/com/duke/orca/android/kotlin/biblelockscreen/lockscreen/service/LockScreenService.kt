@@ -10,7 +10,6 @@ import android.provider.Settings
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.blindscreen.BlindScreenPresenter
 import com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
@@ -41,8 +40,8 @@ class LockScreenService : Service() {
 
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val showOnLockScreen = DataStore.getBoolean(context, PreferencesKeys.LockScreen.showOnLockScreen, true)
-            val displayAfterUnlocking = DataStore.getBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, false)
+            val showOnLockScreen = DataStore.LockScreen.getShowOnLockScreen(context)
+            val displayAfterUnlocking = DataStore.LockScreen.getDisplayAfterUnlocking(context)
 
             when (intent.action) {
                 Action.MAIN_ACTIVITY_DESTROYED -> {
@@ -61,7 +60,7 @@ class LockScreenService : Service() {
                         return
 
                     Intent(context, MainActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(this)
                     }
                 }
@@ -70,7 +69,7 @@ class LockScreenService : Service() {
                         return
 
                     Intent(context, MainActivity::class.java).apply {
-                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(this)
                     }
                 }

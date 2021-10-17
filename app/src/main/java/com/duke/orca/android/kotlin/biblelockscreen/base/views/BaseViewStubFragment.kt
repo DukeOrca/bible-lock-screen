@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.annotation.LayoutRes
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentViewStubBinding
 import java.util.concurrent.atomic.AtomicBoolean
@@ -14,9 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     @get:LayoutRes
     abstract val layoutResource: Int
-    abstract val showCircularProgressIndicator: Boolean
-
-    private val duration = 200L
 
     private var viewStub: ViewStub? = null
     private var onResumed = AtomicBoolean(false)
@@ -38,12 +36,6 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        if (showCircularProgressIndicator) {
-            viewBinding.circularProgressIndicator.show()
-        } else {
-            viewBinding.circularProgressIndicator.hide()
-        }
-
         viewStub = viewBinding.root.findViewById(R.id.view_stub)
         viewStub?.layoutResource = layoutResource
         inflate()
@@ -60,12 +52,7 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     private fun inflate() {
         if (onResumed.get() && isInflated.get().not()) {
             viewStub?.inflate()?.let {
-                if (showCircularProgressIndicator) {
-                    viewBinding.circularProgressIndicator.fadeOut(duration) {
-                        onInflated(it)
-                        afterOnInflated()
-                    }
-                } else {
+                viewBinding.circularProgressIndicator.fadeOut(Duration.MEDIUM) {
                     onInflated(it)
                     afterOnInflated()
                 }

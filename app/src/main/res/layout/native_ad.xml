@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:outlineProvider="none"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     app:cardBackgroundColor="@color/card_background"
     app:cardCornerRadius="@dimen/card_radius"
     app:cardElevation="0dp"
@@ -14,126 +16,139 @@
         android:id="@+id/native_ad_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_16dp"
-        android:paddingBottom="@dimen/padding_12dp"
-        android:paddingTop="@dimen/padding_16dp">
+        android:paddingBottom="@dimen/padding_8dp"
+        android:paddingEnd="@dimen/padding_12dp"
+        android:paddingStart="@dimen/padding_12dp"
+        android:paddingTop="@dimen/padding_8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/margin_16dp">
-
-            <FrameLayout
-                android:id="@+id/frame_layout_headline_or_body"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
-
-                <TextView
-                    android:id="@+id/headline"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textSize="@dimen/text_size_12dp"
-                    tools:text="Headline"
-                    tools:textColor="@color/white"/>
-
-                <TextView
-                    android:id="@+id/body"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:textSize="@dimen/text_size_12dp"
-                    tools:text="Body"
-                    tools:visibility="gone"/>
-
-            </FrameLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frame_layout_headline_or_body">
-
-                <TextView
-                    android:id="@+id/ad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ad_shape"
-                    android:fontFamily="sans-serif-light"
-                    android:includeFontPadding="false"
-                    android:paddingBottom="@dimen/padding_2dp"
-                    android:paddingEnd="@dimen/padding_4dp"
-                    android:paddingStart="@dimen/padding_4dp"
-                    android:paddingTop="@dimen/padding_2dp"
-                    android:text="@string/ad"
-                    android:textColor="@color/accent"
-                    android:textSize="@dimen/text_size_10dp"
-                    android:textStyle="bold"/>
+                android:layout_marginEnd="@dimen/margin_12dp"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <FrameLayout
-                    android:id="@+id/frame_layout_advertiser_or_star_rating"
+                    android:id="@+id/frame_layout_headline_or_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_4dp"
+                    app:layout_constraintBottom_toTopOf="@+id/linear_layout"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:visibility="visible">
 
                     <TextView
-                        android:id="@+id/advertiser"
+                        android:id="@+id/headline"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:textColor="@color/medium_emphasis"
-                        android:textSize="@dimen/text_size_10dp"
-                        tools:text="Advertiser" />
+                        android:fontFamily="sans-serif-light"
+                        android:includeFontPadding="false"
+                        android:textSize="@dimen/text_size_12dp"
+                        android:textStyle="bold"
+                        tools:text="Headline"
+                        tools:textColor="@color/white" />
 
-                    <androidx.appcompat.widget.AppCompatRatingBar
-                        android:id="@+id/star_rating"
-                        style="?android:attr/ratingBarStyleSmall"
+                    <TextView
+                        android:id="@+id/body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:isIndicator="true"
-                        android:numStars="5"
-                        android:stepSize="0.5"
-                        tools:rating="5"/>
+                        android:fontFamily="sans-serif-light"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_12dp"
+                        android:textStyle="bold"
+                        tools:text="Body"
+                        tools:visibility="gone" />
 
                 </FrameLayout>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/height_24dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/frame_layout_headline_or_body">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/call_to_action"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/height_30dp"
-                android:layout_marginTop="@dimen/margin_4dp"
-                android:fontFamily="sans-serif-light"
-                android:includeFontPadding="false"
-                android:paddingBottom="0dp"
-                android:paddingEnd="0dp"
-                android:paddingStart="0dp"
-                android:paddingTop="0dp"
-                android:textSize="@dimen/text_size_10dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linear_layout"
-                tools:text="INSTALL"/>
+                    <TextView
+                        android:id="@+id/ad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ad_shape"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="@string/ad"
+                        android:textColor="@color/accent"
+                        android:textSize="@dimen/text_size_10dp"
+                        android:textStyle="bold" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <FrameLayout
+                        android:id="@+id/frame_layout_advertiser_or_star_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/advertiser"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="@color/medium_emphasis"
+                            android:textSize="@dimen/text_size_10dp"
+                            tools:text="Advertiser" />
+
+                        <androidx.appcompat.widget.AppCompatRatingBar
+                            android:id="@+id/star_rating"
+                            style="?android:attr/ratingBarStyleSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:isIndicator="true"
+                            android:numStars="5"
+                            android:stepSize="0.5"
+                            tools:rating="5" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/call_to_action"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_12dp"
+                    android:fontFamily="sans-serif-light"
+                    android:includeFontPadding="false"
+                    android:insetBottom="0dp"
+                    android:insetTop="0dp"
+                    android:stateListAnimator="@null"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_10dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
+                    app:layout_constraintStart_toEndOf="@+id/linear_layout"
+                    app:layout_constraintTop_toTopOf="@+id/linear_layout"
+                    tools:text="INSTALL" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/icon"

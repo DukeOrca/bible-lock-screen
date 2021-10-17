@@ -37,10 +37,6 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
-        if (setWindowAnimation) {
-            dialog?.window?.setWindowAnimations(R.style.WindowAnimation_DialogFragment)
-        }
-
         return viewBinding.root
     }
 

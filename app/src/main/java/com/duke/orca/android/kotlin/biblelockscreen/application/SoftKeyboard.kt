@@ -4,15 +4,11 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 
-fun hideSoftKeyboard(context: Context) {
-    with(context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager) {
-        toggleSoftInput(0, InputMethodManager.HIDE_IMPLICIT_ONLY)
-    }
-}
+fun hideSoftKeyboard(editText: EditText) {
+    val context = editText.context
 
-fun showSoftKeyboard(context: Context) {
     with(context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager) {
-        toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+        hideSoftInputFromWindow(editText.windowToken, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 }
 

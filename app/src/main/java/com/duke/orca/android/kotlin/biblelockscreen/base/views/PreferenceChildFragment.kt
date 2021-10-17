@@ -12,9 +12,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.settings.views.SettingsFragm
 abstract class PreferenceChildFragment : BaseChildFragment<FragmentPreferenceBinding>() {
     abstract val toolbarTitleResId: Int
 
-    override val changeSystemUiColor: Boolean by lazy { parentFragment !is SettingsFragment }
-    override val onAnimationEnd: ((enter: Boolean) -> Unit)? = null
-
     protected val dataStore by lazy { requireContext().dataStore }
     protected val preferenceAdapter = PreferenceAdapter()
 

@@ -4,6 +4,12 @@
 
     <solid android:color="@android:color/transparent" />
 
+    <padding
+        android:bottom="@dimen/padding_3dp"
+        android:left="@dimen/padding_4dp"
+        android:right="@dimen/padding_4dp"
+        android:top="@dimen/padding_3dp" />
+
     <corners
         android:radius="@dimen/radius_4dp" />
 

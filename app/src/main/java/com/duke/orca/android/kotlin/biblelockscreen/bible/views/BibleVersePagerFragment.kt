@@ -3,28 +3,36 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 import android.annotation.SuppressLint
 import android.app.KeyguardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat.END
-import androidx.fragment.app.Fragment
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.transition.AutoTransition
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.admob.AdLoader
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.ONE_SECOND
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.PageMargin
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.toPx
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.FragmentContainerActivity
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVersePagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVersePagerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.billing.listener.RemoveAdsPurchaseStateListener
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.annotation.RequireDeviceCredential
@@ -32,11 +40,16 @@ import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.FontSettingsFragment
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.LockScreenSettingsFragment
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.SettingsFragment
+import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -44,6 +57,7 @@ import kotlin.math.sqrt
 @AndroidEntryPoint
 @RequireDeviceCredential
 class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
+    RemoveAdsPurchaseStateListener,
     NavigationView.OnNavigationItemSelectedListener {
     override fun inflate(
         inflater: LayoutInflater,
@@ -64,14 +78,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     private val drawerLayout by lazy { viewBinding.drawerLayout }
 
     private var currentItem: BibleVerse? = null
-
-    private val bookAdapter by lazy {
-        ArrayAdapter(
-            requireContext(),
-            R.layout.dropdown_item,
-            activityViewModel.books
-        )
-    }
+    private var nativeAd: NativeAd? = null
+    private var nativeAdBinding: NativeAdBinding? = null
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -102,6 +110,33 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         }
     }
 
+    private val autoTransition by lazy {
+        AutoTransition().apply {
+            duration = Duration.SHORT
+            this.addListener(object : Transition.TransitionListener {
+                override fun onTransitionStart(transition: Transition) {
+                    viewBinding.imageViewMenu.disable()
+                }
+
+                override fun onTransitionEnd(transition: Transition) {
+                    viewBinding.imageViewMenu.enable()
+                }
+
+                override fun onTransitionCancel(transition: Transition) {
+                    viewBinding.imageViewMenu.enable()
+                }
+
+                override fun onTransitionPause(transition: Transition) {
+                    viewBinding.imageViewMenu.enable()
+                }
+
+                override fun onTransitionResume(transition: Transition) {
+                    viewBinding.imageViewMenu.disable()
+                }
+            })
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
@@ -113,7 +148,11 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+        putPublishSubject(Key.NATIVE_AD_VIEW_VISIBILITY, PublishSubject.create())
+        putPublishSubject(Key.NEW_STATE, PublishSubject.create())
+
         observe()
+        subscribe()
         bind()
 
         return viewBinding.root
@@ -121,6 +160,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     override fun onDestroyView() {
         DataStore.BibleVerse.putCurrentItem(requireContext(), viewBinding.viewPager2.currentItem)
+        nativeAd?.destroy()
         viewBinding.viewPager2.unregisterOnPageChangeCallback(onPageChangeCallback)
         super.onDestroyView()
     }
@@ -132,14 +172,20 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.item_search -> addFragment(BibleVerseSearchFragment())
-            R.id.item_favorites -> addFragment(FavoritesFragment())
-            R.id.item_bible -> addFragment(BibleChapterPagerFragment())
-            R.id.item_settings -> addFragment(SettingsFragment())
-            R.id.item_lock_screen -> addFragment(LockScreenSettingsFragment())
-            R.id.item_font -> addFragment(FontSettingsFragment())
+            R.id.item_search -> addFragment(BibleVerseSearchFragment::class.java.simpleName)
+            R.id.item_favorites -> addFragment(FavoritesFragment::class.java.simpleName)
+            R.id.item_bible -> addFragment(BibleChapterPagerFragment::class.java.simpleName)
+            R.id.item_settings -> addFragment(SettingsFragment::class.java.simpleName)
+            R.id.item_lock_screen -> addFragment(LockScreenSettingsFragment::class.java.simpleName)
+            R.id.item_font -> addFragment(FontSettingsFragment::class.java.simpleName)
             R.id.item_share_the_app -> shareApplication(requireContext())
             R.id.item_write_review -> Review.launchReviewFlow(requireActivity())
+        }
+
+        delayOnLifecycle(Duration.LONG) {
+            if (viewBinding.drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+                viewBinding.drawerLayout.closeDrawer(Gravity.RIGHT)
+            }
         }
 
         return true
@@ -149,12 +195,27 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     private fun bind() {
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
+        viewBinding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {
+                getPublishSubject(Key.NEW_STATE).onNext(newState)
+            }
+        })
+
         viewBinding.imageViewSearch.setOnClickListener {
-            addFragment(BibleVerseSearchFragment())
+            addFragment(BibleVerseSearchFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewFavorite.setOnClickListener {
-            addFragment(FavoritesFragment())
+            addFragment(FavoritesFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewMenu.setOnClickListener {
@@ -208,8 +269,14 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                             hide(true)
                             viewBinding.viewRightFake.hide(true)
                         } else {
-                            show()
-                            viewBinding.viewRightFake.show()
+                            if (currentItem?.id != 0) {
+                                show()
+                            }
+                            
+                            if (currentItem?.id != VERSE_COUNT.dec()) {
+                                viewBinding.viewRightFake.show()
+                            }
+
                             setPageTransformer(PageMargin.medium, false)
                         }
                     }
@@ -243,6 +310,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                     viewBinding.imageViewUnlock.alpha = alpha
                     viewBinding.imageViewUnlock.scaleX = scale
                     viewBinding.imageViewUnlock.scaleY = scale
+                    viewBinding.nativeAd.root.alpha = alpha
 
                     translateFakeViews(alpha)
 
@@ -266,16 +334,10 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     }
 
     private fun observe() {
-        activityViewModel.closeDrawer.observe(viewLifecycleOwner, {
-            if (drawerLayout.isDrawerOpen(END)) {
-                drawerLayout.closeDrawer(END)
-            }
-        })
-
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleVerse ->
             bibleVerse?.let {
                 viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setText(
-                    activityViewModel.getBook(it.book),
+                    getBook(it.book),
                     false
                 )
                 viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
@@ -287,11 +349,13 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                     false
                 )
 
-                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
+                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setStringArrayAdapter(
+                    books, R.layout.dropdown_item
+                )
 
                 if (currentItem?.book != it.book) {
                     viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
-                        activityViewModel.chapters[it.book.dec()], R.layout.dropdown_item
+                        chapters[it.book.dec()], R.layout.dropdown_item
                     )
                 }
 
@@ -310,20 +374,47 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 currentItem = it
             }
         })
+
+        viewModel.removeAds.observe(viewLifecycleOwner, {
+            if (it) {
+                onRemoved()
+            } else {
+                onPending()
+            }
+        })
     }
 
-    private fun addFragment(fragment: Fragment) {
-        childFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_right,
-                R.anim.slide_out_left,
-                R.anim.slide_in_left,
-                R.anim.slide_out_right
-            )
-            .setReorderingAllowed(true)
-            .add(R.id.fragment_container_view, fragment, fragment.tag)
-            .addToBackStack(null)
-            .commit()
+    private fun subscribe() {
+        compositeDisposable.add(Observable.combineLatest(
+            getPublishSubject(Key.NATIVE_AD_VIEW_VISIBILITY).distinctUntilChanged(),
+            getPublishSubject(Key.NEW_STATE).filter {
+                if (it is Int) {
+                    viewModel.newState = it
+                }
+
+                it == DrawerLayout.STATE_IDLE
+            }, { visibility, _ ->
+                visibility
+            }
+        ).subscribe {
+            if (it == View.VISIBLE) {
+                showNativeAdView()
+            } else {
+                hideNativeAdView()
+            }
+        })
+
+        viewModel.newState?.let {
+            getPublishSubject(Key.NEW_STATE).onNext(it)
+        } ?: getPublishSubject(Key.NEW_STATE).onNext(DrawerLayout.STATE_IDLE)
+    }
+
+    private fun addFragment(simpleName: String) {
+        Intent(requireContext(), FragmentContainerActivity::class.java).also {
+            it.putExtra(FragmentContainerActivity.Companion.Extra.SIMPLE_NAME, simpleName)
+            startActivity(it)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.hold)
+        }
     }
 
     private fun moveTo(book: Int, chapter: Int, verse: Int) {
@@ -399,6 +490,10 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.viewRightFake.translateX(0.0F, duration = Duration.MEDIUM) {
             enableUserInput()
         }
+
+        nativeAd?.let {
+            viewBinding.nativeAd.root.fade(1.0F, duration = Duration.MEDIUM)
+        }
     }
 
     private fun disableUserInput() {
@@ -409,11 +504,75 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.viewPager2.isUserInputEnabled = true
     }
 
+    private fun populateNativeAdView() {
+        AdLoader.loadNativeAd(requireContext()) {
+            try {
+                with(NativeAdBinding.bind(viewBinding.nativeAd.root)) {
+                    nativeAd = it
+                    nativeAdBinding = NativeAdBinding.bind(viewBinding.nativeAd.root)
+                    AdLoader.populateNativeAdView(this, it)
+                }
+
+                getPublishSubject(Key.NATIVE_AD_VIEW_VISIBILITY).onNext(View.VISIBLE)
+            } catch (e: NullPointerException) {
+                Timber.e(e)
+            }
+        }
+    }
+
+    private fun showNativeAdView() {
+        try {
+            nativeAdBinding?.let {
+                TransitionManager.beginDelayedTransition(viewBinding.constraintLayoutRoot, autoTransition)
+                it.root.show()
+            }
+        } catch (e: NullPointerException) {
+            Timber.e(e)
+            viewBinding.imageViewMenu.enable()
+        }
+    }
+
+    private fun hideNativeAdView() {
+        try {
+            nativeAdBinding?.let {
+                TransitionManager.beginDelayedTransition(viewBinding.constraintLayoutRoot, autoTransition)
+                it.root.hide()
+            }
+        } catch (e: NullPointerException) {
+            Timber.e(e)
+            viewBinding.imageViewMenu.enable()
+        }
+    }
+
+    override fun onPending() {
+        viewBinding.imageViewMenu.disable()
+
+        val begin = DataStore.getBegin(requireContext())
+        val days = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - begin)
+
+        if (days > -7) { // todo test.
+            populateNativeAdView()
+        }
+    }
+
+    override fun onRemoved() {
+        try {
+            viewBinding.imageViewMenu.disable()
+
+            nativeAd?.destroy()
+            getPublishSubject(Key.NATIVE_AD_VIEW_VISIBILITY).onNext(View.GONE)
+        } catch (e: NullPointerException) {
+            Timber.e(e)
+        }
+    }
+
     companion object {
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
 
         private object Key {
             const val DEVICE_CREDENTIAL = "$PACKAGE_NAME.DEVICE_CREDENTIAL"
+            const val NATIVE_AD_VIEW_VISIBILITY = "$PACKAGE_NAME.NATIVE_AD_VIEW_VISIBILITY"
+            const val NEW_STATE = "$PACKAGE_NAME.NEW_STATE"
         }
     }
 }

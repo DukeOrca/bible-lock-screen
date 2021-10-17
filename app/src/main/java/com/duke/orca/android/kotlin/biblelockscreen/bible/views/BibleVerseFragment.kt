@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -58,7 +59,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     }
 
     private fun observe(binding: FragmentBibleVerseBinding) {
-        activityViewModel.settings.observe(viewLifecycleOwner, {
+        viewModel.settings.observe(viewLifecycleOwner, {
             val typeface = binding.textViewWord.typeface
 
             val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
@@ -86,7 +87,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
 
     private fun bind(binding: FragmentBibleVerseBinding, bibleVerse: BibleVerse) {
         binding.textViewWord.text = bibleVerse.word
-        binding.textViewBook.text = activityViewModel.getBook(bibleVerse.book)
+        binding.textViewBook.text = getBook(bibleVerse.book)
         binding.textViewChapter.text = bibleVerse.chapter.toString()
         binding.textViewVerse.text = bibleVerse.verse.toString()
 
@@ -106,6 +107,8 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
                 it.show(childFragmentManager, it.tag)
             }
         }
+
+        binding.constraintLayout.fadeIn(Duration.SHORT)
     }
 
     private fun addToFavorites(id: Int) {

@@ -1,13 +1,13 @@
 package com.duke.orca.android.kotlin.biblelockscreen.settings.views
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseLockScreenActivity
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.ActivityPreferenceBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
@@ -15,7 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.PreferenceA
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DisplaySettingsActivity : AppCompatActivity() {
+class DisplaySettingsActivity : BaseLockScreenActivity() {
     private var _viewBinding: ActivityPreferenceBinding? = null
     private val viewBinding: ActivityPreferenceBinding
         get() = _viewBinding!!
@@ -59,7 +59,6 @@ class DisplaySettingsActivity : AppCompatActivity() {
                 onCheckedChange = { isChecked ->
                     lifecycleScope.launch {
                         DataStore.Display.putDarkMode(this@DisplaySettingsActivity, isChecked)
-
                         delay(Duration.MEDIUM)
                         recreate()
                     }
