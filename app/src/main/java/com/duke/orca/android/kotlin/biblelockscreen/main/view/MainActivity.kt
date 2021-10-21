@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatDelegate
+import android.view.WindowManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseLockScreenActivity
@@ -22,16 +22,15 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
     private var handler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val mode = if (DataStore.Display.isDarkMode(this)) {
-            AppCompatDelegate.MODE_NIGHT_YES
-        } else {
-            AppCompatDelegate.MODE_NIGHT_NO
-        }
-
-        AppCompatDelegate.setDefaultNightMode(mode)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        with(window) {
+            setFlags(
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
+        }
 
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
             PermissionRationaleDialogFragment().also {
@@ -47,7 +46,6 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
 
         if (DataStore.isFirstTime(this)) {
             DataStore.putFirstTime(this, false)
-            DataStore.putBegin(this, System.currentTimeMillis())
         }
     }
 

@@ -39,7 +39,6 @@
         android:id="@+id/linear_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_112dp"
         android:orientation="vertical"
         android:elevation="@dimen/elevation_8dp"
         android:gravity="center_horizontal"
@@ -74,12 +73,12 @@
         android:id="@+id/circular_progress_indicator"
         android:layout_width="@dimen/width_40dp"
         android:layout_height="@dimen/height_40dp"
-        android:layout_marginBottom="@dimen/margin_160dp"
         android:indeterminate="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view" />
+        app:layout_constraintTop_toBottomOf="@+id/search_view"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,7 @@ class BibleVersePagerViewModel @Inject constructor(
         return repository.getVerseCount(book, chapter)
     }
 
-    suspend fun get(book: Int, chapter: Int, verse: Int): BibleVerse {
+    suspend fun get(book: Int, chapter: Int, verse: Int): BibleVerse? {
         return repository.get(book, chapter, verse).first()
     }
 }

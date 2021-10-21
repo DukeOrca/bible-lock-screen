@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterAdapter
@@ -63,7 +62,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
 
     override fun onItemClick(item: BibleChapter) {
         onBookmarkClickListener?.onBookmarkClick(item.id)
-        delayOnLifecycle(Duration.SHORT) {
+        delayOnLifecycle(Duration.Delay.DISMISS) {
             dismiss()
         }
     }
@@ -81,7 +80,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
             bibleChapterAdapter.submitList(it) {
                 if (it.isEmpty()) {
                     delayOnLifecycle(Duration.SHORT) {
-                        viewBinding.textViewNoBookmarks.fadeIn(Duration.MEDIUM)
+                        viewBinding.linearLayout.fadeIn(Duration.MEDIUM)
                     }
                 }
             }

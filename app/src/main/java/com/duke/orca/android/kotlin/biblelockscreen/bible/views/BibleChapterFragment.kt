@@ -131,13 +131,13 @@ class BibleChapterFragment : BaseViewStubFragment(),
         when(option) {
             options[0] -> {
                 bibleVerse?.let { copyToClipboard(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
                 bibleVerse?.let { share(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }

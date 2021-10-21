@@ -16,6 +16,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.ONE_SECOND
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -47,6 +48,7 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
+    private var currentQuery = BLANK
     private var timerTask: TimerTask? = null
 
     override fun onCreateView(
@@ -111,6 +113,7 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
                 query?.let {
                     if (it.isNotBlank()) {
                         search(it)
+                        viewBinding.searchView.clearFocus()
                     }
                 }
 
@@ -144,6 +147,10 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private fun search(text: String) {
+        if (currentQuery == text) return
+
+        currentQuery = text
+
         viewBinding.recyclerView.fadeOut(Duration.SHORT, true) {
             viewBinding.circularProgressIndicator.fadeIn(Duration.MEDIUM)
 

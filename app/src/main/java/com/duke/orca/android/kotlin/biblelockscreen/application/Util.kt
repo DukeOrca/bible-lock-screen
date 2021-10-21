@@ -16,3 +16,9 @@ fun shareApplication(context: Context) {
         context.startActivity(it)
     }
 }
+
+fun Any?.isNull() = this == null
+fun Any?.isNotNull() = isNull().not()
+
+fun intRange(from: Int, to: Int) = from..to
+fun IntRange.toStringArray() = map { it.toString() }.toTypedArray()

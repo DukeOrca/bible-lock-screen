@@ -1,6 +1,8 @@
 package com.duke.orca.android.kotlin.biblelockscreen.persistence.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import androidx.room.Transaction
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -34,4 +36,10 @@ interface BibleVerseDao {
 
     @Query("UPDATE bible_verse SET favorites = :favorites WHERE id = :id")
     suspend fun updateFavorites(id: Int, favorites: Boolean)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insert(bibleVerse: BibleVerse)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insert(bibleVerses: List<BibleVerse>)
 }

@@ -4,9 +4,11 @@
     style="?android:attr/dropDownItemStyle"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_48dp"
-    android:fontFamily="@font/font_family_nanum_myeongjo"
+    android:background="@drawable/ripple_rectangle"
     android:ellipsize="marquee"
+    android:fontFamily="@font/font_family_nanum_myeongjo"
     android:singleLine="true"
     android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+    android:textSize="@dimen/text_size_14dp"
     android:textStyle="bold"
     tools:text="레위기" />

@@ -21,10 +21,16 @@
         <entry key="app/src/main/res/drawable/ic_unlike_24.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/drawable/ic_unlike_dark_24.xml" value="0.10729166666666666" />
         <entry key="app/src/main/res/drawable/oval_stroke.xml" value="0.11018518518518519" />
+        <entry key="app/src/main/res/drawable/ripple_dark.xml" value="0.165625" />
+        <entry key="app/src/main/res/drawable/ripple_rectangle_dark.xml" value="0.165625" />
+        <entry key="app/src/main/res/drawable/ripple_rounded_left_corners.xml" value="0.2375" />
+        <entry key="app/src/main/res/drawable/ripple_rounded_right_corners.xml" value="0.2375" />
+        <entry key="app/src/main/res/drawable/ripple_unlock.xml" value="0.2375" />
         <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.26927083333333335" />
         <entry key="app/src/main/res/drawable/rounded_left_corners.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/rounded_right_corners.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/rounded_top_corners.xml" value="0.16458333333333333" />
+        <entry key="app/src/main/res/font/font_family_nanum_gothic.xml" value="0.18333333333333332" />
         <entry key="app/src/main/res/font/font_family_nanum_myeongjo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_fragment_container.xml" value="0.14791666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20697463768115942" />
@@ -33,11 +39,14 @@
         <entry key="app/src/main/res/layout/bible_verse.xml" value="0.41767068273092367" />
         <entry key="app/src/main/res/layout/bible_verse2.xml" value="0.17291666666666666" />
         <entry key="app/src/main/res/layout/blind_screen.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/book_choice_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/book_selection_item.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/content.xml" value="0.11614583333333334" />
         <entry key="app/src/main/res/layout/content_navigation_drawer.xml" value="0.335" />
         <entry key="app/src/main/res/layout/divider.xml" value="0.12552083333333333" />
         <entry key="app/src/main/res/layout/dropdown_item.xml" value="0.17617753623188406" />
         <entry key="app/src/main/res/layout/dropdown_item2.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/dropdown_menu.xml" value="0.4654471544715447" />
         <entry key="app/src/main/res/layout/exposed_dropdown_menu.xml" value="0.7222222222222222" />
         <entry key="app/src/main/res/layout/exposed_dropdown_menu2.xml" value="0.335" />
         <entry key="app/src/main/res/layout/exposed_dropdown_menu3.xml" value="1.0" />
@@ -48,19 +57,21 @@
         <entry key="app/src/main/res/layout/fragment_bible_chapter.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.2779552715654952" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_view_stub.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_bible_verses.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_book_selection_dialog.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/fragment_preference.xml" value="0.1453804347826087" />
         <entry key="app/src/main/res/layout/fragment_view_stub.xml" value="0.12395833333333334" />
         <entry key="app/src/main/res/layout/header.xml" value="0.3802559414990859" />
         <entry key="app/src/main/res/layout/multi_select_list_preference.xml" value="0.1453804347826087" />
-        <entry key="app/src/main/res/layout/native_ad.xml" value="0.55" />
+        <entry key="app/src/main/res/layout/native_ad.xml" value="0.4421364985163205" />
         <entry key="app/src/main/res/layout/navigation_view.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/permission.xml" value="0.11614583333333334" />
+        <entry key="app/src/main/res/layout/popup_window.xml" value="0.17346014492753623" />
         <entry key="app/src/main/res/layout/recycler_view.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/single_choice_item.xml" value="0.16847826086956522" />
         <entry key="app/src/main/res/layout/space.xml" value="0.11614583333333334" />
@@ -69,6 +80,7 @@
         <entry key="app/src/main/res/menu/bookmark.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/bookmarks.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/navigation_drawer.xml" value="0.375" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.12291666666666666" />
       </map>
     </option>
   </component>

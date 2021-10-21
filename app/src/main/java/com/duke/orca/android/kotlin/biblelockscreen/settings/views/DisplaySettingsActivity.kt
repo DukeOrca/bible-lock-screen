@@ -41,7 +41,7 @@ class DisplaySettingsActivity : BaseLockScreenActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.hold, R.anim.slide_out_right)
+        overridePendingTransition(R.anim.z_adjustment_bottom, R.anim.slide_out_right)
     }
 
     override fun onDestroy() {

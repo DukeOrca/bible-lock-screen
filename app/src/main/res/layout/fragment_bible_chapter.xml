@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/text_view_word"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
             app:srcCompat="@drawable/ic_round_more_vert_24"

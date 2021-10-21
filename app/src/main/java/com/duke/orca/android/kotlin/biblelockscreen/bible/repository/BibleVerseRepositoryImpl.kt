@@ -14,7 +14,7 @@ class BibleVerseRepositoryImpl @Inject constructor(private val datasource: Bible
         return datasource.get(book, chapter)
     }
 
-    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse> {
+    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?> {
         return datasource.get(book, chapter, verse)
     }
 

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface BibleVerseDatasource {
     fun get(id: Int): Flow<BibleVerse>
     fun get(book: Int, chapter: Int): Flow<List<BibleVerse>>
-    fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse>
+    fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?>
     fun getFavorites(): Flow<List<BibleVerse>>
     fun search(text: String): Flow<List<BibleVerse>>
     suspend fun getVerseCount(book: Int, chapter: Int): Int

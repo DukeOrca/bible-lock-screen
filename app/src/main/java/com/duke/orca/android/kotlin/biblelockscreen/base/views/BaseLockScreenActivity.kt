@@ -1,17 +1,11 @@
 package com.duke.orca.android.kotlin.biblelockscreen.base.views
 
 import android.app.KeyguardManager
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.annotation.CallSuper
-import androidx.appcompat.app.AppCompatActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.duke.orca.android.kotlin.biblelockscreen.bottomnavigation.BottomNavigationPressedListener
-import com.duke.orca.android.kotlin.biblelockscreen.bottomnavigation.BottomNavigationWatcher
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
 
 open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
     @CallSuper

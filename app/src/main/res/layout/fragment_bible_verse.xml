@@ -12,23 +12,22 @@
     android:clipToPadding="true">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipChildren="true"
         android:clipToPadding="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:clipChildren="false"
-            android:clipToPadding="false"
-            android:visibility="invisible"
-            tools:visibility="visible">
+            android:clipToPadding="false">
 
             <TextView
                 android:id="@+id/text_view_word"

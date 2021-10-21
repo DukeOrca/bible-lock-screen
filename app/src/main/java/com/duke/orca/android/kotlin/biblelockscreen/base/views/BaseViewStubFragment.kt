@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.annotation.LayoutRes
+import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentViewStubBinding
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
@@ -51,11 +53,17 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
 
     private fun inflate() {
         if (onResumed.get() && isInflated.get().not()) {
-            viewStub?.inflate()?.let {
-                viewBinding.circularProgressIndicator.fadeOut(Duration.MEDIUM) {
-                    onInflated(it)
-                    afterOnInflated()
+            try {
+                viewStub?.inflate()?.let {
+                    viewBinding.circularProgressIndicator.fadeOut(Duration.MEDIUM) {
+                        lifecycleScope.launchWhenResumed {
+                            onInflated(it)
+                            afterOnInflated()
+                        }
+                    }
                 }
+            } catch (e: IllegalStateException) {
+                Timber.e(e)
             }
         }
     }

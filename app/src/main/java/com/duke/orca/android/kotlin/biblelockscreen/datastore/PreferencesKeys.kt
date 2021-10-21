@@ -10,7 +10,6 @@ object PreferencesKeys {
     private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.datastore"
     private const val OBJECT_NAME = "PreferencesKeys"
 
-    val begin = longPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.begin")
     val isFirstTime = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isFirstTime")
 
     object BibleChapter {

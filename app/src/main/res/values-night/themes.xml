@@ -87,6 +87,11 @@
         <item name="android:textColorSecondary">@color/title_text</item>
     </style>
 
+    <style name="WindowAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
+    </style>
+
     <style name="WindowAnimation.BlindScreen">
         <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>

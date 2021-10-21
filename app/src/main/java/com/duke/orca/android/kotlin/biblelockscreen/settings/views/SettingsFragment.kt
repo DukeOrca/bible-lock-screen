@@ -1,16 +1,13 @@
 package com.duke.orca.android.kotlin.biblelockscreen.settings.views
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -47,7 +44,7 @@ class SettingsFragment : PreferenceFragment() {
                         Intent(requireContext(), DisplaySettingsActivity::class.java).also {
                             it.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
                             startActivity(it)
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.hold)
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
                         }
                     },
                     title = getString(R.string.display)
@@ -130,7 +127,6 @@ class SettingsFragment : PreferenceFragment() {
                 R.anim.slide_in_left,
                 R.anim.slide_out_right
             )
-            .setReorderingAllowed(true)
             .add(R.id.fragment_container_view, fragment, fragment.tag)
             .addToBackStack(null)
             .commit()

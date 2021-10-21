@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "232433348964",
+    "project_id": "bible-lock-screen-72ff6",
+    "storage_bucket": "bible-lock-screen-72ff6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232433348964:android:7a853406a0796434708a71",
+        "android_client_info": {
+          "package_name": "com.duke.orca.android.kotlin.biblelockscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232433348964-r1oe2e68m3tlnsma8n601pvp11d0i73v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.duke.orca.android.kotlin.biblelockscreen",
+            "certificate_hash": "0eaf0683b2c3b6b2b63f5bc7e1e26e95fced8486"
+          }
+        },
+        {
+          "client_id": "232433348964-2vv7lthlfocqlgvp5lqucvabqji467u4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZEjOrZCaKXm5rTVzpCv1iQ37tH10NXH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232433348964-2vv7lthlfocqlgvp5lqucvabqji467u4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

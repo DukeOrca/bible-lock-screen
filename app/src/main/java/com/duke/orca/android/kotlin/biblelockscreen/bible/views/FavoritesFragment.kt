@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
@@ -52,6 +52,10 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
 
     private fun observe() {
         viewModel.adapterItems.observe(viewLifecycleOwner, {
+            if (it.isEmpty()) {
+                viewBinding.linearLayout.fadeIn(Duration.MEDIUM)
+            }
+
             bibleVerseAdapter.submitList(it)
         })
     }
@@ -86,13 +90,13 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
         when(option) {
             options[0] -> {
                 bibleVerse?.let { copyToClipboard(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
                 bibleVerse?.let { share(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }

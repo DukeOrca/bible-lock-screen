@@ -1,6 +1,5 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local
 
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDatabase
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +14,7 @@ class BibleVerseDatasourceImpl @Inject constructor(private val database: BibleDa
         return database.bibleVerseDao().get(book, chapter)
     }
 
-    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse> {
+    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?> {
         return database.bibleVerseDao().get(book, chapter, verse)
     }
 

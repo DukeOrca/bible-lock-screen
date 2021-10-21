@@ -36,6 +36,7 @@ abstract class BibleDatabase: RoomDatabase() {
                         BibleDatabase::class.java,
                         "$NAME:$VERSION"
                     )
+                        .allowMainThreadQueries()
                         .createFromAsset(DATABASE_FILE_PATH)
                         .fallbackToDestructiveMigration()
                         .build()

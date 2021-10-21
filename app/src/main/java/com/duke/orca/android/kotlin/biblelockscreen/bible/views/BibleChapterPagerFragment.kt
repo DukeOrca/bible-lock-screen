@@ -7,17 +7,19 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.setIntegerArrayAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterPagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,18 +27,13 @@ import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
-    BookmarksDialogFragment.OnBookmarkClickListener {
+    BookSelectionDialogFragment.LifecycleCallback,
+    BookSelectionDialogFragment.OnBookSelectedListener,
+    BookmarksDialogFragment.OnBookmarkClickListener
+{
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
-
-    private val bookAdapter by lazy {
-        ArrayAdapter(
-            requireContext(),
-            R.layout.dropdown_item,
-            books
-        )
-    }
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -76,30 +73,53 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         viewBinding.viewPager2.setCurrentItem(id, false)
     }
 
+    override fun onBookSelected(
+        dialogFragment: BookSelectionDialogFragment,
+        item: BookSelectionDialogFragment.AdapterItem.Book
+    ) {
+        val chapter = 1
+
+        viewBinding.viewPager2.moveTo(item.index.inc(), chapter)
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
+    }
+
+    override fun onDialogFragmentViewCreated() {
+        viewBinding.imageViewBook.rotate(180.0F, Duration.ROTATION)
+    }
+
+    override fun onDialogFragmentViewDestroyed() {
+        viewBinding.imageViewBook.rotate(0.0F, Duration.ROTATION)
+    }
+
     private fun observe() {
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleChapter ->
             bibleChapter?.let {
-                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setText(
-                    getBook(it.book),
-                    false
-                )
-                viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setText(
-                    it.chapter.toString(),
-                    false
-                )
-
-                viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setAdapter(bookAdapter)
+                viewBinding.textViewBook.text = getBook(it.book)
+                viewBinding.dropdownMenuChapter.setText(it.chapter.toString())
 
                 if (currentItem?.book != it.book) {
-                    viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setIntegerArrayAdapter(
-                        chapters[it.book.dec()], R.layout.dropdown_item
+                    viewBinding.dropdownMenuChapter.setAdapter(
+                        DropdownMenu.ArrayAdapter(
+                            intRange(1, chapters[it.book.dec()]).toStringArray()
+                        ), it.chapter.dec()
                     )
                 }
 
-                with(viewBinding.constraintLayout) {
+                with(viewBinding.linearLayoutBook) {
                     if (isInvisible) {
-                        delayOnLifecycle(Duration.SHORT) {
-                            fadeIn(Duration.MEDIUM)
+                        delayOnLifecycle(Duration.Delay.INFLATE) {
+                            fadeIn(Duration.LONG)
+                        }
+                    }
+                }
+
+                with(viewBinding.dropdownMenuChapter) {
+                    if (isInvisible) {
+                        delayOnLifecycle(Duration.Delay.INFLATE) {
+                            fadeIn(Duration.LONG)
                         }
                     }
                 }
@@ -114,19 +134,25 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             requireActivity().onBackPressed()
         }
 
+        viewBinding.linearLayoutBook.setOnClickListener {
+            BookSelectionDialogFragment.newInstance(currentItem?.book ?: 0).also {
+                it.show(childFragmentManager, it.tag)
+            }
+        }
+
+        viewBinding.imageViewBook.setOnClickListener {
+            BookSelectionDialogFragment.newInstance(currentItem?.book ?: 0).also {
+                it.show(childFragmentManager, it.tag)
+            }
+        }
+
         viewBinding.imageViewBookmarks.setOnClickListener {
             BookmarksDialogFragment().also {
                 it.show(childFragmentManager, it.tag)
             }
         }
 
-        viewBinding.exposedDropdownMenuBook.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-            val chapter = 1
-
-            viewBinding.viewPager2.moveTo(position.inc(), chapter)
-        }
-
-        viewBinding.exposedDropdownMenuChapter.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+        viewBinding.dropdownMenuChapter.setOnItemClickListener { position, _ ->
             val book = currentItem?.book ?: 1
 
             viewBinding.viewPager2.moveTo(book, position.inc())

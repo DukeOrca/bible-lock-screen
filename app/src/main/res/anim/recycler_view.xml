@@ -3,8 +3,22 @@
     android:duration="@android:integer/config_mediumAnimTime">
 
     <alpha
-        android:fromAlpha="0"
-        android:toAlpha="1"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:interpolator="@android:interpolator/decelerate_quad" />
+
+    <translate
+        android:fromYDelta="-12.5%"
+        android:toYDelta="0.0"
+        android:interpolator="@android:interpolator/decelerate_quad" />
+
+    <scale
+        android:fromXScale="104%"
+        android:fromYScale="104%"
+        android:toXScale="100%"
+        android:toYScale="100%"
+        android:pivotX="50%"
+        android:pivotY="50%"
         android:interpolator="@android:interpolator/decelerate_quad" />
 
 </set>

@@ -1,7 +1,11 @@
 package com.duke.orca.android.kotlin.biblelockscreen.admob
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.toPx
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
@@ -15,7 +19,7 @@ import timber.log.Timber
 
 object AdLoader {
     fun loadNativeAd(context: Context, onLoadAd: (NativeAd) -> Unit) {
-        val adLoader = AdLoader.Builder(context, context.getString(R.string.native_advanced_sample_ad_unit_id))
+        val adLoader = AdLoader.Builder(context, context.getString(R.string.native_advanced_ad_unit_id))
             .forNativeAd { nativeAd ->
                 onLoadAd(nativeAd)
             }
@@ -39,34 +43,28 @@ object AdLoader {
     fun populateNativeAdView(viewBinding: NativeAdBinding, nativeAd: NativeAd) {
         viewBinding.headline.text = nativeAd.headline
 
-        nativeAd.body?.let {
-            viewBinding.headline.hide()
-
-            viewBinding.body.text = it
-            viewBinding.body.show()
-        } ?: let { viewBinding.body.hide() }
-
-        nativeAd.starRating?.let {
-            viewBinding.starRating.rating = it.toFloat()
-            viewBinding.starRating.show()
-        } ?: let { viewBinding.advertiser.hide() }
-
         nativeAd.advertiser?.let {
-            viewBinding.starRating.hide()
-
             viewBinding.advertiser.text = it
             viewBinding.advertiser.show()
         } ?: let { viewBinding.advertiser.hide() }
 
         nativeAd.icon?.let {
+            Glide.with(viewBinding.icon)
+                .load(it.drawable)
+                .transform(CenterCrop(), RoundedCorners(4.toPx))
+                .into(viewBinding.icon)
             viewBinding.icon.show()
-            viewBinding.icon.setImageDrawable(it.drawable)
         } ?: let { viewBinding.icon.hide() }
 
         nativeAd.callToAction?.let {
             viewBinding.callToAction.text = it
             viewBinding.callToAction.show()
         } ?: let { viewBinding.callToAction.hide() }
+
+        nativeAd.store?.let {
+            viewBinding.store.text = it
+            viewBinding.store.show()
+        } ?: let { viewBinding.store.hide() }
 
         viewBinding.nativeAdView.callToActionView = viewBinding.callToAction
         viewBinding.nativeAdView.setNativeAd(nativeAd)

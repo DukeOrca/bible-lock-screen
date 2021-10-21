@@ -70,12 +70,6 @@ object DataStore {
         putBoolean(context, PreferencesKeys.isFirstTime, value)
     }
 
-    fun getBegin(context: Context): Long = getLong(context, PreferencesKeys.begin, System.currentTimeMillis())
-
-    fun putBegin(context: Context, value: Long) = runBlocking {
-        putLong(context, PreferencesKeys.begin, value)
-    }
-
     object BibleChapter {
         fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentItem, 0)
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -108,7 +109,9 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
             }
         }
 
-        binding.constraintLayout.fadeIn(Duration.SHORT)
+        if (binding.nestedScrollView.isVisible.not()) {
+            binding.nestedScrollView.fadeIn(Duration.LONG)
+        }
     }
 
     private fun addToFavorites(id: Int) {
@@ -127,13 +130,13 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         when(option) {
             options[0] -> {
                 bibleVerse?.let { copyToClipboard(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
                 bibleVerse?.let { share(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }

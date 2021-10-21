@@ -11,10 +11,7 @@ import android.text.Html
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewPropertyAnimator
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.DecelerateInterpolator
-import android.view.animation.Transformation
+import android.view.animation.*
 import android.widget.*
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
@@ -29,7 +26,7 @@ fun View.disable() {
     isEnabled = false
 }
 
-fun FrameLayout.animateRipple() {
+fun FrameLayout.animateRipple(delayMillis: Long = 200L) {
     if (foreground is RippleDrawable) {
         val handler = Handler(Looper.getMainLooper())
         val rippleDrawable = foreground
@@ -38,7 +35,8 @@ fun FrameLayout.animateRipple() {
             android.R.attr.state_pressed,
             android.R.attr.state_enabled
         )
-        handler.postDelayed({ rippleDrawable.state = intArrayOf() }, 200)
+
+        handler.postDelayed({ rippleDrawable.state = intArrayOf() }, delayMillis)
     }
 }
 
@@ -191,10 +189,27 @@ fun View.rotate(
     degrees: Float, duration: Long,
     animationListenerAdapter: AnimatorListenerAdapter? = null
 ) {
-    this.animate().rotation(degrees)
+    this.animate()
+        .rotation(degrees)
         .setDuration(duration)
         .setListener(animationListenerAdapter)
         .start()
+}
+
+fun View.rotate(fromDegrees: Float, toDegrees: Float, duration: Long) {
+    val rotateAnimation = RotateAnimation(
+        fromDegrees,
+        toDegrees,
+        Animation.RELATIVE_TO_SELF,
+        0.5F,
+        Animation.RELATIVE_TO_SELF,
+        0.5F
+    )
+
+    rotateAnimation.duration = duration
+    rotateAnimation.fillAfter = true
+
+    startAnimation(rotateAnimation)
 }
 
 fun View.fade(

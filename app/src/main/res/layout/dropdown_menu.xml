@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout"
+    android:background="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:clickable="false"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="false"
+    android:gravity="center_vertical"
+    tools:ignore="UseCompoundDrawables">
+
+    <TextView
+        android:id="@+id/text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:fontFamily="@font/font_family_nanum_myeongjo"
+        android:focusable="false"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/padding_12dp"
+        android:paddingStart="@dimen/padding_12dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_14dp"
+        android:textStyle="bold"
+        tools:text="150"
+        tools:textColor="@color/text"/>
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="@dimen/width_28dp"
+        android:layout_height="@dimen/height_28dp"
+        android:layout_marginEnd="@dimen/margin_12dp"
+        android:adjustViewBounds="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
+        app:tint="@color/icon"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>

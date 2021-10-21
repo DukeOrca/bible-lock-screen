@@ -1,8 +1,10 @@
 package com.duke.orca.android.kotlin.biblelockscreen.base.views
 
 import android.os.Bundle
+import androidx.annotation.CallSuper
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.isNotNull
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleChapterPagerFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleVerseSearchFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.FavoritesFragment
@@ -17,6 +19,10 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fragment_container)
 
+        if (savedInstanceState.isNotNull()) {
+            return
+        }
+
         intent?.getStringExtra(Extra.SIMPLE_NAME)?.let {
             if (it.isBlank()) {
                 finish()
@@ -26,9 +32,10 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
         } ?: finish()
     }
 
+    @CallSuper
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.hold, R.anim.slide_out_right)
+        overridePendingTransition(R.anim.z_adjustment_bottom, R.anim.slide_out_right)
     }
 
     private fun replaceFragment(simpleName: String) {
@@ -43,7 +50,6 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
         }
 
         supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
             .replace(R.id.fragment_container_view, fragment, fragment.tag)
             .commit()
     }
