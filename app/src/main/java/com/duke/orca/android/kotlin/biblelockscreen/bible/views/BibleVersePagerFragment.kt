@@ -257,7 +257,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             moveTo(book, chapter, position.inc())
         }
 
-        viewBinding.constraintLayoutExposedDropdownMenu.fadeIn(Duration.LONG)
+
 
         viewBinding.viewPager2.adapter = bibleVersePagerAdapter
         viewBinding.viewPager2.offscreenPageLimit = 2
@@ -266,6 +266,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         setPageTransformer(PageMargin.medium, false)
 
+        viewBinding.constraintLayoutDropdownMenu.fadeIn(Duration.LONG)
         viewBinding.viewPager2.fadeIn(Duration.LONG) {
             setPageTransformer(PageMargin.small, true) {
                 with(viewBinding.viewLeftFake) {

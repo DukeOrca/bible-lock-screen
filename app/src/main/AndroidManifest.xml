@@ -22,6 +22,7 @@
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
+            android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +38,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.FragmentContainerActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing|stateHidden" />
 
         <activity
             android:name=".settings.views.DisplaySettingsActivity"

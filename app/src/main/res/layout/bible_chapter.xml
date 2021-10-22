@@ -13,6 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:fontFamily="@font/font_family_nanum_myeongjo"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/padding_24dp"
         android:paddingStart="@dimen/padding_24dp"

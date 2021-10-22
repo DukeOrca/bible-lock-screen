@@ -50,7 +50,7 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
     private val newTestament by lazy { getString(R.string.new_testament) }
 
     private val bookChoiceAdapter by lazy {
-        BookChoiceAdapter()
+        BookSelectionAdapter()
     }
 
     private var lifecycleCallback: LifecycleCallback? = null
@@ -114,13 +114,23 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         }
     }
 
-    inner class BookChoiceAdapter : ListAdapter<AdapterItem, BookChoiceAdapter.ViewHolder>(DiffCallback()) {
+    inner class BookSelectionAdapter : ListAdapter<AdapterItem, BookSelectionAdapter.ViewHolder>(DiffCallback()) {
+        private val colorSecondary by lazy { requireContext().getColor(R.color.secondary) }
+        private val colorText by lazy { requireContext().getColor(R.color.text) }
+        private val selectedItem = books[arguments?.getInt(Key.POSITION)?.dec() ?: 0]
+
         inner class ViewHolder(private val viewBinding: BookSelectionItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
             fun bind(item: AdapterItem) {
                 if (item is AdapterItem.Book) {
                     viewBinding.textViewTestament.hide()
                     viewBinding.textViewBook.show()
                     viewBinding.textViewBook.text = item.text
+
+                    if (selectedItem == item.text) {
+                        viewBinding.textViewBook.setTextColor(colorSecondary)
+                    } else {
+                        viewBinding.textViewBook.setTextColor(colorText)
+                    }
 
                     viewBinding.root.setOnClickListener {
                         onBookSelectedListener?.onBookSelected(this@BookSelectionDialogFragment, item)
