@@ -22,7 +22,7 @@
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen"
+            android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity"
             android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
