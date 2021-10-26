@@ -266,25 +266,27 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         setPageTransformer(PageMargin.medium, false)
 
-        viewBinding.constraintLayoutDropdownMenu.fadeIn(Duration.LONG)
-        viewBinding.viewPager2.fadeIn(Duration.LONG) {
-            setPageTransformer(PageMargin.small, true) {
-                with(viewBinding.viewLeftFake) {
-                    viewTreeObserver.addOnDrawListener {
-                        if (abs(translationX) == 0.0F) {
-                            setPageTransformer(PageMargin.small, false)
-                            hide(true)
-                            viewBinding.viewRightFake.hide(true)
-                        } else {
-                            if (currentItem?.id != 0) {
-                                show()
-                            }
+        lifecycleScope.launchWhenStarted {
+            viewBinding.constraintLayoutDropdownMenu.fadeIn(Duration.LONG)
+            viewBinding.viewPager2.fadeIn(Duration.LONG) {
+                setPageTransformer(PageMargin.small, true) {
+                    with(viewBinding.viewLeftFake) {
+                        viewTreeObserver.addOnDrawListener {
+                            if (abs(translationX) == 0.0F) {
+                                setPageTransformer(PageMargin.small, false)
+                                hide(true)
+                                viewBinding.viewRightFake.hide(true)
+                            } else {
+                                if (currentItem?.id != 0) {
+                                    show()
+                                }
 
-                            if (currentItem?.id != VERSE_COUNT.dec()) {
-                                viewBinding.viewRightFake.show()
-                            }
+                                if (currentItem?.id != VERSE_COUNT.dec()) {
+                                    viewBinding.viewRightFake.show()
+                                }
 
-                            setPageTransformer(PageMargin.medium, false)
+                                setPageTransformer(PageMargin.medium, false)
+                            }
                         }
                     }
                 }
