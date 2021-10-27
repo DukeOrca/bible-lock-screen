@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class BillingModule(
     context: Context,
@@ -48,6 +50,7 @@ class BillingModule(
         override fun onBillingSetupFinished(billingResult: BillingResult) {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 callback.onBillingSetupFinished(billingClient)
+                billingSetupFinished.set(true)
             } else {
                 callback.onFailure(billingResult.responseCode)
             }
@@ -57,8 +60,14 @@ class BillingModule(
         }
     }
 
+    val billingSetupFinished = AtomicBoolean(false)
+
     fun startConnection() {
-        billingClient.startConnection(billingClientStateListener)
+        try {
+            billingClient.startConnection(billingClientStateListener)
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
+        }
     }
 
     private fun handlePurchase(purchase: Purchase) {

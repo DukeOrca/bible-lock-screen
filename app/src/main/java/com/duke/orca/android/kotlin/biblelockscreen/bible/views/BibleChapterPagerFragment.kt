@@ -2,15 +2,11 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
 import android.os.Bundle
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.transition.AutoTransition
-import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
-import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
@@ -65,7 +61,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
     }
 
     override fun onPause() {
-        DataStore.BibleChapter.putCurrentItem(requireContext(), currentItem?.id ?: 0)
+        DataStore.BibleChapter.putCurrentChapter(requireContext(), currentItem?.id ?: 0)
         super.onPause()
     }
 
@@ -110,17 +106,13 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 
                 with(viewBinding.linearLayoutBook) {
                     if (isInvisible) {
-                        delayOnLifecycle(Duration.Delay.INFLATE) {
-                            fadeIn(Duration.LONG)
-                        }
+                        fadeIn(Duration.FADE_IN)
                     }
                 }
 
                 with(viewBinding.dropdownMenuChapter) {
                     if (isInvisible) {
-                        delayOnLifecycle(Duration.Delay.INFLATE) {
-                            fadeIn(Duration.LONG)
-                        }
+                        fadeIn(Duration.FADE_IN)
                     }
                 }
 
@@ -171,7 +163,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
                 offscreenPageLimit = 2
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(
-                    DataStore.BibleChapter.getCurrentItem(requireContext()),
+                    DataStore.BibleChapter.getCurrentChapter(requireContext()),
                     false
                 )
             }

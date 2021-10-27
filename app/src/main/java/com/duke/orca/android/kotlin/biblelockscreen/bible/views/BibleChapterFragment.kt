@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
@@ -23,6 +24,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class BibleChapterFragment : BaseViewStubFragment(),
@@ -36,6 +39,7 @@ class BibleChapterFragment : BaseViewStubFragment(),
     private val bookChapter by lazy { arguments?.getParcelable<BookChapter>(Key.BOOK_CHAPTER) }
     private val book by lazy { bookChapter?.book ?: 1 }
     private val chapter by lazy { bookChapter?.chapter ?: 1 }
+
     private val bibleVerseAdapter by lazy { BibleVerseAdapter(books) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -44,6 +48,8 @@ class BibleChapterFragment : BaseViewStubFragment(),
     private var _binding: FragmentBibleChapterBinding? = null
     private val binding: FragmentBibleChapterBinding get() = _binding!!
 
+    private val isScrolledToPosition = AtomicBoolean(false)
+
     override fun onInflated(view: View) {
         bibleVerseAdapter.setOnIconClickListener(this)
 
@@ -51,6 +57,13 @@ class BibleChapterFragment : BaseViewStubFragment(),
 
         viewModel.bibleChapter.observe(viewLifecycleOwner, {
             bibleChapter = it
+
+            if (isScrolledToPosition.compareAndSet(false, true)) {
+                delayOnLifecycle(Duration.SHORT) {
+                    binding.recyclerViewBibleChapter.scrollToPosition(it.position)
+                    binding.root.fadeIn(Duration.FADE_IN)
+                }
+            }
 
             binding.imageViewBookmark.setTint(
                 if (it.bookmark) {
@@ -61,12 +74,9 @@ class BibleChapterFragment : BaseViewStubFragment(),
             )
         })
 
-        binding.linearLayout.fadeIn(Duration.MEDIUM)
-
         binding.recyclerViewBibleChapter.apply {
             adapter = bibleVerseAdapter
             layoutManager = LinearLayoutManagerWrapper(requireContext())
-            scheduleLayoutAnimation()
             setHasFixedSize(true)
 
             with(itemAnimator) {
@@ -95,6 +105,26 @@ class BibleChapterFragment : BaseViewStubFragment(),
         observe()
 
         return viewBinding.root
+    }
+
+    override fun onPause() {
+        if (isInflated.get()) {
+            try {
+                val layoutManager = binding.recyclerViewBibleChapter.layoutManager
+
+                if (layoutManager is LinearLayoutManager) {
+                    val position = layoutManager.findLastCompletelyVisibleItemPosition()
+
+                    bibleChapter?.let {
+                        viewModel.updatePosition(it.id, position)
+                    }
+                }
+            } catch (e: NullPointerException) {
+                Timber.e(e)
+            }
+        }
+
+        super.onPause()
     }
 
     override fun onDestroyView() {

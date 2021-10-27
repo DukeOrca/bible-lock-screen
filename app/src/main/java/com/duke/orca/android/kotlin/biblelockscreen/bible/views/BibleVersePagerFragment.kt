@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat.END
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.viewModels
@@ -101,7 +102,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                         if (unlockWithBackKey) {
                             finish()
                         } else {
-                            viewBinding.frameLayoutUnlock.animateRipple()
+                            viewBinding.frameLayoutUnlock.animateRipple(Duration.SHORT)
                         }
                     }
                 }
@@ -257,8 +258,6 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             moveTo(book, chapter, position.inc())
         }
 
-
-
         viewBinding.viewPager2.adapter = bibleVersePagerAdapter
         viewBinding.viewPager2.offscreenPageLimit = 2
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
@@ -266,9 +265,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         setPageTransformer(PageMargin.medium, false)
 
-        lifecycleScope.launchWhenStarted {
-            viewBinding.constraintLayoutDropdownMenu.fadeIn(Duration.LONG)
-            viewBinding.viewPager2.fadeIn(Duration.LONG) {
+        lifecycleScope.launchWhenResumed {
+            viewBinding.viewPager2.fadeIn(Duration.FADE_IN) {
                 setPageTransformer(PageMargin.small, true) {
                     with(viewBinding.viewLeftFake) {
                         viewTreeObserver.addOnDrawListener {
@@ -348,6 +346,12 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 viewBinding.textViewBook.text = getBook(it.book)
                 viewBinding.dropdownMenuChapter.setText(it.chapter.toString())
                 viewBinding.dropdownMenuVerse.setText(it.verse.toString())
+
+                with(viewBinding.constraintLayoutDropdownMenu) {
+                    if (isInvisible) {
+                        fadeIn(Duration.FADE_IN)
+                    }
+                }
 
                 if (currentItem?.book != it.book) {
                     viewBinding.dropdownMenuChapter.setAdapter(
@@ -456,6 +460,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         scheduleAnimation: Boolean,
         onPageAnimationEnd: (() -> Unit)? = null
     ) {
+        if (isDetached) return
+
         viewBinding.viewPager2.setPageTransformer(PageTransformer(
             pageMargin,
             scheduleAnimation
@@ -463,7 +469,11 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             onPageAnimationEnd?.let {
                 setPageAnimatorListener(object : PageTransformer.PageAnimatorListener {
                     override fun onPageAnimationEnd() {
-                        it.invoke()
+                        try {
+                            it.invoke()
+                        } catch (e: NullPointerException) {
+                            Timber.e(e)
+                        }
                     }
                 })
             }

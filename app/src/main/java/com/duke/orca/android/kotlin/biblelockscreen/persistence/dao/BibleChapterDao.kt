@@ -25,4 +25,7 @@ interface BibleChapterDao {
 
     @Query("UPDATE bible_chapter SET bookmark = :bookmark WHERE id = :id")
     suspend fun updateBookmark(id: Int, bookmark: Boolean)
+
+    @Query("UPDATE bible_chapter SET position = :position WHERE id = :id")
+    suspend fun updatePosition(id: Int, position: Int)
 }

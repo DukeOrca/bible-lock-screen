@@ -26,4 +26,8 @@ class BibleChapterDatasourceImpl @Inject constructor(private val database: Bible
     override suspend fun updateBookmark(id: Int, bookmark: Boolean) {
         database.bibleChapterDao().updateBookmark(id, bookmark)
     }
+
+    override suspend fun updatePosition(id: Int, position: Int) {
+        database.bibleChapterDao().updatePosition(id, position)
+    }
 }

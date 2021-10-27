@@ -12,5 +12,6 @@ data class BibleChapter(
     val id: Int,
     val book: Int,
     val bookmark: Boolean,
-    val chapter: Int
+    val chapter: Int,
+    val position: Int
 ): Parcelable

@@ -110,7 +110,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         }
 
         if (binding.nestedScrollView.isVisible.not()) {
-            binding.nestedScrollView.fadeIn(Duration.LONG)
+            binding.nestedScrollView.fadeIn(Duration.FADE_IN)
         }
     }
 

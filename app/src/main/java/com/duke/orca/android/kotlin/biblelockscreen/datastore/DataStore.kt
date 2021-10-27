@@ -71,10 +71,10 @@ object DataStore {
     }
 
     object BibleChapter {
-        fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentItem, 0)
+        fun getCurrentChapter(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentChapter, 0)
 
-        fun putCurrentItem(context: Context, value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.BibleChapter.currentItem, value)
+        fun putCurrentChapter(context: Context, value: Int) = runBlocking {
+            putInt(context, PreferencesKeys.BibleChapter.currentChapter, value)
         }
     }
 

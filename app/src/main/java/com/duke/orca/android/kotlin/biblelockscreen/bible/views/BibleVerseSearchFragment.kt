@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
@@ -28,6 +29,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVerseSearchViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -77,15 +79,15 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
             val searchResults = searchResult.searchResults
             val searchWord = searchResult.searchWord
 
-            viewBinding.circularProgressIndicator.fadeOut(Duration.SHORT) {
-                viewBinding.recyclerView.fadeIn(Duration.MEDIUM) {
-                    bibleVerseAdapter.submitList(
-                        searchResults.map { it.toAdapterItem() }, searchWord, color
-                    ) {
-                        delayOnLifecycle(Duration.SHORT) {
-                            if (searchResults.isEmpty()) {
-                                viewBinding.linearLayout.fadeIn(Duration.MEDIUM)
-                            }
+            viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
+                bibleVerseAdapter.submitList(
+                    searchResults.map { it.toAdapterItem() }, searchWord, color
+                ) {
+                    delayOnLifecycle(Duration.Delay.DISMISS) {
+                        if (searchResults.isEmpty()) {
+                            viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
+                        } else {
+                            viewBinding.recyclerView.fadeIn(Duration.FADE_IN)
                         }
                     }
                 }
@@ -151,17 +153,19 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
 
         currentQuery = text
 
-        viewBinding.recyclerView.fadeOut(Duration.SHORT, true) {
-            viewBinding.circularProgressIndicator.fadeIn(Duration.MEDIUM)
-
-            bibleVerseAdapter.submitList(null)
-
+        lifecycleScope.launch {
             if (viewBinding.linearLayout.isVisible) {
-                viewBinding.linearLayout.fadeOut(Duration.SHORT) {
+                viewBinding.linearLayout.fadeOut(Duration.FADE_OUT) {
+                    viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
+                    bibleVerseAdapter.submitList(null)
                     viewModel.search(text)
                 }
             } else {
-                viewModel.search(text)
+                viewBinding.recyclerView.fadeOut(Duration.FADE_OUT, true) {
+                    viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
+                    bibleVerseAdapter.submitList(null)
+                    viewModel.search(text)
+                }
             }
         }
     }
@@ -184,13 +188,13 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
         when(option) {
             options[0] -> {
                 bibleVerse?.let { copyToClipboard(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
                 bibleVerse?.let { share(requireContext(), it) }
-                delayOnLifecycle(Duration.SHORT) {
+                delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }

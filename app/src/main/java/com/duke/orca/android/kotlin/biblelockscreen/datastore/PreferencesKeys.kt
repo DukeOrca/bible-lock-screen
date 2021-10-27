@@ -14,7 +14,7 @@ object PreferencesKeys {
 
     object BibleChapter {
         private const val OBJECT_NAME = "BibleChapter"
-        val currentItem = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentItem")
+        val currentChapter = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentChapter")
     }
 
     object BibleVerse {

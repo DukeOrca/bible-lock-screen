@@ -6,8 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class BookChapter (
-    @ColumnInfo(name = "book")
     val book: Int,
-    @ColumnInfo(name = "chapter")
     val chapter: Int
 ) : Parcelable

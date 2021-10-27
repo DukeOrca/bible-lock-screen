@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -53,10 +56,16 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     private fun observe() {
         viewModel.adapterItems.observe(viewLifecycleOwner, {
             if (it.isEmpty()) {
-                viewBinding.linearLayout.fadeIn(Duration.MEDIUM)
+                viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
             }
 
-            bibleVerseAdapter.submitList(it)
+            bibleVerseAdapter.submitList(it) {
+                if (viewBinding.recyclerView.isInvisible) {
+                    delayOnLifecycle(Duration.Delay.DISMISS) {
+                        viewBinding.recyclerView.fadeIn(Duration.FADE_IN)
+                    }
+                }
+            }
         })
     }
 
@@ -64,8 +73,6 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
         bibleVerseAdapter.setOnIconClickListener(this)
 
         viewBinding.recyclerView.apply {
-            scheduleLayoutAnimation()
-
             adapter = bibleVerseAdapter
             layoutManager = LinearLayoutManagerWrapper(context)
             setHasFixedSize(true)

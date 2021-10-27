@@ -26,7 +26,7 @@ fun View.disable() {
     isEnabled = false
 }
 
-fun FrameLayout.animateRipple(delayMillis: Long = 200L) {
+fun FrameLayout.animateRipple(delayMillis: Long) {
     if (foreground is RippleDrawable) {
         val handler = Handler(Looper.getMainLooper())
         val rippleDrawable = foreground
@@ -127,7 +127,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
 fun View.fadeIn(
     duration: Long,
-    alphaFrom: Float = 0F,
+    alphaFrom: Float = 0.0F,
     onAnimationEnd: (() -> Unit)? = null
 ) {
     this.apply {
@@ -135,7 +135,7 @@ fun View.fadeIn(
         visibility = View.VISIBLE
 
         animate()
-            .alpha(1F)
+            .alpha(1.0F)
             .setDuration(duration)
             .setInterpolator(DecelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
@@ -148,10 +148,10 @@ fun View.fadeIn(
 
 fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null) {
     this.apply {
-        alpha = 1F
+        alpha = 1.0F
 
         animate()
-            .alpha(0F)
+            .alpha(0.0F)
             .setDuration(duration)
             .setInterpolator(AccelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {

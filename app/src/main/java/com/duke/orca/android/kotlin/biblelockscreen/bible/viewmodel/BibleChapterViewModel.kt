@@ -1,6 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
 
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -59,6 +60,14 @@ class BibleChapterViewModel @Inject constructor(
     fun updateFavorites(id: Int, favorites: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             bibleVerseRepository.updateFavorites(id, favorites)
+        }
+    }
+
+    fun updatePosition(id: Int, position: Int) {
+        if (position == RecyclerView.NO_POSITION) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            bibleChapterRepository.updatePosition(id, position)
         }
     }
 

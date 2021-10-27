@@ -6,10 +6,10 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.CHAPTE
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleChapterFragment
 
-class BibleChapterPagerAdapter(fragment: Fragment, private val bookChapters: List<BookChapter>) : FragmentStateAdapter(fragment) {
+class BibleChapterPagerAdapter(fragment: Fragment, private val bookChapterList: List<BookChapter>) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = CHAPTER_COUNT
 
     override fun createFragment(position: Int): Fragment {
-        return BibleChapterFragment.newInstance(bookChapters[position])
+        return BibleChapterFragment.newInstance(bookChapterList[position])
     }
 }

@@ -20,7 +20,8 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
 
     private var viewStub: ViewStub? = null
     private var onResumed = AtomicBoolean(false)
-    private var isInflated = AtomicBoolean(false)
+
+    protected var isInflated = AtomicBoolean(false)
 
     abstract fun onInflated(view: View)
 
@@ -51,14 +52,21 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
         inflate()
     }
 
+    override fun onPause() {
+        onResumed.set(false)
+        super.onPause()
+    }
+
     private fun inflate() {
         if (onResumed.get() && isInflated.get().not()) {
             try {
-                viewStub?.inflate()?.let {
-                    viewBinding.circularProgressIndicator.fadeOut(Duration.MEDIUM) {
-                        lifecycleScope.launchWhenResumed {
-                            onInflated(it)
-                            afterOnInflated()
+                lifecycleScope.launchWhenResumed {
+                    viewStub?.inflate()?.let {
+                        viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
+                            delayOnLifecycle(Duration.Delay.ON_INFLATED) {
+                                onInflated(it)
+                                afterOnInflated()
+                            }
                         }
                     }
                 }

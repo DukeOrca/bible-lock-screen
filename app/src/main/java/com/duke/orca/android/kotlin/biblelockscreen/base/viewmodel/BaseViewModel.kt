@@ -45,7 +45,9 @@ open class BaseViewModel @Inject constructor(application: Application) : Android
             networkStatus.collect {
                 when(it) {
                     NetworkStatus.Available -> {
-                        billingModule.startConnection()
+                        if (billingModule.billingSetupFinished.get().not()) {
+                            billingModule.startConnection()
+                        }
                     }
                     NetworkStatus.Unavailable -> {
                         withContext(Dispatchers.Main) {

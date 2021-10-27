@@ -10,4 +10,5 @@ interface BibleChapterDatasource {
     fun getAll(): Flow<List<BookChapter>>
     fun getBookmarks(): Flow<List<BibleChapter>>
     suspend fun updateBookmark(id: Int, bookmark: Boolean)
+    suspend fun updatePosition(id: Int, position: Int)
 }
