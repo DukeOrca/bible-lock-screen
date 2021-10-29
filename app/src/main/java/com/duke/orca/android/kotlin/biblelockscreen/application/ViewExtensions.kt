@@ -96,12 +96,11 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
     val from = this.height
     val to = this.measuredHeight
+    val valueAnimator = ValueAnimator.ofInt(from, to)
 
     layoutParams.height = from
 
     show()
-
-    val valueAnimator = ValueAnimator.ofInt(from, to)
 
     valueAnimator.addUpdateListener {
         layoutParams.height = it.animatedValue as Int

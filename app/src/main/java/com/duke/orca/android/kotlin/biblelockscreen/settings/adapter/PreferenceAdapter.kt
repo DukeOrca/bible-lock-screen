@@ -134,11 +134,6 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                 }
                 is SwitchPreferenceBinding -> {
                     if (adapterItem is AdapterItem.SwitchPreference) {
-                        if (adapterItem.isVisible)
-                            viewBinding.root.expand(duration)
-                        else
-                            viewBinding.root.collapse(duration, 0)
-
                         viewBinding.imageViewIcon.setImageDrawable(adapterItem.drawable)
                         viewBinding.switchMaterial.isChecked = adapterItem.isChecked
                         viewBinding.textTitle.text = adapterItem.title
@@ -155,6 +150,15 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                         viewBinding.switchMaterial.setOnCheckedChangeListener { _, isChecked ->
                             adapterItem.onCheckedChange(isChecked)
                         }
+
+                        viewBinding.root.setOnClickListener {
+                            viewBinding.switchMaterial.toggle()
+                        }
+
+                        if (adapterItem.isVisible)
+                            viewBinding.root.expand(duration)
+                        else
+                            viewBinding.root.collapse(duration, 0)
                     }
                 }
             }

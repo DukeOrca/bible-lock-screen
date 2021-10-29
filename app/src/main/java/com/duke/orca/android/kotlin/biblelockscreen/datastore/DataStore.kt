@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -40,6 +41,12 @@ object DataStore {
         }.first()
     }
 
+    private fun getString(context: Context, key: Preferences.Key<String>, defValue: String): String = runBlocking {
+        context.dataStore.data.map {
+            it[key] ?: defValue
+        }.first()
+    }
+
     suspend fun putBoolean(context: Context, key: Preferences.Key<Boolean>, value: Boolean) {
         context.dataStore.edit {
             it[key] = value
@@ -64,10 +71,24 @@ object DataStore {
         }
     }
 
+    suspend fun putString(context: Context, key: Preferences.Key<String>, value: String) {
+        context.dataStore.edit {
+            it[key] = value
+        }
+    }
+
     fun isFirstTime(context: Context): Boolean = getBoolean(context, PreferencesKeys.isFirstTime, true)
 
     fun putFirstTime(context: Context, value: Boolean) = runBlocking {
         putBoolean(context, PreferencesKeys.isFirstTime, value)
+    }
+
+    object Bible {
+        fun getBible(context: Context): String = getString(context, PreferencesKeys.Bible.bible, BLANK)
+
+        fun putBible(context: Context, value: String) = runBlocking {
+            putString(context, PreferencesKeys.Bible.bible, value)
+        }
     }
 
     object BibleChapter {

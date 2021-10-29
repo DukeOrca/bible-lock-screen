@@ -60,7 +60,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     }
 
     private fun observe(binding: FragmentBibleVerseBinding) {
-        viewModel.settings.observe(viewLifecycleOwner, {
+        viewModel.data.observe(viewLifecycleOwner, {
             val typeface = binding.textViewWord.typeface
 
             val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
@@ -87,7 +87,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     }
 
     private fun bind(binding: FragmentBibleVerseBinding, bibleVerse: BibleVerse) {
-        binding.textViewWord.text = bibleVerse.word
+        binding.textViewWord.text = bibleVerse.word.get()
         binding.textViewBook.text = getBook(bibleVerse.book)
         binding.textViewChapter.text = bibleVerse.chapter.toString()
         binding.textViewVerse.text = bibleVerse.verse.toString()

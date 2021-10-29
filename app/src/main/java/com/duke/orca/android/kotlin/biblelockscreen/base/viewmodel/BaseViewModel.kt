@@ -21,7 +21,7 @@ import javax.inject.Inject
 open class BaseViewModel @Inject constructor(application: Application) : AndroidViewModel(application) {
     private val networkStatus = NetworkStatusTracker(application).networkStatus
 
-    val settings = application.dataStore.data.asLiveData(Dispatchers.IO)
+    val data = application.dataStore.data.asLiveData(Dispatchers.IO)
 
     private val _removeAds = MutableLiveData<Boolean>()
     val removeAds: LiveData<Boolean> get() = _removeAds
@@ -45,9 +45,7 @@ open class BaseViewModel @Inject constructor(application: Application) : Android
             networkStatus.collect {
                 when(it) {
                     NetworkStatus.Available -> {
-                        if (billingModule.billingSetupFinished.get().not()) {
-                            billingModule.startConnection()
-                        }
+                        billingModule.startConnection()
                     }
                     NetworkStatus.Unavailable -> {
                         withContext(Dispatchers.Main) {

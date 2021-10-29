@@ -1,9 +1,5 @@
 package com.duke.orca.android.kotlin.biblelockscreen.persistence
 
-import android.content.Context
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDatabase
-
 object Apocalypse {
     private val words = arrayOf(
         "다시 밤이 없겠고 등불과 햇빛이 쓸 데 없으니 이는 주 하나님이 그들에게 비치심이라 그들이 세세토록 왕 노릇 하리로다",
@@ -24,24 +20,4 @@ object Apocalypse {
         "이것들을 증언하신 이가 이르시되 내가 진실로 속히 오리라 하시거늘 아멘 주 예수여 오시옵소서",
         "주 예수의 은혜가 모든 자들에게 있을지어다 아멘"
     )
-
-    suspend fun insert(applicationContext: Context) {
-        val bibleVerseDao = BibleDatabase.getInstance(applicationContext).bibleVerseDao()
-        val bibleVerses = arrayListOf<BibleVerse>()
-
-        words.forEachIndexed { index, word ->
-            bibleVerses.add(
-                BibleVerse(
-                    id = 31085 + index,
-                    book = 66,
-                    chapter = 22,
-                    verse = 5 + index,
-                    word = word,
-                    favorites = false
-                )
-            )
-        }
-
-        bibleVerseDao.insert(bibleVerses)
-    }
 }

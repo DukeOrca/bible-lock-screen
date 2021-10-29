@@ -24,6 +24,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.FragmentContainerActivity
+import com.duke.orca.android.kotlin.biblelockscreen.bible.Bible
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVersePagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTransformer
@@ -151,6 +152,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         putPublishSubject(Key.NATIVE_AD_VIEW_VISIBILITY, PublishSubject.create())
         putPublishSubject(Key.NEW_STATE, PublishSubject.create())
 
+        initData()
         observe()
         subscribe()
         bind()
@@ -340,7 +342,30 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         }
     }
 
+    private fun initData() {
+        Bible.bible = DataStore.Bible.getBible(requireContext())
+
+        if (Bible.bible.isBlank()) {
+            val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                resources.configuration.locales.get(0).language
+            } else{
+                resources.configuration.locale.language
+            }
+
+            Bible.bible = Bible.initialBible(language)
+        }
+    }
+
+
+
     private fun observe() {
+        Bible.toLiveData(requireContext()).observe(viewLifecycleOwner, {
+            if (Bible.bible != it) {
+                Bible.bible = it
+                // todo refresh
+            }
+        })
+
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleVerse ->
             bibleVerse?.let {
                 viewBinding.textViewBook.text = getBook(it.book)

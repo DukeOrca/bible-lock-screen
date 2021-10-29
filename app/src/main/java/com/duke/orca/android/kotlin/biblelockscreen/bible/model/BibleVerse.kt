@@ -11,8 +11,9 @@ data class BibleVerse(
     @PrimaryKey
     val id: Int,
     val book: Int,
+    val bookmark: Boolean,
     val chapter: Int,
     val verse: Int,
-    val word: String,
+    val word: Word,
     var favorites: Boolean
 ): Parcelable

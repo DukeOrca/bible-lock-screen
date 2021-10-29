@@ -1,9 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.datastore
 
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.floatPreferencesKey
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 
 object PreferencesKeys {
@@ -11,6 +8,11 @@ object PreferencesKeys {
     private const val OBJECT_NAME = "PreferencesKeys"
 
     val isFirstTime = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isFirstTime")
+
+    object Bible {
+        private const val OBJECT_NAME = "Bible"
+        val bible = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.bible")
+    }
 
     object BibleChapter {
         private const val OBJECT_NAME = "BibleChapter"

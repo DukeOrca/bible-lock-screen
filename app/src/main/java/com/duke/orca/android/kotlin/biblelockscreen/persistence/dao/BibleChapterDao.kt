@@ -1,6 +1,8 @@
 package com.duke.orca.android.kotlin.biblelockscreen.persistence.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
 import androidx.room.Transaction
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
@@ -15,6 +17,9 @@ interface BibleChapterDao {
     @Query("SELECT * FROM bible_chapter WHERE book = :book AND chapter = :chapter")
     fun get(book: Int, chapter: Int): Flow<BibleChapter>
 
+    @Query("SELECT * FROM bible_chapter")
+    fun getAllMan(): Flow<List<BibleChapter>>
+
     @Transaction
     @Query("SELECT book, chapter FROM bible_chapter ORDER BY id ASC")
     fun getAll(): Flow<List<BookChapter>>
@@ -28,4 +33,7 @@ interface BibleChapterDao {
 
     @Query("UPDATE bible_chapter SET position = :position WHERE id = :id")
     suspend fun updatePosition(id: Int, position: Int)
+
+    @Insert(onConflict = IGNORE)
+    suspend fun insertAll(list: List<BibleChapter>)
 }

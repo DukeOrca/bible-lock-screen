@@ -68,10 +68,10 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
                         viewBinding.textViewVerse.text = verse.toString()
 
                         if (searchWord.isBlank()) {
-                            viewBinding.textViewWord.text = word
+                            viewBinding.textViewWord.text = word.get()
                         } else {
                             viewBinding.textViewWord.setTextWithSearchWord(
-                                word,
+                                word.get(),
                                 searchWord,
                                 color
                             )

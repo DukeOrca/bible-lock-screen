@@ -64,7 +64,9 @@ class BillingModule(
 
     fun startConnection() {
         try {
-            billingClient.startConnection(billingClientStateListener)
+            if (billingSetupFinished.get().not()) {
+                billingClient.startConnection(billingClientStateListener)
+            }
         } catch (e: IllegalStateException) {
             Timber.e(e)
         }
