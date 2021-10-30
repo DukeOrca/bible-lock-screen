@@ -48,6 +48,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 import kotlin.math.pow
@@ -351,6 +352,9 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             } else{
                 resources.configuration.locale.language
             }
+
+            resources.configuration.locale.language
+            Timber.d("language :$language")
 
             Bible.bible = Bible.initialBible(language)
         }

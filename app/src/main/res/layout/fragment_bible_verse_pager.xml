@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_32dp"
-                    android:layout_marginTop="@dimen/margin_56dp"
+                    android:layout_marginTop="@dimen/margin_32dp"
                     android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -110,7 +110,7 @@
                     android:id="@+id/linear_layout_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_56dp"
+                    android:layout_marginTop="@dimen/margin_32dp"
                     android:layout_marginEnd="@dimen/margin_16dp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
@@ -259,7 +259,6 @@
             android:id="@+id/constraint_layout_unlock"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/margin_navigation"
             android:orientation="vertical"
             android:clipChildren="false"
             android:clipToPadding="false"
@@ -267,7 +266,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.2">
+            app:layout_constraintHeight_percent="0.25">
 
             <include
                 layout="@layout/native_ad"
@@ -316,7 +315,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:paddingBottom="@dimen/padding_navigation"
         app:headerLayout="@layout/header"
         app:menu="@menu/navigation_drawer"/>
 

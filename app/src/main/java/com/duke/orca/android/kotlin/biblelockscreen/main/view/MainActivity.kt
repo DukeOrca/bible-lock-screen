@@ -30,12 +30,12 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        with(window) {
-            setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
+//        with(window) {
+//            setFlags(
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//            )
+//        }
 
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
             PermissionRationaleDialogFragment().also {
