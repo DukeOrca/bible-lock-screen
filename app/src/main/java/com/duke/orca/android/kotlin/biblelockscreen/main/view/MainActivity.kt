@@ -7,8 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
-import android.view.WindowManager
-import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseLockScreenActivity
@@ -16,10 +14,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
 import com.duke.orca.android.kotlin.biblelockscreen.permission.view.PermissionRationaleDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDatabase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -29,13 +24,6 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//        with(window) {
-//            setFlags(
-//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-//            )
-//        }
 
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
             PermissionRationaleDialogFragment().also {

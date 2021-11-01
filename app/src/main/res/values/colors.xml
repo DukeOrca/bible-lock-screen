@@ -3,10 +3,10 @@
     <!-- Text legibility
          https://material.io/design/color/text-legibility.html#color-theme-creation -->
 
-    <color name="primary">@color/deep_purple_400</color>
-    <color name="primary_variant">#4D2C91</color>
+    <color name="primary">@color/indigo_400</color>
+    <color name="primary_variant">@color/indigo_600</color>
     <color name="secondary">@color/light_blue_400</color>
-    <color name="secondary_variant">#0086c3</color>
+    <color name="secondary_variant">#0086C3</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -54,22 +54,24 @@
     <color name="deep_purple_400">#7e57c2</color>
     <color name="indigo_400">#5c6bc0</color>
     <color name="blue_400">#42a5f5</color>
-    <color name="light_blue_400">#29b6f6</color>
-    <color name="cyan_400">#26c6da</color>
-    <color name="teal_400">#26a69a</color>
-    <color name="green_400">#66bb6a</color>
-    <color name="light_green_400">#9ccc65</color>
-    <color name="lime_400">#d4e157</color>
-    <color name="yellow_400">#ffee58</color>
-    <color name="amber_400">#ffca28</color>
-    <color name="orange_400">#ffa726</color>
-    <color name="deep_orange_400">#ff7043</color>
-    <color name="brown_400">#8d6e63</color>
-    <color name="grey_400">#bdbdbd</color>
-    <color name="blue_grey_400">#78909c</color>
+    <color name="light_blue_400">#29B6F6</color>
+    <color name="cyan_400">#26C6dA</color>
+    <color name="teal_400">#26A69A</color>
+    <color name="green_400">#66BB6A</color>
+    <color name="light_green_400">#9CCC65</color>
+    <color name="lime_400">#D4E157</color>
+    <color name="yellow_400">#FFEE58</color>
+    <color name="amber_400">#FFCA28</color>
+    <color name="orange_400">#FFA726</color>
+    <color name="deep_orange_400">#FF7043</color>
+    <color name="brown_400">#8D6E63</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="blue_grey_400">#78909C</color>
 
     <color name="deep_purple_500">#673ab7</color>
     <color name="green_500">#4caf50</color>
+
+    <color name="indigo_600">#3949AB</color>
 
     <color name="deep_purple_700">#512da8</color>
     <color name="green_700">#388e3c</color>
@@ -79,7 +81,7 @@
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="nothing_found">#61000000</color>
-    <color name="notification">@color/deep_purple_400</color>
+    <color name="notification">@color/indigo_400</color>
     <color name="ripple">@color/ripple_material_light</color>
     <color name="shadow">@color/dark_grey</color>
     <color name="space">#1F000000</color>

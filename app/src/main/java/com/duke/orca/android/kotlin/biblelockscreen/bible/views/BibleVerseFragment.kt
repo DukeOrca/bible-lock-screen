@@ -21,8 +21,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVerseViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseBinding
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.like.LikeButton
 import com.like.OnLikeListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,48 +45,59 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
         observe(viewBinding)
 
         lifecycleScope.launch {
-            viewModel.get(arguments?.getInt(Key.ID) ?: 0)?.let {
-                bind(viewBinding, it)
-            }
+            viewModel.get(arguments?.getInt(Key.ID) ?: 0)
         }
 
         return viewBinding.root
     }
 
     private fun observe(binding: FragmentBibleVerseBinding) {
-        viewModel.data.observe(viewLifecycleOwner, {
-            val typeface = binding.textViewWord.typeface
+        viewModel.pair.observe(viewLifecycleOwner, { pair ->
+            pair?.let {
+                val bibleVerse = it.first
+                val attributeSet = it.second
 
-            val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
-            val bold = it[PreferencesKeys.Font.bold] ?: false
-            val textAlignment = it[PreferencesKeys.Font.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
+                val typeface = binding.textViewWord.typeface
 
-            binding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
-            binding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
-            binding.textViewWord.gravity = textAlignment
+                with(attributeSet) {
+                    binding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
+                    binding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+                    binding.textViewWord.gravity = textAlignment
 
-            binding.textViewBook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
-            binding.textViewChapter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
-            binding.textViewColon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
-            binding.textViewVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
+                    binding.textViewBook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize.minus(2))
+                    binding.textViewChapter.setTextSize(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        fontSize.minus(2)
+                    )
+                    binding.textViewColon.setTextSize(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        fontSize.minus(2)
+                    )
+                    binding.textViewVerse.setTextSize(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        fontSize.minus(2)
+                    )
+                }
 
-            FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                gravity = textAlignment
-                binding.linearLayout.layoutParams = this
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    gravity = attributeSet.textAlignment
+                    binding.linearLayout.layoutParams = this
+                }
+
+                bind(binding, bibleVerse)
             }
         })
     }
 
     private fun bind(binding: FragmentBibleVerseBinding, bibleVerse: BibleVerse) {
-        binding.textViewWord.text = bibleVerse.word.get()
-        binding.textViewBook.text = getBook(bibleVerse.book)
+        binding.textViewWord.text = bibleVerse.word
+        binding.textViewBook.text = viewModel.bibleBook.name(bibleVerse.book)
         binding.textViewChapter.text = bibleVerse.chapter.toString()
         binding.textViewVerse.text = bibleVerse.verse.toString()
 
@@ -129,13 +138,13 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), it) }
+                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), it) }
+                bibleVerse?.let { share(requireContext(), viewModel.bibleBook,  it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

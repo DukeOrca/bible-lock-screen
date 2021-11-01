@@ -9,11 +9,6 @@ object PreferencesKeys {
 
     val isFirstTime = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isFirstTime")
 
-    object Bible {
-        private const val OBJECT_NAME = "Bible"
-        val bible = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.bible")
-    }
-
     object BibleChapter {
         private const val OBJECT_NAME = "BibleChapter"
         val currentChapter = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentChapter")
@@ -41,5 +36,10 @@ object PreferencesKeys {
         val displayAfterUnlocking = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.displayAfterUnlocking")
         val showOnLockScreen = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.showOnLockScreen")
         val unlockWithBackKey = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.unlockWithBackKey")
+    }
+
+    object Translation {
+        private const val OBJECT_NAME = "Translation"
+        val translation = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.translation")
     }
 }

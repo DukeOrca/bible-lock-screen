@@ -83,17 +83,21 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
     }
 
     override fun onDialogFragmentViewCreated() {
-        viewBinding.imageViewBook.rotate(180.0F, Duration.ROTATION)
+        delayOnLifecycle(Duration.Delay.ROTATE) {
+            viewBinding.imageViewBook.rotate(180.0F, Duration.ROTATION)
+        }
     }
 
     override fun onDialogFragmentViewDestroyed() {
-        viewBinding.imageViewBook.rotate(0.0F, Duration.ROTATION)
+        delayOnLifecycle(Duration.Delay.ROTATE) {
+            viewBinding.imageViewBook.rotate(0.0F, Duration.ROTATION)
+        }
     }
 
     private fun observe() {
         viewModel.currentItem.observe(viewLifecycleOwner, { bibleChapter ->
             bibleChapter?.let {
-                viewBinding.textViewBook.text = getBook(it.book)
+                viewBinding.textViewBook.text = viewModel.bibleBook.name(it.book)
                 viewBinding.dropdownMenuChapter.setText(it.chapter.toString())
 
                 if (currentItem?.book != it.book) {
@@ -127,13 +131,19 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         }
 
         viewBinding.linearLayoutBook.setOnClickListener {
-            BookSelectionDialogFragment.newInstance(currentItem?.book ?: 0).also {
+            BookSelectionDialogFragment.newInstance(
+                viewModel.bibleBook,
+                currentItem?.book ?: 0
+            ).also {
                 it.show(childFragmentManager, it.tag)
             }
         }
 
         viewBinding.imageViewBook.setOnClickListener {
-            BookSelectionDialogFragment.newInstance(currentItem?.book ?: 0).also {
+            BookSelectionDialogFragment.newInstance(
+                viewModel.bibleBook,
+                currentItem?.book ?: 0
+            ).also {
                 it.show(childFragmentManager, it.tag)
             }
         }

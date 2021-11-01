@@ -5,14 +5,12 @@ import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDa
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
-object BibleCModule {
-    @Singleton
+@InstallIn(ViewModelComponent::class)
+object BibleModule {
     @Provides
     fun provideBibleDatabase(@ApplicationContext applicationContext: Context): BibleDatabase {
         return BibleDatabase.getInstance(applicationContext)

@@ -20,5 +20,11 @@ fun shareApplication(context: Context) {
 fun Any?.isNull() = this == null
 fun Any?.isNotNull() = isNull().not()
 
+fun Int?.isZero() = this == 0
+fun Int?.isNonZero() = isZero().not()
+
 fun intRange(from: Int, to: Int) = from..to
 fun IntRange.toStringArray() = map { it.toString() }.toTypedArray()
+
+fun String.`is`(other: String) = this == other
+fun String.not(other: String) = `is`(other).not()

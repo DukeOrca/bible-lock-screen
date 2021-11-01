@@ -36,10 +36,4 @@ interface BibleVerseDao {
 
     @Query("UPDATE bible_verse SET favorites = :favorites WHERE id = :id")
     suspend fun updateFavorites(id: Int, favorites: Boolean)
-
-    @Insert(onConflict = REPLACE)
-    suspend fun insert(bibleVerse: BibleVerse)
-
-    @Insert(onConflict = REPLACE)
-    suspend fun insert(bibleVerses: List<BibleVerse>)
 }

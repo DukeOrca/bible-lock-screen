@@ -2,8 +2,10 @@ package com.duke.orca.android.kotlin.biblelockscreen.application.constants
 
 internal object Duration {
     object Delay {
+        const val SHORT = 75L
+
         const val DISMISS = 150L
-        const val ON_INFLATED = 75L
+        const val ROTATE = SHORT
     }
 
     const val SHORT = 200L

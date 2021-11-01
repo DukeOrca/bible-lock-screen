@@ -5,14 +5,19 @@ import androidx.annotation.MainThread
 import androidx.lifecycle.*
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.AttributeSet
 import com.duke.orca.android.kotlin.biblelockscreen.billing.REMOVE_ADS
 import com.duke.orca.android.kotlin.biblelockscreen.billing.module.BillingModule
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
 import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatus
 import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatusTracker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -22,6 +27,21 @@ open class BaseViewModel @Inject constructor(application: Application) : Android
     private val networkStatus = NetworkStatusTracker(application).networkStatus
 
     val data = application.dataStore.data.asLiveData(Dispatchers.IO)
+    val attributeSet = data.map {
+        val bold = it[PreferencesKeys.Font.bold] ?: false
+        val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
+        val textAlignment = it[PreferencesKeys.Font.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
+
+        AttributeSet(
+            bold = bold,
+            fontSize = fontSize,
+            textAlignment = textAlignment
+        )
+    }
+
+    val translation = application.dataStore.data.map {
+        it[PreferencesKeys.Translation.translation]
+    }.flowOn(Dispatchers.IO)
 
     private val _removeAds = MutableLiveData<Boolean>()
     val removeAds: LiveData<Boolean> get() = _removeAds

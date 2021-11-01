@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isGone
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -37,7 +35,7 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     }
 
     private val viewModel by viewModels<FavoritesViewModel>()
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(books) }
+    private val bibleVerseAdapter by lazy { BibleVerseAdapter(viewModel.bibleBook) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     override fun onCreateView(
@@ -96,13 +94,13 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), it) }
+                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), it) }
+                bibleVerse?.let { share(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

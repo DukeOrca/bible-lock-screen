@@ -57,8 +57,10 @@
 
             <TextView
                 android:id="@+id/text_view_book"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/height_36dp"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/margin_24dp"
                 android:clickable="false"
                 android:drawablePadding="@dimen/padding_8dp"
                 android:ellipsize="end"
@@ -77,6 +79,7 @@
                 android:id="@+id/image_view_book"
                 android:layout_width="@dimen/width_28dp"
                 android:layout_height="@dimen/height_28dp"
+                android:layout_marginEnd="@dimen/margin_24dp"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/ic_round_arrow_drop_down_28"

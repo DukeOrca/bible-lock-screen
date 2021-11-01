@@ -63,7 +63,7 @@ class DisplaySettingsActivity : BaseLockScreenActivity() {
                         recreate()
                     }
                 },
-                title = getString(R.string.dark_mode)
+                body = getString(R.string.dark_mode)
             )
         )
 

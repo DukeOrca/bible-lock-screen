@@ -9,17 +9,17 @@ import android.widget.Toast
 import androidx.annotation.MainThread
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.NEWLINE
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 
 @MainThread
-fun copyToClipboard(context: Context, bibleVerse: BibleVerse) {
-    val books = context.resources.getStringArray(R.array.books)
+fun copyToClipboard(context: Context, bibleBook: BibleBook, bibleVerse: BibleVerse) {
     val clipboard: ClipboardManager? = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
     val stringBuilder = StringBuilder()
 
     stringBuilder.append(bibleVerse.word)
     stringBuilder.append("$NEWLINE$NEWLINE")
-    stringBuilder.append("${books[bibleVerse.book.dec()]}  ${bibleVerse.chapter} : ${bibleVerse.verse}")
+    stringBuilder.append("${bibleBook.name(bibleVerse.book)}  ${bibleVerse.chapter} : ${bibleVerse.verse}")
 
     with(ClipData.newPlainText("label", stringBuilder.toString())) {
         clipboard?.setPrimaryClip(this)
@@ -27,14 +27,13 @@ fun copyToClipboard(context: Context, bibleVerse: BibleVerse) {
     }
 }
 
-fun share(context: Context, bibleVerse: BibleVerse) {
-    val books = context.resources.getStringArray(R.array.books)
+fun share(context: Context, bibleBook: BibleBook, bibleVerse: BibleVerse) {
     val intent = Intent(Intent.ACTION_SEND)
     val stringBuilder = StringBuilder()
 
     stringBuilder.append(bibleVerse.word)
     stringBuilder.append("$NEWLINE$NEWLINE")
-    stringBuilder.append("${books[bibleVerse.book.dec()]}  ${bibleVerse.chapter} : ${bibleVerse.verse}")
+    stringBuilder.append("${bibleBook.name(bibleVerse.book)}  ${bibleVerse.chapter} : ${bibleVerse.verse}")
 
     intent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString())
     intent.type = "text/plain"

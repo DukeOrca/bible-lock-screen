@@ -3,7 +3,8 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
 import androidx.lifecycle.*
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repository.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
 import com.google.android.gms.ads.nativead.NativeAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoritesViewModel @Inject constructor(private val repository: BibleVerseRepository) : ViewModel() {
+class FavoritesViewModel @Inject constructor(
+    private val bibleBookRepository: BibleBookRepository,
+    private val bibleVerseRepository: BibleVerseRepository
+) : ViewModel() {
     private val favorites = MutableLiveData<List<BibleVerse>>()
     private val nativeAds = MutableLiveData<List<NativeAd>>()
 
@@ -26,9 +30,11 @@ class FavoritesViewModel @Inject constructor(private val repository: BibleVerseR
         }
     }
 
+    val bibleBook by lazy { bibleBookRepository.get() }
+
     fun getFavorites() {
         viewModelScope.launch {
-            repository.getFavorites().collect {
+            bibleVerseRepository.getFavorites().collect {
                 favorites.value = it
             }
         }
@@ -36,7 +42,7 @@ class FavoritesViewModel @Inject constructor(private val repository: BibleVerseR
 
     fun updateFavorites(id: Int, favorites: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateFavorites(id, favorites)
+            bibleVerseRepository.updateFavorites(id, favorites)
         }
     }
 

@@ -64,7 +64,7 @@ class LockScreenSettingsFragment : PreferenceChildFragment() {
                         }
                     }
                 },
-                title = getString(R.string.show_on_lock_screen)
+                body = getString(R.string.show_on_lock_screen)
             ),
             AdapterItem.SwitchPreference(
                 drawable = null,
@@ -77,7 +77,7 @@ class LockScreenSettingsFragment : PreferenceChildFragment() {
                         DataStore.LockScreen.putDisplayAfterUnlocking(requireContext(), isChecked)
                     }
                 },
-                title = getString(R.string.display_after_unlocking)
+                body = getString(R.string.display_after_unlocking)
             ),
             AdapterItem.SwitchPreference(
                 drawable = null,
@@ -87,7 +87,7 @@ class LockScreenSettingsFragment : PreferenceChildFragment() {
                         DataStore.LockScreen.putUnlockWithBackKey(requireContext(), isChecked)
                     }
                 },
-                title = getString(R.string.unlock_with_back_button)
+                body = getString(R.string.unlock_with_back_button)
             )
         )
 

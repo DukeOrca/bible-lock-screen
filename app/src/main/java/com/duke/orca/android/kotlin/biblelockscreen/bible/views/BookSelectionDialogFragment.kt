@@ -13,6 +13,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookSelectionItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookSelectionDialogBinding
 
@@ -36,9 +37,12 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         fun onBookSelected(dialogFragment: BookSelectionDialogFragment, item: AdapterItem.Book)
     }
 
-    private val books by lazy { resources.getStringArray(R.array.books) }
+    private val bibleBook by lazy { arguments?.getParcelable<BibleBook>(Key.BIBLE_BOOK) }
+
     private val list: MutableList<AdapterItem> by lazy {
-        books.mapIndexed { index, text ->
+        val names = bibleBook?.names ?: emptyArray()
+
+        names.mapIndexed { index, text ->
             AdapterItem.Book(text, index)
         }.toMutableList()
     }
@@ -117,7 +121,7 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
     inner class BookSelectionAdapter : ListAdapter<AdapterItem, BookSelectionAdapter.ViewHolder>(DiffCallback()) {
         private val colorSecondary by lazy { requireContext().getColor(R.color.secondary) }
         private val colorText by lazy { requireContext().getColor(R.color.text) }
-        private val selectedItem = books[arguments?.getInt(Key.POSITION)?.dec() ?: 0]
+        private val selectedItem = bibleBook?.name(arguments?.getInt(Key.POSITION) ?: 0)
 
         inner class ViewHolder(private val viewBinding: BookSelectionItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
             fun bind(item: AdapterItem) {
@@ -139,6 +143,8 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
                     viewBinding.textViewBook.hide()
                     viewBinding.textViewTestament.show()
                     viewBinding.textViewTestament.text = item.text
+
+                    viewBinding.root.setOnClickListener(null)
                 }
             }
         }
@@ -156,6 +162,7 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
 
     sealed class AdapterItem {
         abstract val text: String
+
         data class Book(
             override val text: String,
             val index: Int
@@ -180,13 +187,15 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
 
         private object Key {
+            const val BIBLE_BOOK = "$PACKAGE_NAME.BIBLE_BOOK"
             const val POSITION = "$PACKAGE_NAME.POSITION"
         }
 
-        fun newInstance(position: Int): BookSelectionDialogFragment {
+        fun newInstance(bibleBook: BibleBook, position: Int): BookSelectionDialogFragment {
             return BookSelectionDialogFragment().apply {
                 arguments = Bundle().apply {
                     putInt(Key.POSITION, position)
+                    putParcelable(Key.BIBLE_BOOK, bibleBook)
                 }
             }
         }

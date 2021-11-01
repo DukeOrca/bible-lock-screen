@@ -65,8 +65,8 @@
 
     <dimen name="height_280dp">280dp</dimen>
     <dimen name="height_288dp">288dp</dimen>
+    <dimen name="height_300dp">300dp</dimen>
     <dimen name="height_320dp">320dp</dimen>
-
     <dimen name="height_324dp">324dp</dimen>
 
     <dimen name="height_exposed_dropdown_menu">@dimen/height_36dp</dimen>

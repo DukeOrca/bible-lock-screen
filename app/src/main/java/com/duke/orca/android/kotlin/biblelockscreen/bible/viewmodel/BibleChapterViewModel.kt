@@ -5,8 +5,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repository.BibleChapterRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repository.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleChapterRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
 import com.google.android.gms.ads.nativead.NativeAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BibleChapterViewModel @Inject constructor(
+    private val bibleBookRepository: BibleBookRepository,
     private val bibleVerseRepository: BibleVerseRepository,
     private val bibleChapterRepository: BibleChapterRepository,
 ) : ViewModel() {
@@ -31,6 +33,8 @@ class BibleChapterViewModel @Inject constructor(
             value = combine(bibleVerses, nativeAds)
         }
     }
+
+    val bibleBook by lazy { bibleBookRepository.get() }
 
     private val _bibleChapter = MutableLiveData<BibleChapter>()
     val bibleChapter: LiveData<BibleChapter> = _bibleChapter

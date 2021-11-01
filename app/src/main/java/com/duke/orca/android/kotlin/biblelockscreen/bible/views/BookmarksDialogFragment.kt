@@ -23,7 +23,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
         get() = true
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
-    private val bibleChapterAdapter by lazy { BibleChapterAdapter(requireContext()) }
+    private val bibleChapterAdapter by lazy { BibleChapterAdapter(requireContext(), viewModel.bibleBook) }
 
     private var onBookmarkClickListener: OnBookmarkClickListener? = null
 

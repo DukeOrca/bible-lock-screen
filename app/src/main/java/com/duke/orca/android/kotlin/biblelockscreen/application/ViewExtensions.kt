@@ -128,12 +128,12 @@ fun View.fadeIn(
     duration: Long,
     alphaFrom: Float = 0.0F,
     onAnimationEnd: (() -> Unit)? = null
-) {
+): ViewPropertyAnimator {
     this.apply {
         alpha = alphaFrom
         visibility = View.VISIBLE
 
-        animate()
+        return@fadeIn animate()
             .alpha(1.0F)
             .setDuration(duration)
             .setInterpolator(DecelerateInterpolator())
@@ -141,15 +141,15 @@ fun View.fadeIn(
                 override fun onAnimationEnd(animation: Animator?) {
                     onAnimationEnd?.invoke()
                 }
-            })
+            }).withLayer()
     }
 }
 
-fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null) {
+fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null): ViewPropertyAnimator {
     this.apply {
         alpha = 1.0F
 
-        animate()
+        return@fadeOut animate()
             .alpha(0.0F)
             .setDuration(duration)
             .setInterpolator(AccelerateInterpolator())
@@ -163,7 +163,7 @@ fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (()
                     onAnimationEnd?.invoke()
                     super.onAnimationEnd(animation)
                 }
-            })
+            }).withLayer()
     }
 }
 

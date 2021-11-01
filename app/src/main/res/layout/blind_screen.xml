@@ -105,7 +105,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="UselessParent">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/image_view_unlock"
                 android:layout_width="@dimen/width_56dp"
                 android:layout_height="@dimen/height_56dp"
@@ -114,6 +114,7 @@
                 android:duplicateParentState="true"
                 android:padding="@dimen/padding_12dp"
                 android:scaleType="centerInside"
+                android:src="@drawable/ic_unlock_90px"
                 app:srcCompat="@drawable/ic_unlock_90px"
                 app:tint="@color/white"
                 tools:ignore="ContentDescription" />

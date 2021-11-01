@@ -64,8 +64,8 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                             viewBinding.imageViewIcon.hide()
                         }
 
+                        viewBinding.textViewBody.text = adapterItem.body
                         viewBinding.textViewSummary.text = adapterItem.summary
-                        viewBinding.textViewTitle.text = adapterItem.title
 
                         if (adapterItem.summary.isBlank())
                             viewBinding.textViewSummary.hide()
@@ -100,7 +100,7 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                             })
                         }
 
-                        viewBinding.textTitle.text = adapterItem.title
+                        viewBinding.textViewBody.text = adapterItem.body
 
                         viewBinding.root.setOnClickListener {
                             if (adapterItem.isExpanded) {
@@ -136,7 +136,7 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                     if (adapterItem is AdapterItem.SwitchPreference) {
                         viewBinding.imageViewIcon.setImageDrawable(adapterItem.drawable)
                         viewBinding.switchMaterial.isChecked = adapterItem.isChecked
-                        viewBinding.textTitle.text = adapterItem.title
+                        viewBinding.textViewBody.text = adapterItem.body
 
                         adapterItem.drawable?.let {
                             viewBinding.imageViewIcon.show()
@@ -284,9 +284,9 @@ sealed class AdapterItem {
         override var isClickable: Boolean = true,
         override var isVisible: Boolean = true,
         val adapter: RecyclerView.Adapter<*>,
+        val body: String,
         val drawable: Drawable?,
         val onClick: (MultiSelectListPreference) -> Unit,
-        val title: String,
         var isExpanded: Boolean = false
     ) : AdapterItem()
 
@@ -294,9 +294,9 @@ sealed class AdapterItem {
         override val id: Long = -1L,
         override var isClickable: Boolean = true,
         override var isVisible: Boolean = true,
+        val body: String,
         val drawable: Drawable?,
         val onClick: (Preference) -> Unit,
-        val title: String,
         val summary: String
     ) : AdapterItem()
 
@@ -317,10 +317,10 @@ sealed class AdapterItem {
         override val id: Long = -1L,
         override var isClickable: Boolean = true,
         override var isVisible: Boolean = true,
+        val body: String,
         val drawable: Drawable?,
         val isChecked: Boolean,
-        val onCheckedChange: (isChecked: Boolean) -> Unit,
-        val title: String
+        val onCheckedChange: (isChecked: Boolean) -> Unit
     ) : AdapterItem()
 }
 

@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -29,7 +28,6 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     protected val compositeDisposable = CompositeDisposable()
 
-    val books: Array<String> by lazy { resources.getStringArray(R.array.books) }
     val chapters: IntArray by lazy { resources.getIntArray(R.array.chapters) }
 
     protected fun putActivityResultLauncher(key: String, value: ActivityResultLauncher<Intent>) {
@@ -81,18 +79,6 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     protected fun finish() {
         requireActivity().finish()
-    }
-
-    protected fun recreate() {
-        requireActivity().recreate()
-    }
-
-    protected fun getBook(book: Int): String {
-        return if (book.dec() in 0 until books.count()) {
-            books[book.dec()]
-        } else {
-            BLANK
-        }
     }
 
     protected fun overridePendingTransition(enterAnim: Int, exitAnim: Int) {

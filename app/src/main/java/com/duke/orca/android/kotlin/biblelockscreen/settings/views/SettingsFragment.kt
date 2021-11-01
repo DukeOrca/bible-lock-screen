@@ -8,16 +8,36 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
+import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.TranslationSelection
 
-class SettingsFragment : PreferenceFragment() {
+class SettingsFragment : PreferenceFragment(),
+    TranslationSelectionDialogFragment.OnTranslationSelectedListener {
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.settings
+
+    override fun onTranslationSelected(
+        dialogFragment: TranslationSelectionDialogFragment,
+        item: TranslationSelection.AdapterItem.Translation
+    ) {
+        val transition = DataStore.Translation.getTranslation(requireContext())
+
+        if (transition.not(item.name)) {
+            DataStore.Translation.putTranslation(requireContext(), item.name)
+        }
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +67,7 @@ class SettingsFragment : PreferenceFragment() {
                             overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
                         }
                     },
-                    title = getString(R.string.display)
+                    body = getString(R.string.display)
                 ),
                 AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
@@ -58,7 +78,7 @@ class SettingsFragment : PreferenceFragment() {
                     onClick = {
                         addFragment(LockScreenSettingsFragment())
                     },
-                    title = getString(R.string.lock_screen)
+                    body = getString(R.string.lock_screen)
                 ),
                 AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
@@ -72,7 +92,20 @@ class SettingsFragment : PreferenceFragment() {
                             " ${getString(R.string.font_size)}," +
                             " ${getString(R.string.text_alignment)}"
                     ,
-                    title = getString(R.string.font)
+                    body = getString(R.string.font)
+                ),
+                AdapterItem.Space(),
+                AdapterItem.ContentPreference(
+                    drawable = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_round_language_24
+                    ),
+                    onClick = {
+                        TranslationSelectionDialogFragment().also {
+                            it.show(childFragmentManager, it.tag)
+                        }
+                    },
+                    body = getString(R.string.translations)
                 ),
                 AdapterItem.Space(),
                 AdapterItem.ContentPreference(

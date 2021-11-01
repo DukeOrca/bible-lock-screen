@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTextWithSearchWord
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BibleVerseBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
@@ -16,7 +17,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.like.LikeButton
 import com.like.OnLikeListener
 
-class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVerseAdapter.AdapterItem, BibleVerseAdapter.ViewHolder>(DiffCallback()) {
+class BibleVerseAdapter(private val bibleBook: BibleBook) : ListAdapter<BibleVerseAdapter.AdapterItem, BibleVerseAdapter.ViewHolder>(DiffCallback()) {
     private var inflater: LayoutInflater? = null
     private var onIconClickListener: OnIconClickListener? = null
     private var recyclerView: RecyclerView? = null
@@ -63,15 +64,15 @@ class BibleVerseAdapter(private val books: Array<String>) : ListAdapter<BibleVer
 
                         val favorites = bibleVerse.favorites
 
-                        viewBinding.textViewBook.text = books[book.dec()]
+                        viewBinding.textViewBook.text = bibleBook.name(book)
                         viewBinding.textViewChapter.text = chapter.toString()
                         viewBinding.textViewVerse.text = verse.toString()
 
                         if (searchWord.isBlank()) {
-                            viewBinding.textViewWord.text = word.get()
+                            viewBinding.textViewWord.text = word
                         } else {
                             viewBinding.textViewWord.setTextWithSearchWord(
-                                word.get(),
+                                word,
                                 searchWord,
                                 color
                             )

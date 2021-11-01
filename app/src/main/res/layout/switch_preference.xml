@@ -17,15 +17,15 @@
             android:layout_width="@dimen/width_24dp"
             android:layout_height="@dimen/height_24dp"
             android:layout_marginStart="@dimen/margin_16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/text_title"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_body"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_title"
+            app:layout_constraintTop_toTopOf="@+id/text_view_body"
             app:tint="@color/icon"
             tools:ignore="ContentDescription"
             tools:srcCompat="@drawable/ic_round_settings_24" />
 
         <TextView
-            android:id="@+id/text_title"
+            android:id="@+id/text_view_body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_16dp"
@@ -44,9 +44,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_16dp"
             android:focusable="false"
-            app:layout_constraintBottom_toBottomOf="@+id/text_title"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_body"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/text_title" />
+            app:layout_constraintTop_toTopOf="@+id/text_view_body" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

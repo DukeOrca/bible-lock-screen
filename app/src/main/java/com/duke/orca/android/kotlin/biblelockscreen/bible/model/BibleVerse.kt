@@ -13,7 +13,7 @@ data class BibleVerse(
     val book: Int,
     val bookmark: Boolean,
     val chapter: Int,
+    val favorites: Boolean,
     val verse: Int,
-    val word: Word,
-    var favorites: Boolean
+    val word: String
 ): Parcelable

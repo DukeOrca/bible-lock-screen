@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">그대 안의 성경</string>
+
+    <string name="ad">Ad</string>
+    <string name="align_center">가운데 정렬</string>
+    <string name="align_left">왼쪽 정렬</string>
+    <string name="align_right">오른쪽 정렬</string>
+    <string name="allow">허용</string>
+    <string name="allow_appear_on_top_permission">다른 앱 위에 표시 권한을 허용하세요.</string>
+    <string name="appear_on_top">다른 앱 위에 표시</string>
+    <string name="bible">성경</string>
+    <string name="bible_lock_screen_is_running">성경 잠금화면이 실행 중입니다.</string>
+    <string name="bold">굵은 글꼴</string>
+    <string name="bookmarks">북마크</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다.</string>
+    <string name="colon">:</string>
+    <string name="copy">복사</string>
+    <string name="dark_mode">다크 모드</string>
+    <string name="deny">거부</string>
+    <string name="display">디스플레이</string>
+    <string name="display_after_unlocking">잠금 해제 후 표시</string>
+    <string name="drag_to_unlock">드래그해서 잠금 해제</string>
+    <string name="draw_unlock_pattern">잠금 해제 패턴을 그리세요.</string>
+    <string name="enter_password_or_pin">비밀번호 또는 PIN을 입력하세요.</string>
+    <string name="enter_two_or_more_characters">두 글자 이상 입력하세요.</string>
+    <string name="enter_your_search_term">검색어를 입력하세요.</string>
+    <string name="favorites">즐겨찾기</string>
+    <string name="font">글꼴</string>
+    <string name="font_size">글꼴 크기</string>
+    <string name="lock_screen">잠금화면</string>
+    <string name="lock_setting">잠금 설정</string>
+    <string name="lock_type">잠금 방식</string>
+    <string name="new_testament">신약</string>
+    <string name="no_bookmarks">북마크가 없습니다.</string>
+    <string name="no_favorites">즐겨찾기가 없습니다.</string>
+    <string name="no_results_found">검색 결과가 없습니다.</string>
+    <string name="old_testament">구약</string>
+    <string name="request_app_permissions">앱 권한 요청</string>
+    <string name="search">검색</string>
+    <string name="share">공유</string>
+    <string name="settings">설정</string>
+    <string name="share_the_app">앱 공유하기</string>
+    <string name="show_on_lock_screen">잠금화면에 표시</string>
+    <string name="text_alignment">텍스트 정렬</string>
+    <string name="translations">번역본</string>
+    <string name="unlock_with_back_button">백 버튼으로 잠금해제</string>
+    <string name="version">버전</string>
+    <string name="write_review">리뷰 쓰기</string>
+
+    <string name="blind_screen_000">보안정책에 따라 홈 버튼으로 잠금 해제할 수 없습니다.</string>
+    <string name="fragment_permission_rationale_dialog_000">앱의 모든 기능을 사용하려면 다음 권한을 허용해야 합니다.</string>
+    <string name="review_000">소중한 리뷰 감사합니다.</string>
+
+    <string name="format_bible_chapter">%s %d장</string>
+
+    <string name="pattern_format_12_hour_000">M월 d일 EEEE</string>
+    <string name="pattern_format_12_hour_001">h:mm</string>
+    <string name="pattern_format_12_hour_002">h:mm:ss</string>
+</resources>

@@ -16,10 +16,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.ONE_SECOND
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
@@ -46,7 +47,7 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private val viewModel by viewModels<BibleVerseSearchViewModel>()
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(books) }
+    private val bibleVerseAdapter by lazy { BibleVerseAdapter(viewModel.bibleBook) }
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -187,13 +188,13 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), it) }
+                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), it) }
+                bibleVerse?.let { share(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

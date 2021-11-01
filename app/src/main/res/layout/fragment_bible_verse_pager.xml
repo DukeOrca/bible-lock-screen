@@ -21,7 +21,7 @@
             android:id="@+id/view_left_fake"
             android:layout_width="@dimen/width_8dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_204dp"
+            android:layout_marginTop="@dimen/margin_180dp"
             android:background="@drawable/rounded_right_corners"
             android:backgroundTint="@color/translucent"
             android:visibility="invisible"
@@ -33,7 +33,7 @@
             android:id="@+id/view_right_fake"
             android:layout_width="@dimen/width_8dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/margin_204dp"
+            android:layout_marginTop="@dimen/margin_180dp"
             android:background="@drawable/rounded_left_corners"
             android:backgroundTint="@color/translucent"
             android:visibility="invisible"
@@ -183,8 +183,10 @@
 
                     <TextView
                         android:id="@+id/text_view_book"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="@dimen/height_36dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/margin_8dp"
                         android:clickable="false"
                         android:drawablePadding="@dimen/padding_8dp"
                         android:ellipsize="end"
@@ -204,6 +206,7 @@
                         android:id="@+id/image_view_book"
                         android:layout_width="@dimen/width_28dp"
                         android:layout_height="@dimen/height_28dp"
+                        android:layout_marginEnd="@dimen/margin_8dp"
                         android:layout_marginStart="@dimen/margin_8dp"
                         app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
                         app:tint="@color/white"
@@ -266,7 +269,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.25">
+            app:layout_constraintHeight_percent="0.2">
 
             <include
                 layout="@layout/native_ad"

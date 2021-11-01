@@ -63,7 +63,7 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
                 lifecycleScope.launchWhenResumed {
                     viewStub?.inflate()?.let {
                         viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
-                            delayOnLifecycle(Duration.Delay.ON_INFLATED) {
+                            delayOnLifecycle(Duration.Delay.SHORT) {
                                 onInflated(it)
                                 afterOnInflated()
                             }

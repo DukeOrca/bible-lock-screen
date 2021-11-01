@@ -75,7 +75,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
                         it.show(childFragmentManager, it.tag)
                     }
                 },
-                title = getString(R.string.font_size)
+                body = getString(R.string.font_size)
             ),
             AdapterItem.SwitchPreference(
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bold_48px),
@@ -85,7 +85,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
                         DataStore.Font.putBold(requireContext(), isChecked)
                     }
                 },
-                title = getString(R.string.bold)
+                body = getString(R.string.bold)
             ),
             AdapterItem.Preference(
                 drawable = getTextAlignmentDrawable(textAlignment),
@@ -96,7 +96,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
                     }
                 },
                 summary = getTextAlignmentSummary(textAlignment),
-                title = getString(R.string.text_alignment)
+                body = getString(R.string.text_alignment)
             )
         )
 

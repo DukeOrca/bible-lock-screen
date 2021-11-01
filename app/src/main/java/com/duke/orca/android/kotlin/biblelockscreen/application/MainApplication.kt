@@ -34,6 +34,7 @@ class MainApplication : Application() {
     companion object {
         private lateinit var instance: MainApplication
 
+        fun getApplication(): Application = instance
         fun getApplicationContext(): Context = instance.applicationContext
     }
 }

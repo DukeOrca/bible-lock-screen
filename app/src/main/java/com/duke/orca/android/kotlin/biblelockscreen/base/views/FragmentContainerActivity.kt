@@ -58,7 +58,8 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.base.views"
 
         object Extra {
-            const val SIMPLE_NAME = "${PACKAGE_NAME}.SIMPLE_NAME"
+            private const val OBJECT_NAME = "Extra"
+            const val SIMPLE_NAME = "$PACKAGE_NAME.$OBJECT_NAME.SIMPLE_NAME"
         }
     }
 }

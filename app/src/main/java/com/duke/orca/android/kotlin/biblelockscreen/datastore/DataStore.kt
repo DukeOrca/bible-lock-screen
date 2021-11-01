@@ -83,14 +83,6 @@ object DataStore {
         putBoolean(context, PreferencesKeys.isFirstTime, value)
     }
 
-    object Bible {
-        fun getBible(context: Context): String = getString(context, PreferencesKeys.Bible.bible, BLANK)
-
-        fun putBible(context: Context, value: String) = runBlocking {
-            putString(context, PreferencesKeys.Bible.bible, value)
-        }
-    }
-
     object BibleChapter {
         fun getCurrentChapter(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentChapter, 0)
 
@@ -164,6 +156,14 @@ object DataStore {
         }
         suspend fun putUnlockWithBackKey(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, value)
+        }
+    }
+
+    object Translation {
+        fun getTranslation(context: Context): String = getString(context, PreferencesKeys.Translation.translation, BLANK)
+
+        fun putTranslation(context: Context, value: String) = runBlocking {
+            putString(context, PreferencesKeys.Translation.translation, value)
         }
     }
 }

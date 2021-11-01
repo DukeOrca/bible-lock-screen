@@ -14,7 +14,6 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
 import timber.log.Timber
 
 object AdLoader {
@@ -28,12 +27,7 @@ object AdLoader {
                     Timber.e(loadAdError.message)
                 }
             })
-            .withNativeAdOptions(
-                NativeAdOptions
-                .Builder()
-                .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_RIGHT)
-                .build()
-            ).build()
+            .build()
 
         val adRequest = AdRequest.Builder().build()
 
