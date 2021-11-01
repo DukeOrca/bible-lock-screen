@@ -35,6 +35,7 @@
         <entry key="app/src/main/res/layout/activity_fragment_container.xml" value="0.14791666666666667" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20697463768115942" />
         <entry key="app/src/main/res/layout/activity_preference.xml" value="0.16530797101449277" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.15416666666666667" />
         <entry key="app/src/main/res/layout/bible_chapter.xml" value="0.375" />
         <entry key="app/src/main/res/layout/bible_verse.xml" value="0.41767068273092367" />
         <entry key="app/src/main/res/layout/bible_verse2.xml" value="0.17291666666666666" />
@@ -59,7 +60,7 @@
         <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.165" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_view_stub.xml" value="0.15729166666666666" />
         <entry key="app/src/main/res/layout/fragment_bible_verses.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_selection_dialog.xml" value="0.1" />

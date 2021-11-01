@@ -44,7 +44,7 @@ object NotificationBuilder {
             )
 
             CoroutineScope(Dispatchers.IO).launch {
-                val smallIcon = R.drawable.ic_holy_bible_96px
+                val smallIcon = R.drawable.ic_holy_bible_overlay_96px
                 val color = ContextCompat.getColor(context, R.color.notification)
                 val contentTitle = context.getString(R.string.app_name)
                 val contentText = context.getString(R.string.bible_lock_screen_is_running)

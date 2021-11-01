@@ -16,20 +16,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BibleLockScreen">
-        <activity
-            android:name=".main.view.MainActivity"
-            android:excludeFromRecents="true"
+
+        <activity android:name=".splash.view.SplashActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity"
-            android:windowSoftInputMode="adjustNothing">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".main.view.MainActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleInstance"
+
+            android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity"
+            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".base.views.FragmentContainerActivity"

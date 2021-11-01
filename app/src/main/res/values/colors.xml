@@ -6,7 +6,7 @@
     <color name="primary">@color/indigo_400</color>
     <color name="primary_variant">@color/indigo_600</color>
     <color name="secondary">@color/light_blue_400</color>
-    <color name="secondary_variant">#0086C3</color>
+    <color name="secondary_variant">@color/light_blue_600</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -39,8 +39,9 @@
     <color name="blue_200">#90CAF9</color>
     <color name="yellow_A_200">#FFFF00</color>
 
-    <color name="pink_300">#f06292</color>
-    <color name="purple_300">#ba68c8</color>
+    <color name="pink_300">#F06292</color>
+    <color name="purple_300">#BA68C8</color>
+    <color name="indigo_300">#7986CB</color>
     <color name="deep_purple_300">#9575CD</color>
     <color name="light_blue_300">#4FC3F7</color>
     <color name="cyan_300">#26c6da</color>
@@ -68,12 +69,15 @@
     <color name="grey_400">#BDBDBD</color>
     <color name="blue_grey_400">#78909C</color>
 
-    <color name="deep_purple_500">#673ab7</color>
+    <color name="deep_purple_500">#673AB7</color>
+    <color name="indigo_500">#3F51B5</color>
     <color name="green_500">#4caf50</color>
 
     <color name="indigo_600">#3949AB</color>
+    <color name="light_blue_600">#039BE5</color>
 
     <color name="deep_purple_700">#512da8</color>
+    <color name="indigo_700">#303F9F</color>
     <color name="green_700">#388e3c</color>
 
     <color name="card_background">#61000000</color>
@@ -81,10 +85,11 @@
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="nothing_found">#61000000</color>
-    <color name="notification">@color/indigo_400</color>
+    <color name="notification">@color/indigo_300</color>
     <color name="ripple">@color/ripple_material_light</color>
     <color name="shadow">@color/dark_grey</color>
     <color name="space">#1F000000</color>
+    <color name="splash_screen_icon">@color/indigo_300</color>
     <color name="subtitle">@color/medium_emphasis</color>
     <color name="system_ui">@color/primary_variant</color>
     <color name="text">@color/high_emphasis</color>

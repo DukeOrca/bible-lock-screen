@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">@color/indigo_400</color>
-    <color name="primary_variant">@color/indigo_600</color>
-    <color name="secondary">@color/light_blue_400</color>
-    <color name="secondary_variant">#0086C3</color>
+    <color name="primary">#212121</color>
+    <color name="primary_variant">@color/dark_grey</color>
+    <color name="secondary">@color/purple_200</color>
+    <color name="secondary_variant">@color/purple_200</color>
 
     <color name="background">@color/dark_grey</color>
     <color name="on_background">@color/white</color>
@@ -22,10 +22,10 @@
     <color name="card_background">#61000000</color>
     <color name="divider">#33FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
-    <color name="notification">@color/primary</color>
     <color name="nothing_found">#61FFFFFF</color>
     <color name="ripple">@color/ripple_material_dark</color>
     <color name="space">#33FFFFFF</color>
+    <color name="splash_screen_icon">@color/white</color>
     <color name="title_text">@color/white</color>
     <color name="toolbar">@color/primary</color>
 

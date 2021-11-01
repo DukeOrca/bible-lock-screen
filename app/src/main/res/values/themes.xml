@@ -12,7 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/translucent</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/translucent</item>
-        <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -22,6 +21,25 @@
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowShowWallpaper">true</item>
+    </style>
+
+    <style name="Theme.SplashActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/background</item>
+
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.DisplaySettingsActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -103,17 +121,17 @@
     </style>
 
     <style name="WindowAnimation">
-        <item name="android:windowEnterAnimation">@anim/fade_in</item>
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="WindowAnimation.BlindScreen">
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="WindowAnimation.Fading">
-        <item name="android:windowEnterAnimation">@anim/fade_in</item>
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <style name="WindowAnimation.Sliding">

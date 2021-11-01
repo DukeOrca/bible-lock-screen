@@ -6,98 +6,106 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/toolbar"
-        android:theme="@style/Toolbar"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:elevation="@dimen/elevation_2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="@string/bible"
-        app:titleTextColor="@color/title_text">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/image_view_bookmarks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/margin_8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/padding_8dp"
-            app:srcCompat="@drawable/ic_round_bookmarks_24"
-            tools:ignore="ContentDescription" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_48dp"
-        android:orientation="horizontal"
-        android:background="@color/surface"
-        android:elevation="@dimen/elevation_2dp"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
-        <LinearLayout
-            android:id="@+id/linear_layout_book"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:background="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/text_view_book"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/height_36dp"
-                android:layout_weight="1"
-                android:layout_marginStart="@dimen/margin_24dp"
-                android:clickable="false"
-                android:drawablePadding="@dimen/padding_8dp"
-                android:ellipsize="end"
-                android:focusable="false"
-                android:fontFamily="@font/font_family_nanum_myeongjo"
-                android:gravity="center"
-                android:inputType="none"
-                android:layout_gravity="center"
-                android:maxLines="1"
-                android:textColor="@color/text"
-                android:textSize="@dimen/text_size_14dp"
-                android:textStyle="bold"
-                tools:text="데살로니가후서" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/toolbar"
+            android:elevation="@dimen/elevation_2dp"
+            android:theme="@style/Toolbar"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="@string/bible"
+            app:titleTextColor="@color/title_text">
 
             <ImageView
-                android:id="@+id/image_view_book"
-                android:layout_width="@dimen/width_28dp"
-                android:layout_height="@dimen/height_28dp"
-                android:layout_marginEnd="@dimen/margin_24dp"
-                android:layout_marginStart="@dimen/margin_8dp"
+                android:id="@+id/image_view_bookmarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
-                app:tint="@color/icon"
+                android:padding="@dimen/padding_8dp"
+                app:srcCompat="@drawable/ic_round_bookmarks_24"
                 tools:ignore="ContentDescription" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-        <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
-            android:id="@+id/dropdown_menu_chapter"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_48dp"
+            android:background="@color/surface"
+            android:elevation="@dimen/elevation_2dp"
+            android:gravity="center_vertical">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/linear_layout_book"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/text_view_book"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height_36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/margin_24dp"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:drawablePadding="@dimen/padding_8dp"
+                    android:ellipsize="end"
+                    android:focusable="false"
+                    android:fontFamily="@font/font_family_nanum_myeongjo"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/text_size_14dp"
+                    android:textStyle="bold"
+                    tools:text="데살로니가후서" />
+
+                <ImageView
+                    android:id="@+id/image_view_book"
+                    android:layout_width="@dimen/width_28dp"
+                    android:layout_height="@dimen/height_28dp"
+                    android:layout_marginStart="@dimen/margin_8dp"
+                    android:layout_marginEnd="@dimen/margin_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
+                    app:tint="@color/icon"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
+                android:id="@+id/dropdown_menu_chapter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager2"
@@ -106,6 +114,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraint_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

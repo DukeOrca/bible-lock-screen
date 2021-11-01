@@ -213,7 +213,7 @@ fun View.rotate(fromDegrees: Float, toDegrees: Float, duration: Long) {
 
 fun View.fade(
     alpha: Float,
-    duration: Long = 200L,
+    duration: Long,
     onAnimationEnd: (() -> Unit)? = null
 ): ViewPropertyAnimator {
     show()
