@@ -35,6 +35,8 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/translucent</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/translucent</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.DisplaySettingsActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -49,7 +51,6 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/system_ui</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
-        <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -58,6 +59,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowShowWallpaper">false</item>
     </style>
 
@@ -73,7 +76,6 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/system_ui</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
-        <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -81,6 +83,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowShowWallpaper">false</item>
     </style>
 

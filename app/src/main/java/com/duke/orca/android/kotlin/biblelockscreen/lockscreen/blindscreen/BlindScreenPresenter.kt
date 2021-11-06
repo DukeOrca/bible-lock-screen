@@ -17,7 +17,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class BlindScreenPresenter {
-    private val applicationContext = MainApplication.getApplicationContext()
+    private val applicationContext = MainApplication.applicationContext
 
     private var _viewBinding: BlindScreenBinding? = BlindScreenBinding.inflate(LayoutInflater.from(applicationContext))
     private val viewBinding: BlindScreenBinding

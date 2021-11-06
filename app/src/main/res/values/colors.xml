@@ -3,10 +3,10 @@
     <!-- Text legibility
          https://material.io/design/color/text-legibility.html#color-theme-creation -->
 
-    <color name="primary">@color/indigo_400</color>
-    <color name="primary_variant">@color/indigo_600</color>
-    <color name="secondary">@color/light_blue_400</color>
-    <color name="secondary_variant">@color/light_blue_600</color>
+    <color name="primary">@color/white</color>
+    <color name="primary_variant">@color/white</color>
+    <color name="secondary">@color/light_blue_200</color>
+    <color name="secondary_variant">@color/light_blue_700</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -37,6 +37,7 @@
     <color name="purple_200">#CE93D8</color>
     <color name="deep_purple_200">#B39DDB</color>
     <color name="blue_200">#90CAF9</color>
+    <color name="light_blue_200">#81D4FA</color>
     <color name="yellow_A_200">#FFFF00</color>
 
     <color name="pink_300">#F06292</color>
@@ -71,29 +72,30 @@
 
     <color name="deep_purple_500">#673AB7</color>
     <color name="indigo_500">#3F51B5</color>
-    <color name="green_500">#4caf50</color>
+    <color name="green_500">#4CAF50</color>
 
     <color name="indigo_600">#3949AB</color>
     <color name="light_blue_600">#039BE5</color>
 
-    <color name="deep_purple_700">#512da8</color>
+    <color name="deep_purple_700">#512DA8</color>
     <color name="indigo_700">#303F9F</color>
-    <color name="green_700">#388e3c</color>
+    <color name="light_blue_700">#0288D1</color>
+    <color name="green_700">#388E3C</color>
 
     <color name="card_background">#61000000</color>
     <color name="divider">#1F000000</color>
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="nothing_found">#61000000</color>
-    <color name="notification">@color/indigo_300</color>
+    <color name="notification">@color/secondary</color>
     <color name="ripple">@color/ripple_material_light</color>
     <color name="shadow">@color/dark_grey</color>
     <color name="space">#1F000000</color>
-    <color name="splash_screen_icon">@color/indigo_300</color>
+    <color name="splash_screen_icon">@color/secondary</color>
     <color name="subtitle">@color/medium_emphasis</color>
     <color name="system_ui">@color/primary_variant</color>
     <color name="text">@color/high_emphasis</color>
-    <color name="title_text">@color/white</color>
+    <color name="title_text">@color/black</color>
     <color name="toolbar">@color/primary</color>
 
     <color name="like">@color/pink_300</color>
@@ -110,7 +112,7 @@
     <color name="header">#DEFFFFFF</color>
     <color name="call_to_action">@color/purple_100</color>
     <color name="ripple_call_to_action">#33E1BEE7</color>
-    <color name="store">@color/blue_200</color>
+    <color name="store">@color/secondary</color>
     <color name="ripple_material_dark">#33FFFFFF</color>
     <color name="ripple_material_light">#1F000000</color>`
 

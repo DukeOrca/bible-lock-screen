@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.settings.views
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,13 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_RECREATE
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
+import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
+import com.duke.orca.android.kotlin.biblelockscreen.bible.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
@@ -24,6 +29,12 @@ class SettingsFragment : PreferenceFragment(),
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.settings
 
+    private object Id {
+        const val TRANSLATION = 0L
+    }
+
+    private val activityViewModel by activityViewModels<FragmentContainerViewModel>()
+
     override fun onTranslationSelected(
         dialogFragment: TranslationSelectionDialogFragment,
         item: TranslationSelection.AdapterItem.Translation
@@ -31,7 +42,9 @@ class SettingsFragment : PreferenceFragment(),
         val transition = DataStore.Translation.getTranslation(requireContext())
 
         if (transition.not(item.name)) {
+            activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
             DataStore.Translation.putTranslation(requireContext(), item.name)
+            preferenceAdapter.updateSummary(Id.TRANSLATION, Translation.getDisplayName(requireContext()))
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {
@@ -95,7 +108,8 @@ class SettingsFragment : PreferenceFragment(),
                     body = getString(R.string.font)
                 ),
                 AdapterItem.Space(),
-                AdapterItem.ContentPreference(
+                AdapterItem.Preference(
+                    id = Id.TRANSLATION,
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_round_language_24
@@ -105,6 +119,7 @@ class SettingsFragment : PreferenceFragment(),
                             it.show(childFragmentManager, it.tag)
                         }
                     },
+                    summary = Translation.getDisplayName(requireContext()),
                     body = getString(R.string.translations)
                 ),
                 AdapterItem.Space(),

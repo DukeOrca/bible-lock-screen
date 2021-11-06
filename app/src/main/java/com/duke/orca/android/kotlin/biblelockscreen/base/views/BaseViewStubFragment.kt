@@ -58,7 +58,7 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     }
 
     private fun inflate() {
-        if (onResumed.get() && isInflated.get().not()) {
+        if (onResumed.get() and isInflated.get().not()) {
             try {
                 lifecycleScope.launchWhenResumed {
                     viewStub?.inflate()?.let {

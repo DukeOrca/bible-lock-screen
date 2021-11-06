@@ -54,7 +54,6 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/system_ui</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
-        <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -63,6 +62,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowShowWallpaper">false</item>
     </style>
 
@@ -78,7 +79,6 @@
         <!-- Status bar color. -->
         <item name="android:navigationBarColor">@color/system_ui</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
-        <!-- Customize your theme here. -->
 
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -86,6 +86,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowShowWallpaper">false</item>
     </style>
 

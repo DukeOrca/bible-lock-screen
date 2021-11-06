@@ -18,7 +18,7 @@
         android:clipToPadding="false">
 
         <View
-            android:id="@+id/view_left_fake"
+            android:id="@+id/view_previous_fake"
             android:layout_width="@dimen/width_8dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/margin_180dp"
@@ -27,10 +27,10 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/view_right_fake"
+            android:id="@+id/view_next_fake"
             android:layout_width="@dimen/width_8dp"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/margin_180dp"
@@ -39,17 +39,17 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/margin_8dp"
-            android:orientation="vertical"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/constraint_layout_unlock"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -156,105 +156,122 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_layout_dropdown_menu"
+                android:id="@+id/constraint_layout_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_16dp"
-                android:layout_marginTop="@dimen/margin_8dp"
-                android:layout_marginEnd="@dimen/margin_16dp"
+                android:layout_height="match_parent"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:visibility="invisible"
                 tools:visibility="visible">
 
-                <LinearLayout
-                    android:id="@+id/linear_layout_book"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/height_36dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/rounded_left_corners"
-                    android:backgroundTint="#40000000"
-                    android:foreground="@drawable/ripple_rounded_left_corners"
-                    android:gravity="center"
-                    app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_layout_dropdown_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_16dp"
+                    android:layout_marginEnd="@dimen/margin_16dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/text_view_book"
+                    <LinearLayout
+                        android:id="@+id/linear_layout_book"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/height_36dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="@dimen/margin_8dp"
-                        android:clickable="false"
-                        android:drawablePadding="@dimen/padding_8dp"
-                        android:ellipsize="end"
-                        android:focusable="false"
-                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:background="@drawable/rounded_left_corners"
+                        android:backgroundTint="#40000000"
+                        android:foreground="@drawable/ripple_rounded_left_corners"
                         android:gravity="center"
-                        android:inputType="none"
-                        android:layout_gravity="center"
-                        android:maxLines="1"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_14dp"
-                        android:textStyle="bold"
-                        tools:text="데살로니가후서" />
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        style="@style/SelectableItemBackgroundBorderless"
-                        android:id="@+id/image_view_book"
-                        android:layout_width="@dimen/width_28dp"
-                        android:layout_height="@dimen/height_28dp"
-                        android:layout_marginEnd="@dimen/margin_8dp"
-                        android:layout_marginStart="@dimen/margin_8dp"
-                        app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
-                        app:tint="@color/white"
-                        tools:ignore="ContentDescription" />
+                        <TextView
+                            android:id="@+id/text_view_book"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/height_36dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:drawablePadding="@dimen/padding_8dp"
+                            android:ellipsize="end"
+                            android:focusable="false"
+                            android:fontFamily="@font/font_family_nanum_myeongjo"
+                            android:gravity="center"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/text_size_14dp"
+                            android:textStyle="bold"
+                            tools:text="데살로니가후서" />
 
-                </LinearLayout>
+                        <ImageView
+                            android:id="@+id/image_view_book"
+                            style="@style/SelectableItemBackgroundBorderless"
+                            android:layout_width="@dimen/width_28dp"
+                            android:layout_height="@dimen/height_28dp"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_marginEnd="@dimen/margin_8dp"
+                            app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
+                            app:tint="@color/white"
+                            tools:ignore="ContentDescription" />
 
-                <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
-                    style="@style/SelectableItemBackground"
-                    android:id="@+id/dropdown_menu_chapter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/height_36dp"
-                    android:background="@color/translucent"
+                    </LinearLayout>
+
+                    <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
+                        android:id="@+id/dropdown_menu_chapter"
+                        style="@style/SelectableItemBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/height_36dp"
+                        android:background="@color/translucent"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_verse"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:textColor="@color/white"
+                        app:tint="@color/white" />
+
+                    <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
+                        android:id="@+id/dropdown_menu_verse"
+                        style="@style/SelectableItemBackground"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/height_36dp"
+                        android:background="@drawable/rounded_right_corners"
+                        android:backgroundTint="@color/translucent"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:rippleDrawable="@drawable/ripple_rounded_right_corners"
+                        app:textColor="@color/white"
+                        app:tint="@color/white" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="@dimen/margin_16dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:layout_marginEnd="@dimen/margin_16dp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_verse"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:textColor="@color/white"
-                    app:tint="@color/white" />
-
-                <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
-                    style="@style/SelectableItemBackground"
-                    android:id="@+id/dropdown_menu_verse"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/height_36dp"
-                    android:background="@drawable/rounded_right_corners"
-                    android:backgroundTint="@color/translucent"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:rippleDrawable="@drawable/ripple_rounded_right_corners"
-                    app:textColor="@color/white"
-                    app:tint="@color/white" />
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/constraint_layout_dropdown_menu"
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/view_pager2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_16dp"
-                android:layout_marginTop="@dimen/margin_8dp"
-                android:layout_marginEnd="@dimen/margin_16dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:visibility="invisible"
-                tools:visibility="visible" />
 
         </LinearLayout>
 

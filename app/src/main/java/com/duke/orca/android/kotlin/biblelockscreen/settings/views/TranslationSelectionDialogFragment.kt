@@ -83,18 +83,38 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
         return linkedMapOf(
             TranslationSelection.AdapterItem.Language(name = Language.ENGLISH) to arrayOf(
                 TranslationSelection.AdapterItem.Translation(
+                    name = Translation.Name.AMERICAN_KING_JAMES_VERSION,
+                    displayName = Translation.DisplayName.AMERICAN_KING_JAMES_VERSION
+                ),
+                TranslationSelection.AdapterItem.Translation(
+                    name = Translation.Name.AMERICAN_STANDARD_VERSION,
+                    displayName = Translation.DisplayName.AMERICAN_STANDARD_VERSION
+                ),
+                TranslationSelection.AdapterItem.Translation(
                     name = Translation.Name.KING_JAMES_VERSION,
                     displayName = Translation.DisplayName.KING_JAMES_VERSION
+                ),
+                TranslationSelection.AdapterItem.Translation(
+                    name = Translation.Name.UPDATED_KING_JAMES_VERSION,
+                    displayName = Translation.DisplayName.UPDATED_KING_JAMES_VERSION
+                )
+            ),
+            TranslationSelection.AdapterItem.Language(name = Language.FRENCH) to arrayOf(
+                TranslationSelection.AdapterItem.Translation(
+                    name = Translation.Name.LOUIS_SEGOND,
+                    displayName = Translation.DisplayName.LOUIS_SEGOND
+                )
+            ),
+            TranslationSelection.AdapterItem.Language(name = Language.GERMAN) to arrayOf(
+                TranslationSelection.AdapterItem.Translation(
+                    name = Translation.Name.LUTHER_BIBLE,
+                    displayName = Translation.DisplayName.LUTHER_BIBLE
                 )
             ),
             TranslationSelection.AdapterItem.Language(name = Language.KOREAN) to arrayOf(
                 TranslationSelection.AdapterItem.Translation(
                     name = Translation.Name.KOREAN_REVISED_VERSION,
                     displayName = Translation.DisplayName.KOREAN_REVISED_VERSION
-                ),
-                TranslationSelection.AdapterItem.Translation(
-                    name = Translation.Name.NEW_KOREAN_REVISED_VERSION,
-                    displayName = Translation.DisplayName.NEW_KOREAN_REVISED_VERSION
                 )
             )
         )

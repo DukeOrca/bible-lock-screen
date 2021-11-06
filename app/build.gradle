@@ -16,8 +16,8 @@ android {
         applicationId "com.duke.orca.android.kotlin.biblelockscreen"
         minSdk 23
         targetSdk 31
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,6 +89,8 @@ dependencies {
     kapt "androidx.room:room-ktx:2.4.0-beta01"
 
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+
+    implementation 'androidx.work:work-runtime-ktx:2.7.0'
 
     implementation "com.android.billingclient:billing-ktx:4.0.0"
     implementation 'com.google.android.gms:play-services-ads:20.4.0'

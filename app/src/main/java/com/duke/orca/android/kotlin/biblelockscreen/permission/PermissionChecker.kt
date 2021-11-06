@@ -67,7 +67,7 @@ internal object PermissionChecker {
     }
 
     internal fun hasManageOverlayPermission(): Boolean {
-        return Settings.canDrawOverlays(MainApplication.getApplicationContext())
+        return Settings.canDrawOverlays(MainApplication.applicationContext)
     }
 
     fun showSnackbar(

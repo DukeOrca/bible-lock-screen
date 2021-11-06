@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
@@ -30,21 +32,19 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     val chapters: IntArray by lazy { resources.getIntArray(R.array.chapters) }
 
-    protected fun putActivityResultLauncher(key: String, value: ActivityResultLauncher<Intent>) {
-        activityResultLauncherHashMap[key] = value
-    }
-
-    protected fun putPublishSubject(key: String, value: PublishSubject<Any>) {
-        publishSubjectHashMap[key] = value
+    protected fun putActivityResultLauncher(key: String, onActivityResult: (ActivityResult) -> Unit) {
+        activityResultLauncherHashMap[key] = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            onActivityResult(it)
+        }
     }
 
     protected fun getActivityResultLauncher(key: String) = activityResultLauncherHashMap[key]
 
-    protected fun getPublishSubject(key: String): PublishSubject<Any> {
-        return publishSubjectHashMap[key] ?: PublishSubject.create<Any>().apply {
-            publishSubjectHashMap[key] = this
-        }
+    protected fun putPublishSubject(key: String, publishSubject: PublishSubject<Any>) {
+        publishSubjectHashMap[key] = publishSubject
     }
+
+    protected fun getPublishSubject(key: String) = publishSubjectHashMap[key]
 
     abstract fun inflate(inflater: LayoutInflater, container: ViewGroup?): VB
 

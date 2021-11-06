@@ -1,13 +1,10 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -99,15 +96,12 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     private fun bind() {
         bibleVerseAdapter.setOnIconClickListener(this)
 
-        val searchMagIcon = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
-        val searchCloseBtn = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        // val searchMagIcon = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
+        // val searchCloseBtn = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         val searchSrcText = viewBinding.searchView.findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
 
-        searchMagIcon?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
-        searchCloseBtn?.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN)
         searchSrcText?.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.hint_text))
         searchSrcText?.setTextAppearance(R.style.EditTextStyle)
-        searchSrcText?.setTextColor(Color.WHITE)
 
         viewBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

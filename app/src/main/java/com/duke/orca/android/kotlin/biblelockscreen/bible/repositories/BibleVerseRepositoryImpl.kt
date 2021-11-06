@@ -2,6 +2,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleVerseDatasource
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -24,6 +25,10 @@ class BibleVerseRepositoryImpl @Inject constructor(private val datasource: Bible
 
     override fun search(text: String): Flow<List<BibleVerse>> {
         return datasource.search(text)
+    }
+
+    override fun single(id: Int): Single<BibleVerse> {
+        return datasource.single(id)
     }
 
     override suspend fun getVerseCount(book: Int, chapter: Int): Int {

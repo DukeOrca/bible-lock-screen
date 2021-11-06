@@ -238,12 +238,22 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
         val item = currentList.find { it.id == id } ?: return
         val index = currentList.indexOf(item)
 
-        if (item is AdapterItem.Preference) {
-            val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
+        when(item) {
+            is AdapterItem.Preference -> {
+                val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
 
-            if (viewHolder is ViewHolder) {
-                viewHolder.updateSummary(summary)
+                if (viewHolder is ViewHolder) {
+                    viewHolder.updateSummary(summary)
+                }
             }
+            is AdapterItem.ContentPreference -> {
+                val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
+
+                if (viewHolder is ViewHolder) {
+                    viewHolder.updateSummary(summary)
+                }
+            }
+            else -> return
         }
     }
 

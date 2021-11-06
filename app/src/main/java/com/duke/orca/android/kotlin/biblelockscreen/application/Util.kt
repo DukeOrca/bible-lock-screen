@@ -17,14 +17,26 @@ fun shareApplication(context: Context) {
     }
 }
 
-fun Any?.isNull() = this == null
-fun Any?.isNotNull() = isNull().not()
+val Any?.`null`: Boolean
+    get() = this == null
+
+val Any?.notNull: Boolean
+    get() = `null`.not()
 
 fun Int?.isZero() = this == 0
 fun Int?.isNonZero() = isZero().not()
 
+fun Int?.`is`(other: Int): Boolean = this == other
+fun Int?.not(other: Int): Boolean = `is`(other).not()
+
 fun intRange(from: Int, to: Int) = from..to
 fun IntRange.toStringArray() = map { it.toString() }.toTypedArray()
 
-fun String.`is`(other: String) = this == other
-fun String.not(other: String) = `is`(other).not()
+fun String.`is`(other: String): Boolean = this == other
+fun String.not(other: String): Boolean = `is`(other).not()
+
+inline fun <T: Any> ifLet(vararg elements: T?, closure: (List<T>) -> Unit) {
+    if (elements.all { it.notNull }) {
+        closure(elements.filterNotNull())
+    }
+}

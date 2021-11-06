@@ -1,20 +1,17 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
 
 import android.app.Application
-import androidx.datastore.preferences.core.Preferences
-import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodel.BaseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
-import com.google.android.gms.ads.nativead.NativeAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
