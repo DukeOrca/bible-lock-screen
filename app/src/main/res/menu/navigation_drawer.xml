@@ -16,7 +16,7 @@
 
         <item
             android:id="@+id/item_bible"
-            android:icon="@drawable/ic_holy_bible_48px"
+            android:icon="@drawable/ic_holy_bible_100px"
             android:title="@string/bible" />
     </group>
 

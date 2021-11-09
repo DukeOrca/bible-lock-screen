@@ -37,11 +37,9 @@ class SplashActivity: AppCompatActivity() {
         findViewById<ImageView>(R.id.image_view)?.let {
             it.fadeIn(Duration.FADE_IN) {
                 startActivity(Intent(this, MainActivity::class.java), options)
-                finish()
             }
-        } ?: let{
-            startActivity(Intent(this, MainActivity::class.java), options)
-            finish()
-        }
+        } ?: startActivity(Intent(this, MainActivity::class.java), options)
+
+        finish()
     }
 }
