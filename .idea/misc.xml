@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.21944444444444444" />
         <entry key="../../Library/Android/sdk/platforms/android-30/data/res/layout/simple_dropdown_item_1line.xml" value="0.17617753623188406" />
         <entry key="app/src/main/res/drawable-v24/ic_round_dark_mode_24.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable-v24/ic_round_keyboard_arrow_up_24.xml" value="0.10208333333333333" />

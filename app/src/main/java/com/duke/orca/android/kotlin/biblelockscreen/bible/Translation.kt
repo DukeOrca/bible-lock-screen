@@ -39,7 +39,7 @@ object Translation {
             Name.LUTHER_BIBLE -> DisplayName.LUTHER_BIBLE
             Name.UPDATED_KING_JAMES_VERSION -> DisplayName.UPDATED_KING_JAMES_VERSION
             Name.NEW_KOREAN_REVISED_VERSION -> DisplayName.NEW_KOREAN_REVISED_VERSION
-            else -> BLANK
+            else -> getInitialTransitionName(context)
         }
     }
 

@@ -14,6 +14,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,7 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         get() = _viewBinding!!
 
     private val activityResultLauncherHashMap = hashMapOf<String, ActivityResultLauncher<Intent>>()
+    private val behaviourSubjectHashMap = hashMapOf<String, BehaviorSubject<Any>>()
     private val publishSubjectHashMap = hashMapOf<String, PublishSubject<Any>>()
 
     protected val compositeDisposable = CompositeDisposable()
@@ -45,6 +47,12 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     }
 
     protected fun getPublishSubject(key: String) = publishSubjectHashMap[key]
+
+    protected fun putBehaviourSubject(key: String, behaviorSubject: BehaviorSubject<Any>) {
+        behaviourSubjectHashMap[key] = behaviorSubject
+    }
+
+    protected fun getBehaviourSubject(key: String) = behaviourSubjectHashMap[key]
 
     abstract fun inflate(inflater: LayoutInflater, container: ViewGroup?): VB
 

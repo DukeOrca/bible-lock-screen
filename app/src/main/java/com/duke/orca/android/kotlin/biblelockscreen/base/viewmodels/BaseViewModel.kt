@@ -1,23 +1,13 @@
 package com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels
 
 import android.app.Application
-import androidx.annotation.MainThread
 import androidx.lifecycle.*
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.Purchase
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.AttributeSet
-import com.duke.orca.android.kotlin.biblelockscreen.billing.REMOVE_ADS
-import com.duke.orca.android.kotlin.biblelockscreen.billing.module.BillingModule
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
-import com.duke.orca.android.kotlin.biblelockscreen.eventbus.NetworkStatusEventBus
-import com.duke.orca.android.kotlin.biblelockscreen.eventbus.RemoveAdsEventBus
-import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

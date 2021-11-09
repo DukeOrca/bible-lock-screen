@@ -3,6 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.billing.module
 import android.content.Context
 import androidx.annotation.MainThread
 import com.android.billingclient.api.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
 import com.duke.orca.android.kotlin.biblelockscreen.billing.REMOVE_ADS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -129,7 +130,7 @@ class BillingModule(
             billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP).purchasesList.let { purchasesList ->
                 for (purchase in purchasesList) {
                     if (purchase.skus.contains(sku)) {
-                        if (purchase.isAcknowledged && purchase.isPurchased) {
+                        if (purchase.isAcknowledged and purchase.isPurchased) {
                             return true
                         }
                     }
@@ -140,6 +141,6 @@ class BillingModule(
         }
 
         private val Purchase.isPurchased: Boolean
-            get() = purchaseState == Purchase.PurchaseState.PURCHASED
+            get() = purchaseState.`is`(Purchase.PurchaseState.PURCHASED)
     }
 }

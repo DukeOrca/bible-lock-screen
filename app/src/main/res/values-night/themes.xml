@@ -77,6 +77,8 @@
         <item name="android:navigationBarColor">@color/system_ui</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/system_ui</item>
 
+        <item name="android:colorEdgeEffect">@color/white</item>
+
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 

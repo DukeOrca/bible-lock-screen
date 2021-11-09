@@ -100,7 +100,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
                 viewBinding.textViewBook.text = viewModel.bibleBook.name(it.book)
                 viewBinding.dropdownMenuChapter.setText(it.chapter.toString())
 
-                if (currentItem?.book != it.book) {
+                if (currentItem?.book.not(it.book)) {
                     viewBinding.dropdownMenuChapter.setAdapter(
                         DropdownMenu.ArrayAdapter(
                             intRange(1, chapters[it.book.dec()]).toStringArray()
