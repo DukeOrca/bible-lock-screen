@@ -58,7 +58,7 @@
         <entry key="app/src/main/res/layout/fragment_base_list_dialog.xml" value="0.16847826086956522" />
         <entry key="app/src/main/res/layout/fragment_bible.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bible_chapter.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.375" />
@@ -84,6 +84,7 @@
         <entry key="app/src/main/res/layout/switch_preference.xml" value="0.11614583333333334" />
         <entry key="app/src/main/res/layout/text_alignment_choice_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/translation_selection_item.xml" value="0.1484375" />
+        <entry key="app/src/main/res/layout/verse_word.xml" value="0.36007462686567165" />
         <entry key="app/src/main/res/menu/bookmark.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/bookmarks.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/navigation_drawer.xml" value="0.375" />

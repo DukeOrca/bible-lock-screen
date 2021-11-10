@@ -108,7 +108,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
                     )
                 }
 
-                with(viewBinding.linearLayoutBook) {
+                with(viewBinding.relativeLayoutBook) {
                     if (isInvisible) {
                         fadeIn(Duration.FADE_IN)
                     }
@@ -130,7 +130,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             requireActivity().onBackPressed()
         }
 
-        viewBinding.linearLayoutBook.setOnClickListener {
+        viewBinding.relativeLayoutBook.setOnClickListener {
             BookSelectionDialogFragment.newInstance(
                 viewModel.bibleBook,
                 currentItem?.book ?: 0

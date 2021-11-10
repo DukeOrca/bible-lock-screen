@@ -8,22 +8,25 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation.Companion.Language.toDisplayName
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.TranslationSelectionItemBinding
 
 class TranslationSelectionAdapter(
     private val context: Context,
-    private val onItemSelected: (TranslationSelection.AdapterItem.Translation) -> Unit
+    private val onItemSelected: (Translation) -> Unit
 ) : ListAdapter<TranslationSelection.AdapterItem, TranslationSelectionAdapter.ViewHolder>(TranslationSelection.DiffCallback()) {
     private val layoutInflater by lazy { LayoutInflater.from(context) }
 
-    fun submitHashMap(hashMap: HashMap<TranslationSelection.AdapterItem.Language, Array<TranslationSelection.AdapterItem.Translation>>) {
+    fun submitTranslations(list: List<Translation>) {
         val arrayList = arrayListOf<TranslationSelection.AdapterItem>()
+        val map = list.groupBy { it.language }
 
-        hashMap.keys.forEach { language ->
-            arrayList.add(language)
+        map.keys.forEach { language ->
+            arrayList.add(TranslationSelection.AdapterItem.Language(language.toDisplayName()))
 
-            hashMap[language]?.forEach { translation ->
-                arrayList.add(translation)
+            map[language]?.forEach { translation ->
+                arrayList.add(TranslationSelection.AdapterItem.TranslationWrapper(translation.displayName, translation))
             }
         }
 
@@ -46,17 +49,17 @@ class TranslationSelectionAdapter(
                 is TranslationSelection.AdapterItem.Language -> {
                     viewBinding.textViewTranslation.hide()
                     viewBinding.textViewLanguage.show()
-                    viewBinding.textViewLanguage.text = item.name
+                    viewBinding.textViewLanguage.text = item.text
 
                     viewBinding.root.setOnClickListener(null)
                 }
-                is TranslationSelection.AdapterItem.Translation -> {
+                is TranslationSelection.AdapterItem.TranslationWrapper -> {
                     viewBinding.textViewLanguage.hide()
                     viewBinding.textViewTranslation.show()
-                    viewBinding.textViewTranslation.text = item.displayName
+                    viewBinding.textViewTranslation.text = item.translation.displayName
 
                     viewBinding.root.setOnClickListener {
-                        onItemSelected(item)
+                        onItemSelected(item.translation)
                     }
                 }
             }
@@ -66,21 +69,21 @@ class TranslationSelectionAdapter(
 
 object TranslationSelection {
     sealed class AdapterItem {
-        abstract val name: String
+        abstract val text: String
 
         data class Language(
-            override val name: String,
+            override val text: String,
         ) : AdapterItem()
 
-        data class Translation(
-            override val name: String,
-            val displayName: String
+        data class TranslationWrapper(
+            override val text: String,
+            val translation: Translation
         ) : AdapterItem()
     }
 
     class DiffCallback: DiffUtil.ItemCallback<AdapterItem>() {
         override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.text == newItem.text
         }
 
         override fun areContentsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {

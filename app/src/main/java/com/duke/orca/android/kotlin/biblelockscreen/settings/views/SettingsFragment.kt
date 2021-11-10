@@ -18,11 +18,10 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.TranslationSelection
 
 class SettingsFragment : PreferenceFragment(),
     TranslationSelectionDialogFragment.OnTranslationSelectedListener {
@@ -37,14 +36,14 @@ class SettingsFragment : PreferenceFragment(),
 
     override fun onTranslationSelected(
         dialogFragment: TranslationSelectionDialogFragment,
-        item: TranslationSelection.AdapterItem.Translation
+        item: Translation
     ) {
-        val transition = DataStore.Translation.getTranslation(requireContext())
+        val transition = DataStore.Translation.getFileName(requireContext())
 
-        if (transition.not(item.name)) {
+        if (transition.not(item.fileName)) {
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
-            DataStore.Translation.putTranslation(requireContext(), item.name)
-            preferenceAdapter.updateSummary(Id.TRANSLATION, Translation.getDisplayName(requireContext()))
+            DataStore.Translation.putFileName(requireContext(), item.fileName)
+            preferenceAdapter.updateSummary(Id.TRANSLATION, item.displayName)
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {
@@ -112,7 +111,7 @@ class SettingsFragment : PreferenceFragment(),
                     id = Id.TRANSLATION,
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
-                        R.drawable.ic_round_language_24
+                        R.drawable.ic_round_translate_24
                     ),
                     onClick = {
                         TranslationSelectionDialogFragment().also {

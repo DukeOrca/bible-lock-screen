@@ -160,10 +160,10 @@ object DataStore {
     }
 
     object Translation {
-        fun getTranslation(context: Context): String = getString(context, PreferencesKeys.Translation.translation, BLANK)
+        fun getFileName(context: Context): String = getString(context, PreferencesKeys.Translation.fileName, BLANK)
 
-        fun putTranslation(context: Context, value: String) = runBlocking {
-            putString(context, PreferencesKeys.Translation.translation, value)
+        fun putFileName(context: Context, value: String) = runBlocking {
+            putString(context, PreferencesKeys.Translation.fileName, value)
         }
     }
 }

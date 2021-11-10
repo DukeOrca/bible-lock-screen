@@ -6,10 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
-import com.duke.orca.android.kotlin.biblelockscreen.bible.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleBookDao
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleChapterDao
@@ -45,9 +45,9 @@ abstract class BibleDatabase: RoomDatabase() {
 
         fun getInstance(context: Context): BibleDatabase {
             synchronized(this) {
-                val translation = DataStore.Translation.getTranslation(context).run {
+                val translation = DataStore.Translation.getFileName(context).run {
                     if (isBlank()) {
-                        return@run Translation.getInitialTransitionName(context)
+                        return@run Translation.getTransitionFileNameInLanguage(context)
                     }
 
                     return@run this
