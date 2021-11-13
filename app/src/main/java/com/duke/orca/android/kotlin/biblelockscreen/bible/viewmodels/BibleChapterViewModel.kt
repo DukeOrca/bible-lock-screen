@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
+package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
@@ -18,19 +18,20 @@ import javax.inject.Inject
 @HiltViewModel
 class BibleChapterViewModel @Inject constructor(
     private val bibleBookRepository: BibleBookRepository,
-    private val bibleVerseRepository: BibleVerseRepository,
     private val bibleChapterRepository: BibleChapterRepository,
+    private val bibleVerseRepository: BibleVerseRepository,
 ) : ViewModel() {
-    private val bibleVerses = MutableLiveData<List<BibleVerse>>()
+    private val verses = MutableLiveData<List<BibleVerse>>()
+    private val subVerses = MutableLiveData<List<BibleVerse>>()
     private val nativeAds = MutableLiveData<List<NativeAd>>()
 
     val adapterItems = MediatorLiveData<List<BibleVerseAdapter.AdapterItem>>().apply {
-        addSource(bibleVerses) {
-            value = combine(bibleVerses, nativeAds)
+        addSource(verses) {
+            value = combine(verses, nativeAds)
         }
 
         addSource(nativeAds) {
-            value = combine(bibleVerses, nativeAds)
+            value = combine(verses, nativeAds)
         }
     }
 
@@ -50,7 +51,7 @@ class BibleChapterViewModel @Inject constructor(
     fun getBibleVerses(book: Int, chapter: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             bibleVerseRepository.get(book, chapter).collect {
-                bibleVerses.postValue(it)
+                verses.postValue(it)
             }
         }
     }

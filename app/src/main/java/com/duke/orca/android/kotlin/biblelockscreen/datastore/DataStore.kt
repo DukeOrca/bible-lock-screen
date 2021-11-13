@@ -165,5 +165,11 @@ object DataStore {
         fun putFileName(context: Context, value: String) = runBlocking {
             putString(context, PreferencesKeys.Translation.fileName, value)
         }
+
+        fun getSubFileName(context: Context): String = getString(context, PreferencesKeys.Translation.subFileName, BLANK)
+
+        fun putSubFileName(context: Context, value: String) = runBlocking {
+            putString(context, PreferencesKeys.Translation.subFileName, value)
+        }
     }
 }

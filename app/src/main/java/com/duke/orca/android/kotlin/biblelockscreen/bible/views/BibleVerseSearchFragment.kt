@@ -24,7 +24,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAda
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVerseSearchViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVerseSearchViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

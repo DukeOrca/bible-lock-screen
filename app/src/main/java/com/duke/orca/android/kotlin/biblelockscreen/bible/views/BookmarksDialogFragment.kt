@@ -12,7 +12,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterPagerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookmarksDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 

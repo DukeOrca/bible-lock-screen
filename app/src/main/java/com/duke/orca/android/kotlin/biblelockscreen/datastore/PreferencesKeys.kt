@@ -41,5 +41,6 @@ object PreferencesKeys {
     object Translation {
         private const val OBJECT_NAME = "Translation"
         val fileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fileName")
+        val subFileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.subFileName")
     }
 }

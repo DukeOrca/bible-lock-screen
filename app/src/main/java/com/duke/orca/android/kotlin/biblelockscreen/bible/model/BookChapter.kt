@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 class BookChapter (
+    val id: Int,
     val book: Int,
     val chapter: Int
 ) : Parcelable

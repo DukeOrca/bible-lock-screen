@@ -18,14 +18,9 @@ interface BibleChapterDao {
     @Query("SELECT * FROM bible_chapter WHERE book = :book AND chapter = :chapter")
     fun get(book: Int, chapter: Int): Flow<BibleChapter>
 
-    @Query("SELECT * FROM bible_chapter")
-    fun getAllMan(): Flow<List<BibleChapter>>
-
-    @Transaction
-    @Query("SELECT book, chapter FROM bible_chapter ORDER BY id ASC")
+    @Query("SELECT id, book, chapter FROM bible_chapter ORDER BY id ASC")
     fun getAll(): Flow<List<BookChapter>>
 
-    @Transaction
     @Query("SELECT * FROM bible_chapter WHERE bookmark LIKE 1 ORDER BY id ASC")
     fun getBookmarks(): Flow<List<BibleChapter>>
 

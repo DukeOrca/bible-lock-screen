@@ -60,13 +60,11 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     private fun inflate() {
         if (onResumed.get() and isInflated.get().not()) {
             try {
-                lifecycleScope.launchWhenResumed {
-                    viewStub?.inflate()?.let {
-                        viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
-                            delayOnLifecycle(Duration.Delay.SHORT) {
-                                onInflated(it)
-                                afterOnInflated()
-                            }
+                viewStub?.inflate()?.let {
+                    viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
+                        delayOnLifecycle(Duration.Delay.SHORT) {
+                            onInflated(it)
+                            afterOnInflated()
                         }
                     }
                 }

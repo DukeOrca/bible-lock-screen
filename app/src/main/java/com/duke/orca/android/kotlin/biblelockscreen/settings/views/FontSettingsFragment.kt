@@ -114,8 +114,8 @@ class FontSettingsFragment : PreferenceChildFragment(),
     private fun getTextAlignmentDrawable(textAlignment: Int): Drawable? {
         @DrawableRes
         val id = when(textAlignment) {
-            DataStore.Font.TextAlignment.CENTER -> R.drawable.ic_round_format_align_center_24
             DataStore.Font.TextAlignment.LEFT -> R.drawable.ic_round_format_align_left_24
+            DataStore.Font.TextAlignment.CENTER -> R.drawable.ic_round_format_align_center_24
             DataStore.Font.TextAlignment.RIGHT -> R.drawable.ic_round_format_align_right_24
             else -> throw IllegalArgumentException()
         }

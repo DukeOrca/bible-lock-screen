@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class FragmentContainerViewModel(application: Application) : AndroidViewModel(application) {
     private val _activityResult = MutableLiveData<ActivityResult>()

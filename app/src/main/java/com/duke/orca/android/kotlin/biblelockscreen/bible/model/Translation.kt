@@ -76,6 +76,20 @@ data class Translation (
             }
         }
 
+        fun getAbbreviation(context: Context): String {
+            return when (DataStore.Translation.getFileName(context)) {
+                FileName.AMERICAN_KING_JAMES_VERSION -> Abbreviation.AMERICAN_KING_JAMES_VERSION
+                FileName.AMERICAN_STANDARD_VERSION -> Abbreviation.AMERICAN_STANDARD_VERSION
+                FileName.KING_JAMES_VERSION -> Abbreviation.KING_JAMES_VERSION
+                FileName.KOREAN_REVISED_VERSION -> Abbreviation.KOREAN_REVISED_VERSION
+                FileName.LOUIS_SEGOND -> Abbreviation.LOUIS_SEGOND
+                FileName.LUTHER_BIBLE -> Abbreviation.LUTHER_BIBLE
+                FileName.UPDATED_KING_JAMES_VERSION -> Abbreviation.UPDATED_KING_JAMES_VERSION
+                FileName.NEW_KOREAN_REVISED_VERSION -> Abbreviation.NEW_KOREAN_REVISED_VERSION
+                else -> getAbbreviationInLanguage(context)
+            }
+        }
+
         fun getDisplayName(context: Context): String {
             return when (DataStore.Translation.getFileName(context)) {
                 FileName.AMERICAN_KING_JAMES_VERSION -> DisplayName.AMERICAN_KING_JAMES_VERSION
@@ -86,11 +100,11 @@ data class Translation (
                 FileName.LUTHER_BIBLE -> DisplayName.LUTHER_BIBLE
                 FileName.UPDATED_KING_JAMES_VERSION -> DisplayName.UPDATED_KING_JAMES_VERSION
                 FileName.NEW_KOREAN_REVISED_VERSION -> DisplayName.NEW_KOREAN_REVISED_VERSION
-                else -> getTransitionDisplayNameInLanguage(context)
+                else -> getDisplayNameInLanguage(context)
             }
         }
 
-        fun getTransitionFileNameInLanguage(context: Context): String {
+        fun getFileNameInLanguage(context: Context): String {
             val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.resources.configuration.locales.get(0).language
             } else {
@@ -106,7 +120,7 @@ data class Translation (
             }
         }
 
-        private fun getTransitionDisplayNameInLanguage(context: Context): String {
+        private fun getDisplayNameInLanguage(context: Context): String {
             val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.resources.configuration.locales.get(0).language
             } else {
@@ -119,6 +133,22 @@ data class Translation (
                 Language.GERMAN -> DisplayName.LUTHER_BIBLE
                 Language.KOREAN -> DisplayName.KOREAN_REVISED_VERSION
                 else -> DisplayName.KING_JAMES_VERSION
+            }
+        }
+
+        private fun getAbbreviationInLanguage(context: Context): String {
+            val language = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales.get(0).language
+            } else {
+                context.resources.configuration.locale.language
+            }
+
+            return when (language) {
+                Language.ENGLISH -> Abbreviation.KING_JAMES_VERSION
+                Language.FRENCH -> Abbreviation.LOUIS_SEGOND
+                Language.GERMAN -> Abbreviation.LUTHER_BIBLE
+                Language.KOREAN -> Abbreviation.KOREAN_REVISED_VERSION
+                else -> Abbreviation.KING_JAMES_VERSION
             }
         }
     }

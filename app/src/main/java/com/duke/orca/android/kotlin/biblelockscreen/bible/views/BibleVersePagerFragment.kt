@@ -29,7 +29,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVersePag
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.biblelockscreen.bible.unlock.UnlockController
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVersePagerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVersePagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.billing.model.Sku
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
@@ -37,7 +37,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.annotation.RequireDeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.eventbus.BehaviourEventBus
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDatabase
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.FontSettingsFragment
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.LockScreenSettingsFragment
@@ -159,8 +159,12 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         putActivityResultLauncher(Key.FRAGMENT_CONTAINER) { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
                 activityResult.data?.let { data ->
@@ -173,18 +177,14 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         putBehaviourSubject(Key.DROPDOWN_MENU, BehaviorSubject.create())
         putBehaviourSubject(Key.VIEW_PAGER2, BehaviorSubject.create())
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        subscribe()
-        bind()
 
         return viewBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        subscribe()
+        bind()
     }
 
     override fun onStop() {
@@ -247,18 +247,14 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         viewBinding.linearLayoutBook.setOnClickListener {
             BookSelectionDialogFragment.newInstance(
-                viewModel.bibleBook, currentItem?.book ?: 0
+                currentItem?.book ?: 0
             ).also {
                 it.show(childFragmentManager, it.tag)
             }
         }
 
         viewBinding.imageViewBook.setOnClickListener {
-            BookSelectionDialogFragment.newInstance(
-                viewModel.bibleBook, currentItem?.book ?: 0
-            ).also {
-                it.show(childFragmentManager, it.tag)
-            }
+            viewBinding.linearLayoutBook.performClick()
         }
 
         viewBinding.dropdownMenuChapter.setOnItemClickListener { position, _ ->
@@ -283,8 +279,6 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.viewPager2.setCurrentItem(DataStore.BibleVerse.getCurrentItem(requireContext()), false)
 
         getBehaviourSubject(Key.VIEW_PAGER2)?.onNext(Unit)
-
-
     }
 
     private fun subscribe() {
@@ -304,7 +298,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             })
         }
 
-        compositeDisposable.add(viewModel.publishSubject
+        compositeDisposable.add(viewModel.behaviorSubject
             .ofType(BibleVerse::class.java)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -516,7 +510,8 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     private fun recreate() {
         viewBinding.viewPreviousFake.viewTreeObserver.removeOnDrawListener(onDrawListener)
-        BibleDatabase.clear()
+
+        Database.refresh(requireContext())
 
         findNavController().navigate(
             R.id.bibleVersePagerFragment,

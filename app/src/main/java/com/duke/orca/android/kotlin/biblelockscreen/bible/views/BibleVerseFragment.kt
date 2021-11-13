@@ -19,7 +19,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleVerseViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVerseViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseBinding
 import com.like.LikeButton
 import com.like.OnLikeListener

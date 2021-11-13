@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,12 +15,17 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BookSelectionDialogViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookSelectionItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookSelectionDialogBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDialogBinding>() {
     override val setWindowAnimation: Boolean
         get() = false
+
+    private val viewModel by viewModels<BookSelectionDialogViewModel>()
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -37,10 +43,8 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         fun onBookSelected(dialogFragment: BookSelectionDialogFragment, item: AdapterItem.Book)
     }
 
-    private val bibleBook by lazy { arguments?.getParcelable<BibleBook>(Key.BIBLE_BOOK) }
-
     private val list: MutableList<AdapterItem> by lazy {
-        val names = bibleBook?.names ?: emptyArray()
+        val names = viewModel.book.names
 
         names.mapIndexed { index, text ->
             AdapterItem.Book(text, index)
@@ -121,7 +125,7 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
     inner class BookSelectionAdapter : ListAdapter<AdapterItem, BookSelectionAdapter.ViewHolder>(DiffCallback()) {
         private val colorSecondary by lazy { requireContext().getColor(R.color.secondary) }
         private val colorText by lazy { requireContext().getColor(R.color.text) }
-        private val selectedItem = bibleBook?.name(arguments?.getInt(Key.POSITION) ?: 0)
+        private val selectedItem = viewModel.book.name(arguments?.getInt(Key.POSITION) ?: 0)
 
         inner class ViewHolder(private val viewBinding: BookSelectionItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
             fun bind(item: AdapterItem) {
@@ -187,15 +191,13 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
 
         private object Key {
-            const val BIBLE_BOOK = "$PACKAGE_NAME.BIBLE_BOOK"
             const val POSITION = "$PACKAGE_NAME.POSITION"
         }
 
-        fun newInstance(bibleBook: BibleBook, position: Int): BookSelectionDialogFragment {
+        fun newInstance(position: Int): BookSelectionDialogFragment {
             return BookSelectionDialogFragment().apply {
                 arguments = Bundle().apply {
                     putInt(Key.POSITION, position)
-                    putParcelable(Key.BIBLE_BOOK, bibleBook)
                 }
             }
         }

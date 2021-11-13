@@ -4,7 +4,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.Bible
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleBookDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepositoryImpl
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.BibleDatabase
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 object BibleBookModule {
     @Provides
-    fun provideBibleBookDatasource(database: BibleDatabase): BibleBookDatasource {
+    fun provideBibleBookDatasource(database: Database): BibleBookDatasource {
         return BibleBookDatasourceImpl(database)
     }
 

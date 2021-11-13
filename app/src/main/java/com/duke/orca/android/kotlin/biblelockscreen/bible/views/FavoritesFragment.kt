@@ -17,7 +17,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAda
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.FavoritesViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
 

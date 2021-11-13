@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
+package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse

@@ -2,7 +2,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.AttributeSet
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.AttributeSet
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore

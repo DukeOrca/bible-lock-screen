@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -12,8 +13,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.setTint
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
+import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
@@ -21,7 +22,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel.BibleChapterViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -64,14 +65,6 @@ class BibleChapterFragment : BaseViewStubFragment(),
                     binding.root.fadeIn(Duration.FADE_IN)
                 }
             }
-
-            binding.imageViewBookmark.setTint(
-                if (it.bookmark) {
-                    R.color.bookmarked
-                } else {
-                    R.color.unbookmarked
-                }
-            )
         })
 
         binding.recyclerViewBibleChapter.apply {
@@ -86,13 +79,9 @@ class BibleChapterFragment : BaseViewStubFragment(),
             }
         }
 
-        binding.imageViewBookmark.setOnClickListener {
-            bibleChapter?.let { bibleChapter ->
-                viewModel.updateBookmark(bibleChapter.id, bibleChapter.bookmark.not())
-            }
-        }
-
         viewModel.getBibleChapter(book, chapter)
+
+        savePosition()
     }
 
     override fun onCreateView(
@@ -105,26 +94,6 @@ class BibleChapterFragment : BaseViewStubFragment(),
         observe()
 
         return viewBinding.root
-    }
-
-    override fun onPause() {
-        if (isInflated.get()) {
-            try {
-                val layoutManager = binding.recyclerViewBibleChapter.layoutManager
-
-                if (layoutManager is LinearLayoutManager) {
-                    val position = layoutManager.findLastCompletelyVisibleItemPosition()
-
-                    bibleChapter?.let {
-                        viewModel.updatePosition(it.id, position)
-                    }
-                }
-            } catch (e: NullPointerException) {
-                Timber.e(e)
-            }
-        }
-
-        super.onPause()
     }
 
     override fun onDestroyView() {
@@ -141,6 +110,22 @@ class BibleChapterFragment : BaseViewStubFragment(),
         viewModel.adapterItems.observe(viewLifecycleOwner, {
             bibleVerseAdapter.submitList(it)
         })
+    }
+
+    private fun savePosition() {
+        try {
+            val layoutManager = binding.recyclerViewBibleChapter.layoutManager
+
+            if (layoutManager is LinearLayoutManager) {
+                val position = layoutManager.findLastCompletelyVisibleItemPosition()
+
+                bibleChapter?.let {
+                    viewModel.updatePosition(it.id, position)
+                }
+            }
+        } catch (e: NullPointerException) {
+            Timber.e(e)
+        }
     }
 
     override fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean) {

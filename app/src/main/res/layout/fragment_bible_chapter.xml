@@ -13,48 +13,9 @@
         android:layout_height="0dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        app:layout_constraintBottom_toTopOf="@+id/linear_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@color/surface"
-        android:elevation="@dimen/elevation_4dp"
-        android:gravity="center_vertical|end"
-        android:padding="@dimen/padding_8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/image_view_bookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/image_view_more_vert"
-            app:layout_constraintEnd_toStartOf="@+id/image_view_more_vert"
-            app:layout_constraintTop_toTopOf="@+id/image_view_more_vert"
-            app:srcCompat="@drawable/ic_round_bookmark_24"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
-            android:id="@+id/image_view_more_vert"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/padding_8dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@+id/text_view_word"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
-            app:srcCompat="@drawable/ic_round_more_vert_24"
-            app:tint="@color/icon"
-            tools:ignore="ContentDescription" />
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

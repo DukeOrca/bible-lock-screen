@@ -1,41 +1,41 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local
+package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasource
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class BibleVerseDatasourceImpl @Inject constructor(private val database: Database) : BibleVerseDatasource {
+class SubVerseRepositoryImpl @Inject constructor(private val datasource: SubVerseDatasource) : SubVerseRepository {
     override fun get(id: Int): Flow<BibleVerse> {
-        return database.bibleVerseDao().get(id)
+        return datasource.get(id)
     }
 
     override fun get(book: Int, chapter: Int): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().get(book, chapter)
+        return datasource.get(book, chapter)
     }
 
     override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?> {
-        return database.bibleVerseDao().get(book, chapter, verse)
+        return datasource.get(book, chapter, verse)
     }
 
     override fun getFavorites(): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().getFavorites()
+        return datasource.getFavorites()
     }
 
     override fun search(text: String): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().search(text)
+        return datasource.search(text)
     }
 
     override fun single(id: Int): Single<BibleVerse> {
-        return database.bibleVerseDao().single(id)
+        return datasource.single(id)
     }
 
     override suspend fun getVerseCount(book: Int, chapter: Int): Int {
-        return database.bibleVerseDao().getVerseCount(book, chapter)
+        return datasource.getVerseCount(book, chapter)
     }
 
     override suspend fun updateFavorites(id: Int, favorites: Boolean) {
-        database.bibleVerseDao().updateFavorites(id, favorites)
+        datasource.updateFavorites(id, favorites)
     }
 }

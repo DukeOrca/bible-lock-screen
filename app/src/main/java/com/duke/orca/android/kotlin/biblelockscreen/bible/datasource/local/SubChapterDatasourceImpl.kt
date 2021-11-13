@@ -2,11 +2,11 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local
 
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class BibleChapterDatasourceImpl @Inject constructor(private val database: Database) : BibleChapterDatasource {
+class SubChapterDatasourceImpl @Inject constructor(private val database: SubDatabase) : SubChapterDatasource {
     override fun get(id: Int): Flow<BibleChapter> {
         return database.bibleChapterDao().get(id)
     }

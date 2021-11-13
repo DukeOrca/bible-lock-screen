@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/toolbar"
         android:orientation="vertical"
-        android:elevation="@dimen/elevation_2dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:background="@color/toolbar"
+        android:elevation="@dimen/elevation_4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,36 +25,40 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="@dimen/elevation_2dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:theme="@style/Toolbar"
             app:layout_scrollFlags="scroll|enterAlways"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:titleTextColor="@color/title_text">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
-                <RelativeLayout
-                    android:id="@+id/relative_layout_book"
+                <LinearLayout
+                    android:id="@+id/linear_layout_book"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="?attr/selectableItemBackground"
                     android:orientation="horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:gravity="center_vertical"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible"
+                    tools:ignore="UseCompoundDrawables">
 
                     <TextView
                         android:id="@+id/text_view_book"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="@dimen/height_36dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/image_view_book"
+                        android:layout_weight="1"
                         android:clickable="false"
                         android:drawablePadding="@dimen/padding_8dp"
                         android:ellipsize="end"
@@ -66,31 +74,19 @@
 
                     <ImageView
                         android:id="@+id/image_view_book"
-                        android:layout_width="@dimen/width_28dp"
-                        android:layout_height="@dimen/height_28dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="@dimen/margin_8dp"
-                        android:layout_marginEnd="@dimen/margin_24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_8dp"
+                        android:layout_marginStart="@dimen/margin_24dp"
+                        android:padding="@dimen/padding_8dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
                         app:tint="@color/icon"
                         tools:ignore="ContentDescription" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/image_view_bookmarks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="@dimen/margin_8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/padding_8dp"
-                    app:srcCompat="@drawable/ic_round_bookmarks_24"
-                    tools:ignore="ContentDescription" />
-
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -98,7 +94,6 @@
             android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_48dp"
-            android:elevation="@dimen/elevation_2dp"
             android:gravity="center_vertical">
 
             <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
@@ -124,4 +119,103 @@
         app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_behavior="@string/scrolling_view_behavior"/>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/toolbar"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        app:hideOnScroll="true"
+        app:layout_scrollFlags="scroll">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:padding="@dimen/padding_8dp">
+
+            <ImageView
+                android:id="@+id/image_view_bookmarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_bookmarks_24"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/image_view_crayon"
+                android:layout_width="@dimen/width_40dp"
+                android:layout_height="@dimen/height_40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_view_bookmarks"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_crayon_96px"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"/>
+
+            <ImageView
+                android:id="@+id/image_view_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_view_crayon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_favorite_24"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"/>
+
+            <ImageView
+                android:id="@+id/image_view_typography"
+                android:layout_width="@dimen/width_40dp"
+                android:layout_height="@dimen/height_40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/image_view_dark_mode"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_typography_96px"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"/>
+
+            <ImageView
+                android:id="@+id/image_view_dark_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/image_view_translate"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_light_mode_24"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"/>
+
+            <ImageView
+                android:id="@+id/image_view_translate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="@dimen/padding_8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_translate_24"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodel
+package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import android.app.Application
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
@@ -6,8 +6,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.coroutines.flow.*
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -18,12 +18,12 @@ class BibleVersePagerViewModel @Inject constructor(
     application: Application
 ) : BaseViewModel(application) {
     val bibleBook by lazy { bibleBookRepository.get() }
-    val publishSubject: PublishSubject<Any> by lazy { PublishSubject.create() }
+    val behaviorSubject: BehaviorSubject<Any> by lazy { BehaviorSubject.create() }
 
     fun get(id: Int) {
         bibleVerseRepository.single(id)
             .subscribe ({
-                publishSubject.onNext(it)
+                behaviorSubject.onNext(it)
             }) {
                 Timber.e(it)
             }

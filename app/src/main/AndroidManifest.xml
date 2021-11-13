@@ -33,7 +33,7 @@
             android:name=".main.view.MainActivity"
             android:excludeFromRecents="true"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity"
             android:windowSoftInputMode="adjustNothing" />
