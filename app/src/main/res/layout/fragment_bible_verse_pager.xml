@@ -117,6 +117,17 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:id="@+id/image_view_bible"
+                        style="@style/SelectableItemBackgroundBorderless"
+                        android:layout_width="@dimen/width_40dp"
+                        android:layout_height="@dimen/height_40dp"
+                        android:elevation="@dimen/elevation_4dp"
+                        android:padding="@dimen/padding_8dp"
+                        app:srcCompat="@drawable/ic_holy_bible_100px"
+                        app:tint="@android:color/white"
+                        tools:ignore="ContentDescription" />
+
+                    <ImageView
                         android:id="@+id/image_view_search"
                         style="@style/SelectableItemBackgroundBorderless"
                         android:layout_width="wrap_content"

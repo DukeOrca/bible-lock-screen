@@ -7,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_RECREATE
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
-import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
@@ -21,10 +22,10 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragmen
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
 
 class SettingsFragment : PreferenceFragment(),
-    TranslationSelectionDialogFragment.OnTranslationSelectedListener {
+    TranslationSelectionDialogFragment.OnClickListener {
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.settings
 
@@ -34,16 +35,34 @@ class SettingsFragment : PreferenceFragment(),
 
     private val activityViewModel by activityViewModels<FragmentContainerViewModel>()
 
-    override fun onTranslationSelected(
-        dialogFragment: TranslationSelectionDialogFragment,
-        item: Translation
-    ) {
-        val transition = DataStore.Translation.getFileName(requireContext())
+    override fun onNegativeButtonClick(dialogFragment: DialogFragment) {
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
+    }
 
-        if (transition.not(item.fileName)) {
+    override fun onPositiveButtonClick(
+        dialogFragment: DialogFragment,
+        translation: Translation.Model,
+        subTranslation: Translation.Model?,
+        isTranslationChanged: Boolean,
+        isSubTranslationChanged: Boolean
+    ) {
+       if (isTranslationChanged) {
+            DataStore.Translation.putFileName(requireContext(), translation.fileName)
+
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
-            DataStore.Translation.putFileName(requireContext(), item.fileName)
-            preferenceAdapter.updateSummary(Id.TRANSLATION, item.displayName)
+            preferenceAdapter.updateSummary(Id.TRANSLATION, translation.name)
+        }
+
+        if (isSubTranslationChanged) {
+            subTranslation?.let {
+                DataStore.Translation.putSubFileName(requireContext(), it.fileName)
+            } ?: run {
+                DataStore.Translation.putSubFileName(requireContext(), BLANK)
+            }
+
+            activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {
@@ -118,11 +137,11 @@ class SettingsFragment : PreferenceFragment(),
                             it.show(childFragmentManager, it.tag)
                         }
                     },
-                    summary = Translation.getDisplayName(requireContext()),
+                    summary = Translation.getName(requireContext()),
                     body = getString(R.string.translations)
                 ),
                 AdapterItem.Space(),
-                AdapterItem.ContentPreference(
+                AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_round_share_24
@@ -130,9 +149,10 @@ class SettingsFragment : PreferenceFragment(),
                     onClick = {
                         shareApplication(requireContext())
                     },
-                    body = getString(R.string.share_the_app)
+                    body = getString(R.string.share_the_app),
+                    summary = BLANK
                 ),
-                AdapterItem.ContentPreference(
+                AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_round_rate_review_24
@@ -140,16 +160,16 @@ class SettingsFragment : PreferenceFragment(),
                     onClick = {
                         Review.launchReviewFlow(requireActivity())
                     },
-                    body = getString(R.string.write_review)
+                    body = getString(R.string.write_review),
+                    summary = BLANK
                 ),
-                AdapterItem.ContentPreference(
+                AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_round_info_24
                     ),
                     isClickable = false,
                     onClick = {
-
                     },
                     summary = getVersionName(requireContext()),
                     body = getString(R.string.version)

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentPreferenceBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.PreferenceAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter
 
 abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>() {
     abstract val toolbarTitleResId: Int

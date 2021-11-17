@@ -28,7 +28,7 @@
     <color name="helper_text">#99000000</color>
     <color name="error_text">#B00020</color>
 
-    <color name="accent">@color/light_blue_400</color>
+    <color name="accent">@color/secondary</color>
 
     <color name="grey_50">#FAFAFA</color>
 

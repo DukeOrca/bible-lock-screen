@@ -1,20 +1,19 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.FragmentContainerActivity
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
@@ -22,6 +21,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapte
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterPagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.TranslationSelectionDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +34,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
     BookSelectionDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     BookmarksDialogFragment.OnBookmarkClickListener,
-    TranslationSelectionDialogFragment.OnTranslationSelectedListener
+    TranslationSelectionDialogFragment.OnClickListener
 {
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
@@ -47,7 +47,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         }
     }
 
-    private var bibleChapterPagerAdapter: BibleChapterPagerAdapter? = null
+    private var chapterPagerAdapter: BibleChapterPagerAdapter? = null
     private var currentItem: BibleChapter? = null
 
     private val names: Array<String>
@@ -95,20 +95,50 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         }
     }
 
-    override fun onTranslationSelected(
-        dialogFragment: TranslationSelectionDialogFragment,
-        item: Translation
-    ) {
-        with(DataStore.Translation.getFileName(requireContext())) {
-            if (not(item.fileName)) {
-                DataStore.Translation.putFileName(requireContext(), item.fileName)
-                viewBinding.viewPager2.adapter = null
+    override fun onNegativeButtonClick(dialogFragment: DialogFragment) {
+        delayOnLifecycle(Duration.Delay.SHORT) {
+            dialogFragment.dismiss()
+        }
+    }
 
-                delayOnLifecycle(Duration.Delay.SHORT) {
-                    Database.refresh(requireContext())
-                    onTranslationChanged(item)
-                }
+    override fun onPositiveButtonClick(
+        dialogFragment: DialogFragment,
+        translation: Translation.Model,
+        subTranslation: Translation.Model?,
+        isTranslationChanged: Boolean,
+        isSubTranslationChanged: Boolean
+    ) {
+        if (isTranslationChanged) {
+            DataStore.Translation.putFileName(requireContext(), translation.fileName)
+        }
+
+        if (isSubTranslationChanged) {
+            subTranslation?.let {
+                DataStore.Translation.putSubFileName(requireContext(), it.fileName)
+            } ?: run {
+                DataStore.Translation.putSubFileName(requireContext(), BLANK)
             }
+        }
+
+        if (isTranslationChanged or isSubTranslationChanged) {
+            viewBinding.viewPager2.adapter = null
+            chapterPagerAdapter = null
+        }
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            if (isTranslationChanged or isSubTranslationChanged) {
+                if (isTranslationChanged) {
+                    Database.refresh(requireContext())
+                }
+
+                if (isSubTranslationChanged) {
+                    SubDatabase.refresh(requireContext())
+                }
+
+                onTranslationChanged()
+            }
+
+            dialogFragment.dismiss()
         }
     }
 
@@ -170,13 +200,13 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         lifecycleScope.launch {
             val bookChapters = viewModel.getAll()
 
-            bibleChapterPagerAdapter = BibleChapterPagerAdapter(
+            chapterPagerAdapter = BibleChapterPagerAdapter(
                 this@BibleChapterPagerFragment,
                 bookChapters
             )
 
             viewBinding.viewPager2.apply {
-                adapter = bibleChapterPagerAdapter
+                adapter = chapterPagerAdapter
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(
                     DataStore.BibleChapter.getCurrentChapter(requireContext()),
@@ -228,10 +258,19 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             .commit()
     }
 
-    private fun onTranslationChanged(translation: Translation) {
+    private fun onTranslationChanged() {
         lifecycleScope.launch {
+            viewModel.refresh()
+
+            val bookChapters = viewModel.getAll()
+
+            chapterPagerAdapter = BibleChapterPagerAdapter(
+                this@BibleChapterPagerFragment,
+                bookChapters
+            )
+
             viewBinding.viewPager2.apply {
-                adapter = bibleChapterPagerAdapter
+                adapter = chapterPagerAdapter
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(
                     DataStore.BibleChapter.getCurrentChapter(requireContext()),
@@ -248,14 +287,6 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             withContext(Dispatchers.Main) {
                 setCurrentItem(item, false)
             }
-        }
-    }
-
-    companion object {
-        private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
-
-        private object Key {
-            const val FRAGMENT_CONTAINER = "$PACKAGE_NAME.FRAGMENT_CONTAINER"
         }
     }
 }

@@ -1,8 +1,11 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
+import android.content.Context
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleChapterDatasource
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleChapterDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -29,5 +32,12 @@ class BibleChapterRepositoryImpl @Inject constructor(private val datasource: Bib
 
     override suspend fun updatePosition(id: Int, position: Int) {
         datasource.updatePosition(id, position)
+    }
+
+    companion object {
+        fun from(context: Context): BibleChapterRepositoryImpl {
+            val chapterDatasource = BibleChapterDatasourceImpl(Database.getInstance(context))
+            return BibleChapterRepositoryImpl(chapterDatasource)
+        }
     }
 }

@@ -12,14 +12,14 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object BibleVerseModule {
+object VerseModule {
     @Provides
-    fun provideBibleVerseDatasource(database: Database): BibleVerseDatasource {
+    fun provideVerseDatasource(database: Database): BibleVerseDatasource {
         return BibleVerseDatasourceImpl(database)
     }
 
     @Provides
-    fun provideBibleVerseRepository(datasource: BibleVerseDatasource): BibleVerseRepository {
+    fun provideVerseRepository(datasource: BibleVerseDatasource): BibleVerseRepository {
         return BibleVerseRepositoryImpl(datasource)
     }
 }

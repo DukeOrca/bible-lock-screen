@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.settings.adapter
+package com.duke.orca.android.kotlin.biblelockscreen.settings.adapters
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -10,12 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.*
 
-class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(DiffCallback()) {
+class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAdapter.ViewHolder>(DiffCallback()) {
     private var recyclerView: RecyclerView? = null
 
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
@@ -30,31 +29,6 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                 viewBinding.root.hide()
 
             when(viewBinding) {
-                is ContentPreferenceBinding -> {
-                    if (adapterItem is AdapterItem.ContentPreference) {
-                        adapterItem.drawable?.let {
-                            viewBinding.imageViewIcon.show()
-                            viewBinding.imageViewIcon.setImageDrawable(it)
-                        } ?: let {
-                            viewBinding.imageViewIcon.hide()
-                        }
-
-                        viewBinding.textViewSummary.text = adapterItem.summary
-                        viewBinding.textViewBody.text = adapterItem.body
-
-                        if (adapterItem.summary.isBlank())
-                            viewBinding.textViewSummary.hide()
-
-                        viewBinding.root.setOnClickListener {
-                            adapterItem.onClick.invoke(adapterItem)
-                        }
-
-                        if (isAboveSpace(adapterPosition))
-                            viewBinding.viewDivider.hide()
-                        else
-                            viewBinding.viewDivider.show()
-                    }
-                }
                 is PreferenceBinding -> {
                     if (adapterItem is AdapterItem.Preference) {
                         adapterItem.drawable?.let {
@@ -67,17 +41,19 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                         viewBinding.textViewBody.text = adapterItem.body
                         viewBinding.textViewSummary.text = adapterItem.summary
 
-                        if (adapterItem.summary.isBlank())
+                        if (adapterItem.summary.isBlank()) {
                             viewBinding.textViewSummary.hide()
+                        }
 
                         viewBinding.root.setOnClickListener {
                             adapterItem.onClick.invoke(adapterItem)
                         }
 
-                        if (isAboveSpace(adapterPosition))
+                        if (isAboveSpace(adapterPosition)) {
                             viewBinding.viewDivider.hide()
-                        else
+                        } else {
                             viewBinding.viewDivider.show()
+                        }
                     }
                 }
                 is MultiSelectListPreferenceBinding -> {
@@ -126,11 +102,11 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                     }
                 }
                 is PreferenceCategoryBinding -> {
-                    if (adapterItem is AdapterItem.PreferenceCategory)
+                    if (adapterItem is AdapterItem.PreferenceCategory) {
                         viewBinding.textViewCategory.text = adapterItem.category
+                    }
                 }
                 is SpaceBinding -> {
-                    // pass
                 }
                 is SwitchPreferenceBinding -> {
                     if (adapterItem is AdapterItem.SwitchPreference) {
@@ -155,10 +131,11 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                             viewBinding.switchMaterial.toggle()
                         }
 
-                        if (adapterItem.isVisible)
+                        if (adapterItem.isVisible) {
                             viewBinding.root.expand(duration)
-                        else
+                        } else {
                             viewBinding.root.collapse(duration, 0)
+                        }
                     }
                 }
             }
@@ -179,7 +156,6 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
 
     private fun createViewHolder(layoutInflater: LayoutInflater, parent: ViewGroup, viewType: Int): ViewHolder {
         val viewBinding = when(viewType) {
-            ViewType.Content -> ContentPreferenceBinding.inflate(layoutInflater, parent, false)
             ViewType.Preference -> PreferenceBinding.inflate(layoutInflater, parent, false)
             ViewType.MultiSelectListPreference -> MultiSelectListPreferenceBinding.inflate(layoutInflater, parent, false)
             ViewType.PreferenceCategory -> PreferenceCategoryBinding.inflate(layoutInflater, parent, false)
@@ -208,7 +184,6 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
 
     override fun getItemViewType(position: Int): Int {
         return when(currentList[position]) {
-            is AdapterItem.ContentPreference -> ViewType.Content
             is AdapterItem.MultiSelectListPreference -> ViewType.MultiSelectListPreference
             is AdapterItem.Preference -> ViewType.Preference
             is AdapterItem.PreferenceCategory -> ViewType.PreferenceCategory
@@ -246,13 +221,6 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
                     viewHolder.updateSummary(summary)
                 }
             }
-            is AdapterItem.ContentPreference -> {
-                val viewHolder = recyclerView?.findViewHolderForAdapterPosition(index)
-
-                if (viewHolder is ViewHolder) {
-                    viewHolder.updateSummary(summary)
-                }
-            }
             else -> return
         }
     }
@@ -263,83 +231,72 @@ class PreferenceAdapter: ListAdapter<AdapterItem, PreferenceAdapter.ViewHolder>(
         } else
             false
     }
-}
 
-private object ViewType {
-    const val Content = 0
-    const val MultiSelectListPreference = 1
-    const val Preference = 2
-    const val PreferenceCategory = 3
-    const val Space = 4
-    const val SwitchPreference = 5
-}
-
-sealed class AdapterItem {
-    abstract val id: Long
-    abstract var isClickable: Boolean
-    abstract var isVisible: Boolean
-
-    data class ContentPreference(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = true,
-        override var isVisible: Boolean = true,
-        val drawable: Drawable?,
-        val onClick: (ContentPreference) -> Unit,
-        val body: String,
-        var summary: String = BLANK,
-    ) : AdapterItem()
-
-    data class MultiSelectListPreference(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = true,
-        override var isVisible: Boolean = true,
-        val adapter: RecyclerView.Adapter<*>,
-        val body: String,
-        val drawable: Drawable?,
-        val onClick: (MultiSelectListPreference) -> Unit,
-        var isExpanded: Boolean = false
-    ) : AdapterItem()
-
-    data class Preference(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = true,
-        override var isVisible: Boolean = true,
-        val body: String,
-        val drawable: Drawable?,
-        val onClick: (Preference) -> Unit,
-        val summary: String
-    ) : AdapterItem()
-
-    data class PreferenceCategory(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = true,
-        override var isVisible: Boolean = true,
-        val category: String
-    ) : AdapterItem()
-
-    data class Space(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = false,
-        override var isVisible: Boolean = true,
-    ) : AdapterItem()
-
-    data class SwitchPreference(
-        override val id: Long = -1L,
-        override var isClickable: Boolean = true,
-        override var isVisible: Boolean = true,
-        val body: String,
-        val drawable: Drawable?,
-        val isChecked: Boolean,
-        val onCheckedChange: (isChecked: Boolean) -> Unit
-    ) : AdapterItem()
-}
-
-class DiffCallback: DiffUtil.ItemCallback<AdapterItem>() {
-    override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
-        return oldItem.id == newItem.id
+    private object ViewType {
+        const val MultiSelectListPreference = 0
+        const val Preference = 1
+        const val PreferenceCategory = 2
+        const val Space = 3
+        const val SwitchPreference = 4
     }
 
-    override fun areContentsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
-        return oldItem == newItem
+    sealed class AdapterItem {
+        abstract val id: Long
+        abstract var isClickable: Boolean
+        abstract var isVisible: Boolean
+
+        data class MultiSelectListPreference(
+            override val id: Long = -1L,
+            override var isClickable: Boolean = true,
+            override var isVisible: Boolean = true,
+            val adapter: RecyclerView.Adapter<*>,
+            val body: String,
+            val drawable: Drawable?,
+            val onClick: (MultiSelectListPreference) -> Unit,
+            var isExpanded: Boolean = false
+        ) : AdapterItem()
+
+        data class Preference(
+            override val id: Long = -1L,
+            override var isClickable: Boolean = true,
+            override var isVisible: Boolean = true,
+            val body: String,
+            val drawable: Drawable?,
+            val onClick: (Preference) -> Unit,
+            val summary: String
+        ) : AdapterItem()
+
+        data class PreferenceCategory(
+            override val id: Long = -1L,
+            override var isClickable: Boolean = true,
+            override var isVisible: Boolean = true,
+            val category: String
+        ) : AdapterItem()
+
+        data class Space(
+            override val id: Long = -1L,
+            override var isClickable: Boolean = false,
+            override var isVisible: Boolean = true,
+        ) : AdapterItem()
+
+        data class SwitchPreference(
+            override val id: Long = -1L,
+            override var isClickable: Boolean = true,
+            override var isVisible: Boolean = true,
+            val body: String,
+            val drawable: Drawable?,
+            val isChecked: Boolean,
+            val onCheckedChange: (isChecked: Boolean) -> Unit
+        ) : AdapterItem()
+    }
+
+    class DiffCallback: DiffUtil.ItemCallback<AdapterItem>() {
+        override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
+            return oldItem == newItem
+        }
     }
 }

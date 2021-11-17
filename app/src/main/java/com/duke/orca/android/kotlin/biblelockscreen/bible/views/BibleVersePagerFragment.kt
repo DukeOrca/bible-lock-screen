@@ -229,6 +229,10 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
+        viewBinding.imageViewBible.setOnClickListener {
+            launch(BibleChapterPagerFragment::class.java.simpleName)
+        }
+
         viewBinding.imageViewSearch.setOnClickListener {
             launch(BibleVerseSearchFragment::class.java.simpleName)
         }

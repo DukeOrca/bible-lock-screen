@@ -12,6 +12,7 @@
     <string name="bible_lock_screen_is_running">성경 잠금화면이 실행 중입니다.</string>
     <string name="bold">Bold</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="cancel">Cancel</string>
     <string name="copied_to_clipboard">클립보드에 복사되었습니다.</string>
     <string name="colon">:</string>
     <string name="copy">Copy</string>
@@ -34,6 +35,7 @@
     <string name="no_bookmarks">No bookmarks.</string>
     <string name="no_favorites">No favorites.</string>
     <string name="no_results_found">No result found.</string>
+    <string name="ok">OK</string>
     <string name="old_testament">Old testament</string>
     <string name="request_app_permissions">Request app permissions</string>
     <string name="search">Search</string>

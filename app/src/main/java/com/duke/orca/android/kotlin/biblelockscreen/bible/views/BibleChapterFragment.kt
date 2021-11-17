@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -14,9 +13,9 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Applic
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
@@ -41,7 +40,7 @@ class BibleChapterFragment : BaseViewStubFragment(),
     private val book by lazy { bookChapter?.book ?: 1 }
     private val chapter by lazy { bookChapter?.chapter ?: 1 }
 
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(viewModel.bibleBook) }
+    private val wordAdapter by lazy { WordAdapter(requireContext()) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     private var bibleChapter: BibleChapter? = null
@@ -52,23 +51,10 @@ class BibleChapterFragment : BaseViewStubFragment(),
     private val isScrolledToPosition = AtomicBoolean(false)
 
     override fun onInflated(view: View) {
-        bibleVerseAdapter.setOnIconClickListener(this)
-
         _binding = FragmentBibleChapterBinding.bind(view)
 
-        viewModel.bibleChapter.observe(viewLifecycleOwner, {
-            bibleChapter = it
-
-            if (isScrolledToPosition.compareAndSet(false, true)) {
-                delayOnLifecycle(Duration.SHORT) {
-                    binding.recyclerViewBibleChapter.scrollToPosition(it.position)
-                    binding.root.fadeIn(Duration.FADE_IN)
-                }
-            }
-        })
-
         binding.recyclerViewBibleChapter.apply {
-            adapter = bibleVerseAdapter
+            adapter = wordAdapter
             layoutManager = LinearLayoutManagerWrapper(requireContext())
             setHasFixedSize(true)
 
@@ -80,6 +66,17 @@ class BibleChapterFragment : BaseViewStubFragment(),
         }
 
         viewModel.getBibleChapter(book, chapter)
+
+        viewModel.bibleChapter.observe(viewLifecycleOwner, {
+            bibleChapter = it
+
+            if (isScrolledToPosition.compareAndSet(false, true)) {
+                delayOnLifecycle(Duration.SHORT) {
+                    binding.recyclerViewBibleChapter.scrollToPosition(it.position)
+                    binding.root.fadeIn(Duration.FADE_IN)
+                }
+            }
+        })
 
         savePosition()
     }
@@ -103,12 +100,13 @@ class BibleChapterFragment : BaseViewStubFragment(),
 
     private fun initData() {
         viewModel.getBibleChapter(book, chapter)
-        viewModel.getBibleVerses(book, chapter)
+        viewModel.getVerses(book, chapter)
+        viewModel.getSubVerses(book, chapter)
     }
 
     private fun observe() {
         viewModel.adapterItems.observe(viewLifecycleOwner, {
-            bibleVerseAdapter.submitList(it)
+            wordAdapter.submitList(it)
         })
     }
 
@@ -145,13 +143,13 @@ class BibleChapterFragment : BaseViewStubFragment(),
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
+                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.book, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), viewModel.bibleBook, it) }
+                bibleVerse?.let { share(requireContext(), viewModel.book, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

@@ -7,7 +7,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Applic
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleBookDao
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleChapterDao
@@ -30,10 +29,10 @@ abstract class SubDatabase: RoomDatabase() {
         @Volatile
         private var INSTANCE: SubDatabase? = null
 
-        fun getInstance(context: Context): SubDatabase {
+        fun getInstance(context: Context): SubDatabase? {
             synchronized(this) {
                 return INSTANCE ?: let {
-                    getBuilder(context).build().also {
+                    getBuilder(context)?.build().also {
                         INSTANCE = it
                     }
                 }
@@ -44,7 +43,7 @@ abstract class SubDatabase: RoomDatabase() {
             synchronized(this) {
                 clear()
                 context.applicationContext.cacheDir.deleteRecursively()
-                INSTANCE = getBuilder(context).build()
+                INSTANCE = getBuilder(context)?.build()
             }
         }
 
@@ -60,14 +59,10 @@ abstract class SubDatabase: RoomDatabase() {
             }
         }
 
-        private fun getBuilder(context: Context): Builder<SubDatabase> {
-            val subFileName = DataStore.Translation.getSubFileName(context).run {
-                if (isBlank()) {
-                    return@run Translation.getFileNameInLanguage(context)
-                }
+        private fun getBuilder(context: Context): Builder<SubDatabase>? {
+            val subFileName = DataStore.Translation.getSubFileName(context)
 
-                return@run this
-            }
+            if (subFileName.isBlank()) return null
 
             return Room.databaseBuilder(
                 context.applicationContext,

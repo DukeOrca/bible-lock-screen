@@ -1,14 +1,17 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
+import android.app.Application
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasource
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasourceImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleChapterRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
-import com.google.android.gms.ads.nativead.NativeAd
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.*
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -20,22 +23,35 @@ class BibleChapterViewModel @Inject constructor(
     private val bibleBookRepository: BibleBookRepository,
     private val bibleChapterRepository: BibleChapterRepository,
     private val bibleVerseRepository: BibleVerseRepository,
-) : ViewModel() {
-    private val verses = MutableLiveData<List<BibleVerse>>()
-    private val subVerses = MutableLiveData<List<BibleVerse>>()
-    private val nativeAds = MutableLiveData<List<NativeAd>>()
-
-    val adapterItems = MediatorLiveData<List<BibleVerseAdapter.AdapterItem>>().apply {
-        addSource(verses) {
-            value = combine(verses, nativeAds)
+    application: Application
+) : AndroidViewModel(application) {
+    private val subDatabase = SubDatabase.getInstance(application)
+    private val subBookRepository by lazy {
+        subDatabase?.let {
+            SubBookRepositoryImpl(SubBookDatasourceImpl(it))
         }
-
-        addSource(nativeAds) {
-            value = combine(verses, nativeAds)
+    }
+    private val subVerseRepository by lazy {
+        subDatabase?.let {
+            SubVerseRepositoryImpl(SubVerseDatasourceImpl(it))
         }
     }
 
-    val bibleBook by lazy { bibleBookRepository.get() }
+    private val verses = MutableLiveData<List<BibleVerse>>()
+    private val subVerses = MutableLiveData<List<BibleVerse>>()
+
+    val adapterItems = MediatorLiveData<List<WordAdapter.AdapterItem>>().apply {
+        addSource(verses) {
+            value = combine(verses, subVerses)
+        }
+
+        addSource(subVerses) {
+            value = combine(verses, subVerses)
+        }
+    }
+
+    val book by lazy { bibleBookRepository.get() }
+    private val subBook by lazy { subBookRepository?.get() }
 
     private val _bibleChapter = MutableLiveData<BibleChapter>()
     val bibleChapter: LiveData<BibleChapter> = _bibleChapter
@@ -48,10 +64,18 @@ class BibleChapterViewModel @Inject constructor(
         }
     }
 
-    fun getBibleVerses(book: Int, chapter: Int) {
+    fun getVerses(book: Int, chapter: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             bibleVerseRepository.get(book, chapter).collect {
                 verses.postValue(it)
+            }
+        }
+    }
+
+    fun getSubVerses(book: Int, chapter: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            subVerseRepository?.get(book, chapter)?.collect {
+                subVerses.postValue(it)
             }
         }
     }
@@ -78,36 +102,51 @@ class BibleChapterViewModel @Inject constructor(
 
     private fun combine(
         source1: LiveData<List<BibleVerse>>,
-        source2: LiveData<List<NativeAd>>
-    ): List<BibleVerseAdapter.AdapterItem> {
-        val bibleVerses = source1.value ?: emptyList()
-        val nativeAds = source2.value ?: emptyList()
+        source2: LiveData<List<BibleVerse>>
+    ): List<WordAdapter.AdapterItem> {
+        val verses = source1.value ?: emptyList()
+        val subVerses = source2.value ?: emptyList()
 
-        val adapterItems = arrayListOf<BibleVerseAdapter.AdapterItem>()
-
-        adapterItems.addAll(bibleVerses.map { BibleVerseAdapter.AdapterItem.AdapterBibleVerse(it) })
-
-        for (i in 0 until nativeAds.count()) {
-            if (i == 0) {
-                adapterItems.add(0, BibleVerseAdapter.AdapterItem.AdapterNativeAd(-1, nativeAds[0]))
-            } else {
-                val index = i * AD_INTERVAL
-
-                if (index <= adapterItems.count()) {
-                    adapterItems.add(
-                        index,
-                        BibleVerseAdapter.AdapterItem.AdapterNativeAd(-index, nativeAds[i])
-                    )
-                } else {
-                    break
-                }
+        val adapterItems = arrayListOf<WordAdapter.AdapterItem>()
+        val words = if (subVerses.isNotEmpty()) {
+            verses.zip(subVerses) { verse, subVerse ->
+                WordAdapter.AdapterItem.AdapterWord(
+                    id = verse.id,
+                    book = WordAdapter.AdapterItem.AdapterWord.Book(
+                        verse.book,
+                        book.name(verse.book)
+                    ),
+                    subBook = WordAdapter.AdapterItem.AdapterWord.Book(
+                        subVerse.book,
+                        subBook?.name(subVerse.book) ?: BLANK
+                    ),
+                    verse = verse.verse,
+                    word = verse.word,
+                    subWord = subVerse.word,
+                    bookmark = verse.bookmark,
+                    color = -1,
+                    favorites = verse.favorites
+                )
+            }
+        } else {
+            verses.map { verse ->
+                WordAdapter.AdapterItem.AdapterWord(
+                    id = verse.id,
+                    book = WordAdapter.AdapterItem.AdapterWord.Book(
+                        verse.book,
+                        book.name(verse.book)
+                    ),
+                    verse = verse.verse,
+                    word = verse.word,
+                    bookmark = verse.bookmark,
+                    color = -1,
+                    favorites = verse.favorites
+                )
             }
         }
 
-        return adapterItems
-    }
+        adapterItems.addAll(words)
 
-    companion object {
-        private const val AD_INTERVAL = 8
+        return adapterItems
     }
 }

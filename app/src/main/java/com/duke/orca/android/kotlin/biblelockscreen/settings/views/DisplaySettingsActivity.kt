@@ -10,8 +10,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseLockScreenActivity
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.ActivityPreferenceBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.AdapterItem
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.PreferenceAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

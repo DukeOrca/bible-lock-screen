@@ -26,14 +26,14 @@ interface BibleVerseDao {
     @Query("SELECT * FROM bible_verse WHERE favorites LIKE 1")
     fun getFavorites(): Flow<List<BibleVerse>>
 
-    @Query("SELECT COUNT(id) FROM bible_verse WHERE book = :book AND chapter = :chapter")
-    suspend fun getVerseCount(book: Int, chapter: Int): Int
-
     @Query("SELECT * FROM bible_verse WHERE word LIKE '%' || :text || '%'")
     fun search(text: String): Flow<List<BibleVerse>>
 
     @Query("SELECT * FROM bible_verse WHERE id = :id")
     fun single(id: Int): Single<BibleVerse>
+
+    @Query("SELECT COUNT(id) FROM bible_verse WHERE book = :book AND chapter = :chapter")
+    suspend fun getVerseCount(book: Int, chapter: Int): Int
 
     @Query("UPDATE bible_verse SET favorites = :favorites WHERE id = :id")
     suspend fun updateFavorites(id: Int, favorites: Boolean)

@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentTranslationSelectionDialogBinding
-import com.duke.orca.android.kotlin.biblelockscreen.settings.adapter.TranslationSelectionAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.SelectedTranslationAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.TranslationAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodel.TranslationSelectionDialogViewModel
 
 class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslationSelectionDialogBinding>() {
     override val setWindowAnimation: Boolean
@@ -22,18 +28,35 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
         return FragmentTranslationSelectionDialogBinding.inflate(inflater, container, false)
     }
 
-    private var onTranslationSelectedListener: OnTranslationSelectedListener? = null
+    private val viewModel by viewModels<TranslationSelectionDialogViewModel>()
 
-    interface OnTranslationSelectedListener {
-        fun onTranslationSelected(
-            dialogFragment: TranslationSelectionDialogFragment,
-            item: Translation
+    private var onClickListener: OnClickListener? = null
+
+    interface OnClickListener {
+        fun onNegativeButtonClick(dialogFragment: DialogFragment)
+
+        fun onPositiveButtonClick(
+            dialogFragment: DialogFragment,
+            translation: Translation.Model,
+            subTranslation: Translation.Model?,
+            isTranslationChanged: Boolean,
+            isSubTranslationChanged: Boolean
         )
     }
 
-    private val translationSelectionAdapter by lazy {
-        TranslationSelectionAdapter(requireContext()) {
-            onTranslationSelectedListener?.onTranslationSelected(this, it)
+    private val selectedTranslationAdapter by lazy {
+        SelectedTranslationAdapter(requireContext()) { from, to ->
+            viewModel.swap(from, to)
+        }
+    }
+
+    private val translationAdapter by lazy {
+        TranslationAdapter(requireContext()) { item, isChecked ->
+            if (isChecked) {
+                viewModel.select(item)
+            } else {
+                viewModel.unselect(item)
+            }
         }
     }
 
@@ -41,8 +64,8 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
         super.onAttach(context)
 
         with(parentFragment) {
-            if (this is OnTranslationSelectedListener) {
-                onTranslationSelectedListener = this
+            if (this is OnClickListener) {
+                onClickListener = this
             }
         }
     }
@@ -54,66 +77,66 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        translationSelectionAdapter.submitTranslations(createList())
-
-        viewBinding.recyclerView.apply {
-            adapter = translationSelectionAdapter
-            layoutManager = LinearLayoutManagerWrapper(context)
-            setHasFixedSize(true)
-        }
+        bind()
 
         return viewBinding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observe()
+    }
+
     override fun onDetach() {
-        onTranslationSelectedListener = null
+        onClickListener = null
         super.onDetach()
     }
 
-    private fun createList(): List<Translation> {
-        return listOf(
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.AMERICAN_KING_JAMES_VERSION,
-                displayName = Translation.Companion.DisplayName.AMERICAN_KING_JAMES_VERSION,
-                fileName = Translation.Companion.FileName.AMERICAN_KING_JAMES_VERSION,
-                language = Translation.Companion.Language.ENGLISH
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.AMERICAN_STANDARD_VERSION,
-                displayName = Translation.Companion.DisplayName.AMERICAN_STANDARD_VERSION,
-                fileName = Translation.Companion.FileName.AMERICAN_STANDARD_VERSION,
-                language = Translation.Companion.Language.ENGLISH
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.KING_JAMES_VERSION,
-                displayName = Translation.Companion.DisplayName.KING_JAMES_VERSION,
-                fileName = Translation.Companion.FileName.KING_JAMES_VERSION,
-                language = Translation.Companion.Language.ENGLISH
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.UPDATED_KING_JAMES_VERSION,
-                displayName = Translation.Companion.DisplayName.UPDATED_KING_JAMES_VERSION,
-                fileName = Translation.Companion.FileName.UPDATED_KING_JAMES_VERSION,
-                language = Translation.Companion.Language.ENGLISH
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.LOUIS_SEGOND,
-                displayName = Translation.Companion.DisplayName.LOUIS_SEGOND,
-                fileName = Translation.Companion.FileName.LOUIS_SEGOND,
-                language = Translation.Companion.Language.FRENCH
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.LUTHER_BIBLE,
-                displayName = Translation.Companion.DisplayName.LUTHER_BIBLE,
-                fileName = Translation.Companion.FileName.LUTHER_BIBLE,
-                language = Translation.Companion.Language.GERMAN
-            ),
-            Translation(
-                abbreviation = Translation.Companion.Abbreviation.KOREAN_REVISED_VERSION,
-                displayName = Translation.Companion.DisplayName.KOREAN_REVISED_VERSION,
-                fileName = Translation.Companion.FileName.KOREAN_REVISED_VERSION,
-                language = Translation.Companion.Language.KOREAN
-            ),
-        )
+    private fun bind() {
+        viewBinding.recyclerViewSelected.apply {
+            adapter = selectedTranslationAdapter
+            layoutManager = LinearLayoutManagerWrapper(context)
+            setHasFixedSize(true)
+        }
+
+        viewBinding.recyclerView.apply {
+            adapter = translationAdapter
+            layoutManager = LinearLayoutManagerWrapper(context)
+            setHasFixedSize(true)
+        }
+
+        viewBinding.textViewCancel.setOnClickListener {
+            onClickListener?.onNegativeButtonClick(this)
+        }
+
+        viewBinding.textViewOk.setOnClickListener {
+            val translation = selectedTranslationAdapter.currentList[0]
+            val subTranslation =
+                if (viewModel.selectedItemCount > 1) {
+                    selectedTranslationAdapter.currentList[1]
+                } else {
+                    null
+                }
+
+            onClickListener?.onPositiveButtonClick(
+                this,
+                translation,
+                subTranslation,
+                viewModel.currentFileName.not(translation.fileName),
+                viewModel.currentSubFileName.not(subTranslation?.fileName ?: BLANK)
+            )
+        }
+    }
+
+    private fun observe() {
+        viewModel.items.observe(viewLifecycleOwner, {
+            translationAdapter.submitItems(it)
+        })
+
+        viewModel.selectedItems.observe(viewLifecycleOwner, {
+            selectedTranslationAdapter.submitList(it)
+
+            viewBinding.textViewOk.isEnabled = it.count() > 0
+        })
     }
 }

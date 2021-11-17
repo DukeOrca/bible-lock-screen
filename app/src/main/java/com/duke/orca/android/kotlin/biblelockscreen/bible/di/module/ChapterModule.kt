@@ -12,7 +12,7 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object BibleChapterModule {
+object ChapterModule {
     @Provides
     fun provideBibleChapterDatasource(database: Database): BibleChapterDatasource {
         return BibleChapterDatasourceImpl(database)

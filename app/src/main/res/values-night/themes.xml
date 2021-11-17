@@ -90,14 +90,28 @@
         <item name="android:windowShowWallpaper">false</item>
     </style>
 
+    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:includeFontPadding">true</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">@dimen/text_size_14dp</item>
+        <item name="android:lineSpacingMultiplier">@dimen/line_spacing_multiplier</item>
+    </style>
+
     <style name="TextViewStyle.Button" parent="@android:style/Widget.DeviceDefault.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:includeFontPadding">false</item>
+        <item name="android:includeFontPadding">true</item>
         <item name="android:padding">@dimen/padding_8dp</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">@color/color_text</item>
         <item name="android:textSize">@dimen/text_size_16dp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextViewStyle.Content" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:textSize">@dimen/text_size_14dp</item>
+        <item name="android:lineSpacingMultiplier">@dimen/line_spacing_multiplier</item>
     </style>
 
     <style name="Toolbar">

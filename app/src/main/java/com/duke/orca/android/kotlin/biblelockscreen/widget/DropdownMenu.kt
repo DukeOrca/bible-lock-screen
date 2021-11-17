@@ -83,6 +83,9 @@ class DropdownMenu : FrameLayout {
 
     private val popupWindowBinding by lazy { PopupWindowBinding.inflate(layoutInflater) }
 
+    val recyclerView: RecyclerView
+        get() = popupWindowBinding.recyclerView
+
     private val elevationPopupWindow by lazy { resources.getDimension(R.dimen.elevation_6dp) }
     private val itemHeight by lazy { resources.getDimensionPixelOffset(R.dimen.height_48dp) }
     private val marginBottom by lazy { resources.getDimensionPixelOffset(R.dimen.height_8dp) }
@@ -176,10 +179,6 @@ class DropdownMenu : FrameLayout {
     class ArrayAdapter(private val array: Array<String>) : RecyclerView.Adapter<ArrayAdapter.ViewHolder>() {
         private var itemRippleDrawable: Drawable? = null
         private var onItemClickListener: OnItemClickListener? = null
-
-        fun setItemRippleDrawable(itemRippleDrawable: Drawable) {
-            this.itemRippleDrawable = itemRippleDrawable
-        }
 
         fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
             this.onItemClickListener = onItemClickListener
