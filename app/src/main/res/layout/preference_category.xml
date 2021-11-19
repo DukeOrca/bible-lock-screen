@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/text_view_category"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_48dp"
+    android:layout_height="@dimen/height_36dp"
+    android:gravity="bottom"
+    android:paddingBottom="@dimen/padding_8dp"
     android:paddingEnd="@dimen/margin_16dp"
     android:paddingStart="@dimen/margin_16dp"
-    android:gravity="center_vertical"
+    android:textColor="@color/medium_emphasis"
     tools:text="Category" />

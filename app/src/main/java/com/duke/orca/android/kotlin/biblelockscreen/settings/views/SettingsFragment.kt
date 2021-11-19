@@ -114,7 +114,7 @@ class SettingsFragment : PreferenceFragment(),
                 AdapterItem.Preference(
                     drawable = ContextCompat.getDrawable(
                         requireContext(),
-                        R.drawable.ic_typography_96px
+                        R.drawable.ic_round_text_format_24
                     ),
                     onClick = {
                         addFragment(FontSettingsFragment())

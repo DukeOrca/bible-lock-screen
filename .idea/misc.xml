@@ -17,8 +17,10 @@
         <entry key="app/src/main/res/drawable/ic_round_bookmarks_24.xml" value="0.24074074074074073" />
         <entry key="app/src/main/res/drawable/ic_round_dark_mode_24.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable/ic_round_format_align_center_24.xml" value="0.23958333333333334" />
+        <entry key="app/src/main/res/drawable/ic_round_format_bold_24.xml" value="0.1234375" />
         <entry key="app/src/main/res/drawable/ic_round_format_size_24.xml" value="0.25833333333333336" />
         <entry key="app/src/main/res/drawable/ic_round_menu_24.xml" value="0.16458333333333333" />
+        <entry key="app/src/main/res/drawable/ic_round_text_format_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_round_unbookmarked_24.xml" value="0.2287179487179487" />
         <entry key="app/src/main/res/drawable/ic_unlike_24.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/drawable/ic_unlike_dark_24.xml" value="0.10729166666666666" />
@@ -28,6 +30,7 @@
         <entry key="app/src/main/res/drawable/ripple_rounded_left_corners.xml" value="0.2375" />
         <entry key="app/src/main/res/drawable/ripple_rounded_right_corners.xml" value="0.2375" />
         <entry key="app/src/main/res/drawable/ripple_unlock.xml" value="0.2375" />
+        <entry key="app/src/main/res/drawable/round_text_format_black_24dp.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/rounded_corners.xml" value="0.26927083333333335" />
         <entry key="app/src/main/res/drawable/rounded_left_corners.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/drawable/rounded_right_corners.xml" value="0.21145833333333333" />
@@ -59,7 +62,7 @@
         <entry key="app/src/main/res/layout/fragment_base_list_dialog.xml" value="0.16847826086956522" />
         <entry key="app/src/main/res/layout/fragment_bible.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bible_chapter.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.17370892018779344" />
+        <entry key="app/src/main/res/layout/fragment_bible_chapter_pager.xml" value="0.3781021897810219" />
         <entry key="app/src/main/res/layout/fragment_bible_verse.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_pager.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_bible_verse_search.xml" value="0.375" />
@@ -68,6 +71,7 @@
         <entry key="app/src/main/res/layout/fragment_book_selection_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/fragment_font_settings_bottom_sheet_dialog.xml" value="0.44313725490196076" />
         <entry key="app/src/main/res/layout/fragment_permission_rationale_dialog.xml" value="0.1308876811594203" />
         <entry key="app/src/main/res/layout/fragment_preference.xml" value="0.1453804347826087" />
         <entry key="app/src/main/res/layout/fragment_translation_selection_dialog.xml" value="0.38095238095238093" />
@@ -78,8 +82,8 @@
         <entry key="app/src/main/res/layout/navigation_view.xml" value="0.1484375" />
         <entry key="app/src/main/res/layout/permission.xml" value="0.11614583333333334" />
         <entry key="app/src/main/res/layout/popup_window.xml" value="0.17346014492753623" />
-        <entry key="app/src/main/res/layout/preference.xml" value="0.140625" />
-        <entry key="app/src/main/res/layout/preference_category.xml" value="0.140625" />
+        <entry key="app/src/main/res/layout/preference.xml" value="0.5486856745884484" />
+        <entry key="app/src/main/res/layout/preference_category.xml" value="0.43257797983418006" />
         <entry key="app/src/main/res/layout/recycler_view.xml" value="0.16394927536231885" />
         <entry key="app/src/main/res/layout/selected_translation_item.xml" value="0.375" />
         <entry key="app/src/main/res/layout/single_choice_item.xml" value="0.16847826086956522" />

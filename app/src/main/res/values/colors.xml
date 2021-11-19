@@ -18,9 +18,9 @@
     <color name="on_background">@color/dark_grey</color>
     <color name="surface">@color/white</color>
 
-    <color name="high_emphasis">#DE000000</color>
-    <color name="medium_emphasis">#99000000</color>
-    <color name="disabled">#61000000</color>
+    <color name="high_emphasis">#212121</color> <!-- #DE000000 -->
+    <color name="medium_emphasis">#666666</color> <!-- #99000000 -->
+    <color name="disabled">#9E9E9E</color> <!-- #61000000 -->
 
     <color name="active">#DE000000</color>
     <color name="inactive">#99000000</color>

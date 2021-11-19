@@ -23,13 +23,11 @@ class DisplaySettingsActivity : BaseLockScreenActivity() {
     private val preferenceAdapter = PreferenceAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val mode = if (DataStore.Display.isDarkMode(this)) {
-            AppCompatDelegate.MODE_NIGHT_YES
+        if (DataStore.Display.isDarkMode(this)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
-            AppCompatDelegate.MODE_NIGHT_NO
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
-
-        AppCompatDelegate.setDefaultNightMode(mode)
 
         super.onCreate(savedInstanceState)
         _viewBinding = ActivityPreferenceBinding.inflate(layoutInflater)
@@ -59,7 +57,7 @@ class DisplaySettingsActivity : BaseLockScreenActivity() {
                 onCheckedChange = { isChecked ->
                     lifecycleScope.launch {
                         DataStore.Display.putDarkMode(this@DisplaySettingsActivity, isChecked)
-                        delay(Duration.MEDIUM)
+                        delay(Duration.Delay.RECREATE)
                         recreate()
                     }
                 },

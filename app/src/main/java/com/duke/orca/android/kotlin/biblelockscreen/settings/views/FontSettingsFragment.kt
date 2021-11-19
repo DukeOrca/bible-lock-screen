@@ -66,8 +66,11 @@ class FontSettingsFragment : PreferenceChildFragment(),
         val textAlignment = DataStore.Font.getTextAlignment(requireContext())
 
         val list: List<AdapterItem> = arrayListOf(
+            AdapterItem.PreferenceCategory(
+                category = getString(R.string.lock_screen)
+            ),
             AdapterItem.Preference(
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_font_size_48px),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_round_format_size_24),
                 id = Id.FONT_SIZE,
                 summary = "${fontSize}dp",
                 onClick = {
@@ -78,7 +81,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
                 body = getString(R.string.font_size)
             ),
             AdapterItem.SwitchPreference(
-                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_bold_48px),
+                drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_round_format_bold_24),
                 isChecked = bold,
                 onCheckedChange = { isChecked ->
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -97,7 +100,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
                 },
                 summary = getTextAlignmentSummary(textAlignment),
                 body = getString(R.string.text_alignment)
-            )
+            ),
         )
 
         preferenceAdapter.submitList(list)

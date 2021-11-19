@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
@@ -13,6 +14,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
@@ -22,6 +24,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleCha
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
+import com.duke.orca.android.kotlin.biblelockscreen.settings.views.FontSettingsBottomSheetDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.settings.views.TranslationSelectionDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
 import dagger.hilt.android.AndroidEntryPoint
@@ -229,12 +232,25 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             addFragment(FavoritesFragment())
         }
 
-        viewBinding.imageViewTypography.setOnClickListener {
+        viewBinding.imageViewFont.setOnClickListener {
+            FontSettingsBottomSheetDialogFragment().also {
+                it.show(childFragmentManager, it.tag)
+            }
+        }
 
+        val isDarkMode = DataStore.Display.isDarkMode(requireContext())
+
+        if (isDarkMode) {
+            viewBinding.imageViewDarkMode.setImageResource(R.drawable.ic_round_light_mode_24)
+        } else {
+            viewBinding.imageViewDarkMode.setImageResource(R.drawable.ic_round_dark_mode_24)
         }
 
         viewBinding.imageViewDarkMode.setOnClickListener {
-
+            DataStore.Display.putDarkMode(it.context, isDarkMode.not())
+            delayOnLifecycle(Duration.Delay.RECREATE) {
+                activity?.recreate()
+            }
         }
 
         viewBinding.imageViewTranslate.setOnClickListener {

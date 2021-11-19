@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/surface"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_view_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64dp"
+            android:background="@drawable/rounded_top_corners"
+            android:backgroundTint="@color/surface"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/padding_24dp"
+            android:paddingEnd="@dimen/padding_24dp"
+            android:text="@string/font"
+            android:textSize="@dimen/text_size_20dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_view_result"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_112dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_view_title" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_font_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_result">
+
+            <ImageView
+                android:id="@+id/image_view_icon"
+                android:layout_width="@dimen/width_24dp"
+                android:layout_height="@dimen/height_24dp"
+                android:layout_marginStart="@dimen/margin_24dp"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/linear_layout"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_format_size_24"
+                app:tint="@color/icon"
+                tools:ignore="ContentDescription"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/text_view_font_size_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_16dp"
+                android:text="@string/font_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
+
+            <TextView
+                android:id="@+id/text_view_font_size_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/medium_emphasis"
+                android:textSize="@dimen/text_size_12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_title"
+                tools:text="14.0dp"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_24dp"
+            android:layout_marginStart="@dimen/padding_24dp"
+            android:stepSize="1.0"
+            android:valueFrom="12.0"
+            android:valueTo="48.0"
+            app:thumbColor="@color/secondary"
+            app:trackColor="@color/secondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_font_size" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

@@ -85,6 +85,7 @@
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
+        <item name="android:windowAnimationStyle">@style/WindowAnimation.Fading</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>

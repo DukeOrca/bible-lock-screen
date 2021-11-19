@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodel
+package com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

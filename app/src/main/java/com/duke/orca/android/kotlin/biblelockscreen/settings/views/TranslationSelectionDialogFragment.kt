@@ -15,7 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentTranslationSelectionDialogBinding
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.SelectedTranslationAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.TranslationAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodel.TranslationSelectionDialogViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodels.TranslationSelectionDialogViewModel
 
 class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslationSelectionDialogBinding>() {
     override val setWindowAnimation: Boolean
