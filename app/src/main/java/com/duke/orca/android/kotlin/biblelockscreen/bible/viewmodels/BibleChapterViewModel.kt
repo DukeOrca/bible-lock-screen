@@ -5,17 +5,21 @@ import androidx.lifecycle.*
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasource
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.*
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +29,8 @@ class BibleChapterViewModel @Inject constructor(
     private val bibleVerseRepository: BibleVerseRepository,
     application: Application
 ) : AndroidViewModel(application) {
+    private val dataStore = application.dataStore
+
     private val subDatabase = SubDatabase.getInstance(application)
     private val subBookRepository by lazy {
         subDatabase?.let {
@@ -55,6 +61,16 @@ class BibleChapterViewModel @Inject constructor(
 
     private val _bibleChapter = MutableLiveData<BibleChapter>()
     val bibleChapter: LiveData<BibleChapter> = _bibleChapter
+
+    val font = dataStore.data.mapLatest {
+        val size = it[PreferencesKeys.Font.Bible.size] ?: DataStore.Font.DEFAULT_FONT_SIZE
+        val textAlignment = it[PreferencesKeys.Font.Bible.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
+
+        Font(
+            size = size,
+            textAlignment = textAlignment
+        )
+    }
 
     fun getBibleChapter(book: Int, chapter: Int) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -1,6 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -8,10 +9,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordBinding
 
 class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordAdapter.ViewHolder>(DiffCallback()) {
     private val layoutInflater = LayoutInflater.from(context)
+
+    private var font: Font? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(WordBinding.inflate(layoutInflater, parent, false))
@@ -21,6 +25,11 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
         holder.bind(getItem(position))
     }
 
+    fun setFont(font: Font) {
+        this.font = font
+        notifyItemRangeChanged(0, itemCount)
+    }
+
     inner class ViewHolder(private val viewBinding: WordBinding) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
@@ -28,6 +37,14 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                     val verse = item.verse.toString()
 
                     with(viewBinding) {
+                        font?.let {
+                            textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
+                            textViewWord.gravity = it.textAlignment
+
+                            textViewSubWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
+                            textViewSubWord.gravity = it.textAlignment
+                        }
+
                         textViewVerse.text = verse
                         textViewWord.text = item.word
 

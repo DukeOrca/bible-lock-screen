@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -24,9 +25,15 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
+@FlowPreview
 @AndroidEntryPoint
 class BibleChapterFragment : BaseViewStubFragment(),
     BibleVerseAdapter.OnIconClickListener,
@@ -40,7 +47,13 @@ class BibleChapterFragment : BaseViewStubFragment(),
     private val book by lazy { bookChapter?.book ?: 1 }
     private val chapter by lazy { bookChapter?.chapter ?: 1 }
 
-    private val wordAdapter by lazy { WordAdapter(requireContext()) }
+    private val wordAdapter by lazy {
+        WordAdapter(requireContext()).apply {
+            runBlocking {
+                setFont(viewModel.font.first())
+            }
+        }
+    }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     private var bibleChapter: BibleChapter? = null
@@ -77,6 +90,12 @@ class BibleChapterFragment : BaseViewStubFragment(),
                 }
             }
         })
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.font.distinctUntilChanged().collectLatest {
+                wordAdapter.setFont(it)
+            }
+        }
 
         savePosition()
     }

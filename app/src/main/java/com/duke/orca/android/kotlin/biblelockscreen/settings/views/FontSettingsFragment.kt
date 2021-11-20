@@ -61,7 +61,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
     }
 
     private fun initData() {
-        val fontSize = DataStore.Font.getFontSize(requireContext())
+        val fontSize = DataStore.Font.getSize(requireContext())
         val bold = DataStore.Font.getBold(requireContext())
         val textAlignment = DataStore.Font.getTextAlignment(requireContext())
 

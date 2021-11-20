@@ -89,6 +89,8 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowShowWallpaper">false</item>
+
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
     </style>
 
     <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">

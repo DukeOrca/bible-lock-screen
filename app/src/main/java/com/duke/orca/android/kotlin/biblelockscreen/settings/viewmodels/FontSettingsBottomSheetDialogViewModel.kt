@@ -1,14 +1,23 @@
 package com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodels
 
-import androidx.lifecycle.ViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
-import javax.inject.Inject
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-@HiltViewModel
-class FontSettingsBottomSheetDialogViewModel @Inject constructor(
-    private val verseRepository: BibleVerseRepository
-) : ViewModel() {
-    suspend fun verse(id: Int) = verseRepository.get(id).first()
+class FontSettingsBottomSheetDialogViewModel(application: Application)
+    : AndroidViewModel(application) {
+    fun putSize(size: Float) {
+        viewModelScope.launch(Dispatchers.IO) {
+            DataStore.Font.Bible.putSize(getApplication(), size)
+        }
+    }
+
+    fun putTextAlignment(textAlignment: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            DataStore.Font.Bible.putTextAlignment(getApplication(), textAlignment)
+        }
+    }
 }

@@ -42,17 +42,19 @@ class BibleChapterAdapter(
         fun bind(item: BibleChapter) {
             val text = String.format(format, bibleBook.name(item.book), item.chapter)
 
-            viewBinding.textView.text = text
+            with(viewBinding) {
+                textView.text = text
 
-            with(viewBinding.imageViewBookmark) {
-                setOnClickListener {
-                    this.setTint(R.color.unbookmarked)
-                    onItemClickListener?.onIconClick(item)
+                with(imageViewBookmark) {
+                    setOnClickListener {
+                        setTint(R.color.unbookmarked)
+                        onItemClickListener?.onIconClick(item)
+                    }
                 }
-            }
 
-            viewBinding.root.setOnClickListener {
-                onItemClickListener?.onItemClick(item)
+                root.setOnClickListener {
+                    onItemClickListener?.onItemClick(item)
+                }
             }
         }
     }

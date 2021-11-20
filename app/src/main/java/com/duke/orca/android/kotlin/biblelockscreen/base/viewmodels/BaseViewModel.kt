@@ -15,7 +15,7 @@ open class BaseViewModel @Inject constructor(application: Application) : Android
     val data = application.dataStore.data.asLiveData(Dispatchers.IO)
     val attributeSet = data.map {
         val bold = it[PreferencesKeys.Font.bold] ?: false
-        val fontSize = it[PreferencesKeys.Font.fontSize] ?: DataStore.Font.DEFAULT_FONT_SIZE
+        val fontSize = it[PreferencesKeys.Font.size] ?: DataStore.Font.DEFAULT_FONT_SIZE
         val textAlignment = it[PreferencesKeys.Font.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
 
         AttributeSet(

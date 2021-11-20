@@ -21,9 +21,15 @@ object PreferencesKeys {
 
     object Font {
         private const val OBJECT_NAME = "Font"
-        val fontSize = floatPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fontSize")
+        val size = floatPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.size")
         val bold = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.bold")
         val textAlignment = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.textAlignment")
+
+        object Bible {
+            private const val OBJECT_NAME = "Bible"
+            val size = floatPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.size")
+            val textAlignment = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.textAlignment")
+        }
     }
 
     object Display {

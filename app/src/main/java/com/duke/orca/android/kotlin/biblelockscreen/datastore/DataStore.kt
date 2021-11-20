@@ -125,12 +125,12 @@ object DataStore {
             const val RIGHT = Gravity.RIGHT
         }
 
-        fun getFontSize(context: Context) = getFloat(context, PreferencesKeys.Font.fontSize, DEFAULT_FONT_SIZE)
+        fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.size, DEFAULT_FONT_SIZE)
         fun getBold(context: Context) = getBoolean(context, PreferencesKeys.Font.bold, false)
         fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.textAlignment, TextAlignment.LEFT)
 
         suspend fun putFontSize(context: Context, value: Float) {
-            putFloat(context, PreferencesKeys.Font.fontSize, value)
+            putFloat(context, PreferencesKeys.Font.size, value)
         }
 
         suspend fun putBold(context: Context, value: Boolean) {
@@ -139,6 +139,19 @@ object DataStore {
 
         suspend fun putTextAlignment(context: Context, value: Int) {
             putInt(context, PreferencesKeys.Font.textAlignment, value)
+        }
+
+        object Bible {
+            fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.Bible.size, DEFAULT_FONT_SIZE)
+            fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.Bible.textAlignment, TextAlignment.LEFT)
+
+            suspend fun putSize(context: Context, value: Float) {
+                putFloat(context, PreferencesKeys.Font.Bible.size, value)
+            }
+
+            suspend fun putTextAlignment(context: Context, value: Int) {
+                putInt(context, PreferencesKeys.Font.Bible.textAlignment, value)
+            }
         }
     }
 

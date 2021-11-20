@@ -1,19 +1,17 @@
 package com.duke.orca.android.kotlin.biblelockscreen.settings.views
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFontSettingsBottomSheetDialogBinding
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.viewmodels.FontSettingsBottomSheetDialogViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import com.google.android.material.slider.Slider
 
-@AndroidEntryPoint
 class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var _viewBinding: FragmentFontSettingsBottomSheetDialogBinding? = null
     val viewBinding: FragmentFontSettingsBottomSheetDialogBinding
@@ -28,6 +26,7 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
     ): View {
         _viewBinding = FragmentFontSettingsBottomSheetDialogBinding.inflate(inflater, container, false)
 
+        initData()
         bind()
 
         return viewBinding.root
@@ -38,18 +37,54 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
         super.onDestroyView()
     }
 
-    private fun bind() {
-        lifecycleScope.launch {
-            viewBinding.textViewResult.text = viewModel.verse(0)?.word
-        }
+    private fun initData() {
+        val font = DataStore.Font.Bible.getSize(requireContext())
+        val textAlignment = DataStore.Font.Bible.getTextAlignment(requireContext())
 
-        viewBinding.slider.addOnChangeListener { slider, value, fromUser ->
+        with(viewBinding) {
+            val text = "${font}dp"
+
+            textViewFontSizeSummary.text = text
+            slider.value = font
+
+            val id = when(textAlignment) {
+                DataStore.Font.TextAlignment.LEFT -> R.id.material_button_align_left
+                DataStore.Font.TextAlignment.CENTER -> R.id.material_button_align_center
+                DataStore.Font.TextAlignment.RIGHT -> R.id.material_button_align_right
+                else -> R.id.material_button_align_left
+            }
+
+            materialButtonToggleGroup.check(id)
+        }
+    }
+
+    private fun bind() {
+        viewBinding.slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                val text = "${value}.dp"
+                val text = "${value}dp"
 
                 viewBinding.textViewFontSizeSummary.text = text
-                viewBinding.textViewResult.setTextSize(TypedValue.COMPLEX_UNIT_DIP, value)
             }
+        }
+
+        viewBinding.slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                viewModel.putSize(slider.value)
+            }
+        })
+
+        viewBinding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            val textAlignment = when(checkedId) {
+                R.id.material_button_align_left -> DataStore.Font.TextAlignment.LEFT
+                R.id.material_button_align_center -> DataStore.Font.TextAlignment.CENTER
+                R.id.material_button_align_right -> DataStore.Font.TextAlignment.RIGHT
+                else -> DataStore.Font.TextAlignment.LEFT
+            }
+
+            viewModel.putTextAlignment(textAlignment)
         }
     }
 }

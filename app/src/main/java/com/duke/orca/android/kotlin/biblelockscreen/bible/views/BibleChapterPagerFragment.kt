@@ -1,5 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
@@ -41,6 +43,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 {
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
+    private val activityViewModel by activityViewModels<FragmentContainerViewModel>()
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -126,6 +129,8 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         if (isTranslationChanged or isSubTranslationChanged) {
             viewBinding.viewPager2.adapter = null
             chapterPagerAdapter = null
+
+            activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {
