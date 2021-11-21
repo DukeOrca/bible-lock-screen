@@ -86,7 +86,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 if (nativeAd.notNull and nativeAdBinding.notNull) {
                     viewBinding.nativeAd.root.apply {
                         if (this.isVisible) {
-                            fade(1.0F, duration = Duration.MEDIUM)
+                            fade(1.0f, duration = Duration.MEDIUM)
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     private val onDrawListener = ViewTreeObserver.OnDrawListener {
         try {
             with(viewBinding.viewPreviousFake) {
-                if (abs(translationX) == 0.0F) {
+                if (abs(translationX) == 0.0f) {
                     setPageTransformer(PageMargin.small, false)
                     hide(true)
                     viewBinding.viewNextFake.hide(true)
@@ -200,6 +200,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         nativeAd?.destroy()
         viewBinding.viewPreviousFake.viewTreeObserver.removeOnDrawListener(onDrawListener)
         viewBinding.viewPager2.unregisterOnPageChangeCallback(onPageChangeCallback)
+        viewBinding.viewPager2.adapter = null
         super.onDestroyView()
     }
 
@@ -212,7 +213,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         when(item.itemId) {
             R.id.item_search -> launch(BibleVerseSearchFragment::class.java.simpleName)
             R.id.item_favorites -> launch(FavoritesFragment::class.java.simpleName)
-            R.id.item_bible -> launch(BibleChapterPagerFragment::class.java.simpleName)
+            R.id.item_bible -> launch(ChapterPagerFragment::class.java.simpleName)
             R.id.item_settings -> launch(SettingsFragment::class.java.simpleName)
             R.id.item_lock_screen -> launch(LockScreenSettingsFragment::class.java.simpleName)
             R.id.item_font -> launch(FontSettingsFragment::class.java.simpleName)
@@ -230,7 +231,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
         viewBinding.imageViewBible.setOnClickListener {
-            launch(BibleChapterPagerFragment::class.java.simpleName)
+            launch(ChapterPagerFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewSearch.setOnClickListener {
@@ -440,7 +441,7 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     private fun showNativeAdView() {
         try {
             nativeAdBinding?.let {
-                viewBinding.nativeAd.root.alpha = 1.0F
+                viewBinding.nativeAd.root.alpha = 1.0f
                 TransitionManager.beginDelayedTransition(
                     viewBinding.constraintLayoutUnlock,
                     AutoTransition()
@@ -502,13 +503,13 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     override fun onDialogFragmentViewCreated() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0F, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(180.0f, Duration.ROTATION)
         }
     }
 
     override fun onDialogFragmentViewDestroyed() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(0.0F, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(0.0f, Duration.ROTATION)
         }
     }
 

@@ -46,7 +46,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
             DataStore.Font.putFontSize(requireContext(), item)
         }
 
-        preferenceAdapter.updateSummary(Id.FONT_SIZE, "${item}dp")
+        preferenceAdapter.updateSummary(Id.FONT_SIZE, String.format("%.0f", item))
         dialogFragment.dismiss()
     }
 
@@ -72,7 +72,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
             AdapterItem.Preference(
                 drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_round_format_size_24),
                 id = Id.FONT_SIZE,
-                summary = "${fontSize}dp",
+                summary = String.format("%.0f", fontSize),
                 onClick = {
                     FontSizeChoiceDialogFragment().also {
                         it.show(childFragmentManager, it.tag)

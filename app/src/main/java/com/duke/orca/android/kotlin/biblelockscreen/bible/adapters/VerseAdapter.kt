@@ -17,7 +17,10 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.like.LikeButton
 import com.like.OnLikeListener
 
-class BibleVerseAdapter(private val bibleBook: BibleBook) : ListAdapter<BibleVerseAdapter.AdapterItem, BibleVerseAdapter.ViewHolder>(DiffCallback()) {
+class VerseAdapter(
+    private val bibleBook: BibleBook,
+    private val onItemClick: ((item: BibleVerse) -> Unit)? = null
+) : ListAdapter<VerseAdapter.AdapterItem, VerseAdapter.ViewHolder>(DiffCallback()) {
     private var inflater: LayoutInflater? = null
     private var onIconClickListener: OnIconClickListener? = null
     private var recyclerView: RecyclerView? = null
@@ -91,6 +94,12 @@ class BibleVerseAdapter(private val bibleBook: BibleBook) : ListAdapter<BibleVer
 
                         viewBinding.imageViewMoreVert.setOnClickListener {
                             onIconClickListener?.onMoreVertClick(bibleVerse)
+                        }
+
+                        onItemClick?.let { onItemClick ->
+                            viewBinding.root.setOnClickListener {
+                                onItemClick(bibleVerse)
+                            }
                         }
                     }
                 }

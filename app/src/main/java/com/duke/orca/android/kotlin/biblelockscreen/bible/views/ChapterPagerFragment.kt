@@ -14,12 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterPagerBinding
@@ -35,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
+class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
     BookSelectionDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     BookmarksDialogFragment.OnBookmarkClickListener,
@@ -68,8 +70,8 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observe()
         bind()
+        observe()
     }
 
     override fun onBookmarkClick(id: Int) {
@@ -91,13 +93,13 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 
     override fun onDialogFragmentViewCreated() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0F, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(180.0f, Duration.ROTATION)
         }
     }
 
     override fun onDialogFragmentViewDestroyed() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(0.0F, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(0.0f, Duration.ROTATION)
         }
     }
 
@@ -206,18 +208,22 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
         }
 
         lifecycleScope.launch {
-            val bookChapters = viewModel.getAll()
+            val chapterVerse = arguments?.getParcelable<ChapterVerse>(Key.CHAPTER_VERSE)
+            val chapters = viewModel.getAll()
+
+            val currentItem = chapterVerse?.chapter
+                ?: DataStore.BibleChapter.getCurrentChapter(requireContext())
 
             chapterPagerAdapter = BibleChapterPagerAdapter(
-                this@BibleChapterPagerFragment,
-                bookChapters
+                this@ChapterPagerFragment,
+                chapters
             )
 
             viewBinding.viewPager2.apply {
                 adapter = chapterPagerAdapter
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(
-                    DataStore.BibleChapter.getCurrentChapter(requireContext()),
+                    currentItem,
                     false
                 )
             }
@@ -286,7 +292,7 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
             val bookChapters = viewModel.getAll()
 
             chapterPagerAdapter = BibleChapterPagerAdapter(
-                this@BibleChapterPagerFragment,
+                this@ChapterPagerFragment,
                 bookChapters
             )
 
@@ -307,6 +313,22 @@ class BibleChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBin
 
             withContext(Dispatchers.Main) {
                 setCurrentItem(item, false)
+            }
+        }
+    }
+
+    companion object {
+        private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
+
+        private object Key {
+            const val CHAPTER_VERSE = "$PACKAGE_NAME.CHAPTER_VERSE"
+        }
+
+        fun newInstance(chapterVerse: ChapterVerse): ChapterPagerFragment {
+            return ChapterPagerFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(Key.CHAPTER_VERSE, chapterVerse)
+                }
             }
         }
     }

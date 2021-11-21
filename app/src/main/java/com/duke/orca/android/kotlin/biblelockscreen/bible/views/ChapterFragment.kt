@@ -15,7 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Durati
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
@@ -35,8 +35,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 @FlowPreview
 @AndroidEntryPoint
-class BibleChapterFragment : BaseViewStubFragment(),
-    BibleVerseAdapter.OnIconClickListener,
+class ChapterFragment : BaseViewStubFragment(),
+    VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener
 {
     override val layoutResource: Int
@@ -183,8 +183,8 @@ class BibleChapterFragment : BaseViewStubFragment(),
             const val BOOK_CHAPTER = "$PACKAGE_NAME.BOOK_CHAPTER"
         }
 
-        fun newInstance(bookChapter: BookChapter): BibleChapterFragment {
-            return BibleChapterFragment().apply {
+        fun newInstance(bookChapter: BookChapter): ChapterFragment {
+            return ChapterFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(Key.BOOK_CHAPTER, bookChapter)
                 }

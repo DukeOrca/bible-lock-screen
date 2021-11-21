@@ -13,9 +13,10 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Durati
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
-    BibleVerseAdapter.OnIconClickListener,
+    VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
@@ -35,7 +36,17 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     }
 
     private val viewModel by viewModels<FavoritesViewModel>()
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(viewModel.bibleBook) }
+    private val verseAdapter by lazy {
+        VerseAdapter(viewModel.bibleBook) {
+            val chapterVerse = ChapterVerse(it.chapter.dec(), it.verse)
+
+            addFragment(
+                R.id.fragment_container_view,
+                parentFragmentManager,
+                ChapterPagerFragment.newInstance(chapterVerse)
+            )
+        }
+    }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     override fun onCreateView(
@@ -57,7 +68,7 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
                 viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
             }
 
-            bibleVerseAdapter.submitList(it) {
+            verseAdapter.submitList(it) {
                 if (viewBinding.recyclerView.isInvisible) {
                     delayOnLifecycle(Duration.Delay.DISMISS) {
                         viewBinding.recyclerView.fadeIn(Duration.FADE_IN)
@@ -68,10 +79,10 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     }
 
     private fun bind() {
-        bibleVerseAdapter.setOnIconClickListener(this)
+        verseAdapter.setOnIconClickListener(this)
 
         viewBinding.recyclerView.apply {
-            adapter = bibleVerseAdapter
+            adapter = verseAdapter
             layoutManager = LinearLayoutManagerWrapper(context)
             setHasFixedSize(true)
         }

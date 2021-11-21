@@ -126,7 +126,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
 fun View.fadeIn(
     duration: Long,
-    alphaFrom: Float = 0.0F,
+    alphaFrom: Float = 0.0f,
     onAnimationEnd: (() -> Unit)? = null
 ): ViewPropertyAnimator {
     this.apply {
@@ -134,7 +134,7 @@ fun View.fadeIn(
         visibility = View.VISIBLE
 
         return@fadeIn animate()
-            .alpha(1.0F)
+            .alpha(1.0f)
             .setDuration(duration)
             .setInterpolator(DecelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
@@ -147,10 +147,10 @@ fun View.fadeIn(
 
 fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null): ViewPropertyAnimator {
     this.apply {
-        alpha = 1.0F
+        alpha = 1.0f
 
         return@fadeOut animate()
-            .alpha(0.0F)
+            .alpha(0.0f)
             .setDuration(duration)
             .setInterpolator(AccelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
@@ -200,9 +200,9 @@ fun View.rotate(fromDegrees: Float, toDegrees: Float, duration: Long) {
         fromDegrees,
         toDegrees,
         Animation.RELATIVE_TO_SELF,
-        0.5F,
+        0.5f,
         Animation.RELATIVE_TO_SELF,
-        0.5F
+        0.5f
     )
 
     rotateAnimation.duration = duration
@@ -235,7 +235,7 @@ fun View.fade(
 
 fun View.scale(
     scale: Float,
-    alpha: Float = 1.0F,
+    alpha: Float = 1.0f,
     duration: Long = 200L,
     onAnimationEnd: (() -> Unit)? = null
 ): ViewPropertyAnimator {
@@ -379,7 +379,7 @@ fun TextView.setTextWithSearchWord(
 
 fun View.translateX(
     value: Float,
-    alpha: Float = 1.0F,
+    alpha: Float = 1.0f,
     duration: Long = 150L,
     onAnimationEnd: (() -> Unit)? = null
 ) {

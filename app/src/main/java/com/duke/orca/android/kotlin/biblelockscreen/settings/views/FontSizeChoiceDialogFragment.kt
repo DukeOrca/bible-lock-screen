@@ -23,10 +23,10 @@ class FontSizeChoiceDialogFragment : SingleChoiceDialogFragment<Float>() {
         }
     }
 
-    override val items: Array<Float> = arrayOf(12F, 14F, 16F, 20F, 24F, 32F)
+    override val items: Array<Float> = arrayOf(12f, 14f, 16f, 20f, 24f, 32f, 40f)
 
     override fun bind(viewBinding: SingleChoiceItemBinding, item: Float) {
-        val text = "${item}dp"
+        val text = String.format("%.0f", item)
         viewBinding.root.text = text
         viewBinding.root.setTextSize(TypedValue.COMPLEX_UNIT_DIP, item)
         viewBinding.root.setOnClickListener {

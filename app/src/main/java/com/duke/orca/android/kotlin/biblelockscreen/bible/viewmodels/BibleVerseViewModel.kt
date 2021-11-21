@@ -46,9 +46,11 @@ class BibleVerseViewModel @Inject constructor(
         return bibleVerse to attributeSet
     }
 
-    suspend fun get(id: Int) {
-        bibleVerseRepository.get(id).flowOn(Dispatchers.IO).collect {
-            bibleVerse.postValue(it)
+    fun get(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            bibleVerseRepository.get(id).flowOn(Dispatchers.IO).collect {
+                bibleVerse.postValue(it)
+            }
         }
     }
 

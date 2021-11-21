@@ -12,7 +12,7 @@ internal object Application {
 }
 
 internal object PageMargin {
-    val small = 8.0F.toPx
-    val medium = 16.0F.toPx
-    val large = 24.0F.toPx
+    val small = 8.0f.toPx
+    val medium = 16.0f.toPx
+    val large = 24.0f.toPx
 }

@@ -23,10 +23,10 @@ class UnlockController(
     }
 
     private val isOutOfRanged = AtomicBoolean(false)
-    private val range = 600.0F
+    private val range = 600.0f
 
-    private var x = 0.0F
-    private var y = 0.0F
+    private var x = 0.0f
+    private var y = 0.0f
 
     fun init() {
         viewBinding.constraintLayoutUnlock.setOnTouchListener { _, event ->
@@ -40,22 +40,22 @@ class UnlockController(
                     viewBinding.frameLayoutUnlock.showRipple()
 
                     val distance = sqrt((x - event.x).pow(2) + (y - event.y).pow(2))
-                    var scale = abs(range - distance * 0.4F) / range
+                    var scale = abs(range - distance * 0.4f) / range
 
                     when {
-                        scale >= 1.0F -> scale = 1.0F
-                        scale < 0.8F -> scale = 0.8F
+                        scale >= 1.0f -> scale = 1.0f
+                        scale < 0.8f -> scale = 0.8f
                     }
 
-                    val alpha = (scale - 0.8F) * 5.0F
+                    val alpha = (scale - 0.8f) * 5.0f
 
                     setAlpha(alpha)
                     setScale(scale)
 
-                    viewBinding.viewPreviousFake.translationX = ((1.0F - alpha) * -8.0F).toPx
-                    viewBinding.viewNextFake.translationX = ((1.0F - alpha) * 8.0F).toPx
+                    viewBinding.viewPreviousFake.translationX = ((1.0f - alpha) * -8.0f).toPx
+                    viewBinding.viewNextFake.translationX = ((1.0f - alpha) * 8.0f).toPx
 
-                    isOutOfRanged.set(distance * 1.25F > range * 0.75F)
+                    isOutOfRanged.set(distance * 1.25f > range * 0.75f)
                 }
                 MotionEvent.ACTION_UP -> {
                     if (isOutOfRanged.get()) {
@@ -87,10 +87,10 @@ class UnlockController(
 
     fun restore() {
         viewBinding.frameLayoutUnlock.hideRipple()
-        viewBinding.imageViewUnlock.scale(1.0F, duration = Duration.MEDIUM)
-        viewBinding.linearLayout.scale(1.0F, duration =  Duration.MEDIUM)
-        viewBinding.viewPreviousFake.translateX(0.0F, duration = Duration.MEDIUM)
-        viewBinding.viewNextFake.translateX(0.0F, duration = Duration.MEDIUM) {
+        viewBinding.imageViewUnlock.scale(1.0f, duration = Duration.MEDIUM)
+        viewBinding.linearLayout.scale(1.0f, duration =  Duration.MEDIUM)
+        viewBinding.viewPreviousFake.translateX(0.0f, duration = Duration.MEDIUM)
+        viewBinding.viewNextFake.translateX(0.0f, duration = Duration.MEDIUM) {
             enableUserInput()
         }
 

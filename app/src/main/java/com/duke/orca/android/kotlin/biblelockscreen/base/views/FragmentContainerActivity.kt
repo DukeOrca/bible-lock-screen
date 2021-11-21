@@ -9,7 +9,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_SIMPLE_NAM
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.notNull
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleChapterPagerFragment
+import com.duke.orca.android.kotlin.biblelockscreen.bible.views.ChapterPagerFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleVerseSearchFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.FavoritesFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -66,7 +66,7 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
 
     private fun replaceFragment(simpleName: String) {
         val fragment = when (simpleName) {
-            BibleChapterPagerFragment::class.java.simpleName -> BibleChapterPagerFragment()
+            ChapterPagerFragment::class.java.simpleName -> ChapterPagerFragment()
             BibleVerseSearchFragment::class.java.simpleName -> BibleVerseSearchFragment()
             FavoritesFragment::class.java.simpleName -> FavoritesFragment()
             FontSettingsFragment::class.java.simpleName -> FontSettingsFragment()
@@ -77,6 +77,23 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container_view, fragment, fragment.tag)
+            .commit()
+    }
+
+    private fun addFragment(simpleName: String) {
+        val fragment = when (simpleName) {
+            ChapterPagerFragment::class.java.simpleName -> ChapterPagerFragment()
+            BibleVerseSearchFragment::class.java.simpleName -> BibleVerseSearchFragment()
+            FavoritesFragment::class.java.simpleName -> FavoritesFragment()
+            FontSettingsFragment::class.java.simpleName -> FontSettingsFragment()
+            LockScreenSettingsFragment::class.java.simpleName -> LockScreenSettingsFragment()
+            SettingsFragment::class.java.simpleName -> SettingsFragment()
+            else -> throw IllegalArgumentException()
+        }
+
+        supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .add(R.id.fragment_container_view, fragment, fragment.tag)
             .commit()
     }
 

@@ -89,10 +89,10 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
                                 if (to > constrainedHeight)
                                     to = constrainedHeight
 
-                                viewBinding.imageViewKeyboardArrowUp.rotate(0F, duration)
+                                viewBinding.imageViewKeyboardArrowUp.rotate(0.0f, duration)
                                 viewBinding.constraintLayoutEntries.expand(duration, to.inc())
                             } else {
-                                viewBinding.imageViewKeyboardArrowUp.rotate(180F, duration)
+                                viewBinding.imageViewKeyboardArrowUp.rotate(180.0f, duration)
                                 viewBinding.constraintLayoutEntries.collapse(duration, 0)
                             }
 

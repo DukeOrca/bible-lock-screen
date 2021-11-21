@@ -47,9 +47,7 @@ class BibleVerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         super.onCreateView(inflater, container, savedInstanceState)
         observe(viewBinding)
 
-        lifecycleScope.launch {
-            viewModel.get(arguments?.getInt(Key.ID) ?: 0)
-        }
+        viewModel.get(arguments?.getInt(Key.ID) ?: 0)
 
         return viewBinding.root
     }

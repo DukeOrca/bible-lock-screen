@@ -76,7 +76,7 @@ class DropdownMenu : FrameLayout {
     private val popupWindow by lazy {
         PopupWindow().apply {
             setOnDismissListener {
-                viewBinding.imageView.rotate(180.0F, 0.0F, Duration.ROTATION)
+                viewBinding.imageView.rotate(180.0f, 0.0f, Duration.ROTATION)
             }
         }
     }
@@ -150,7 +150,7 @@ class DropdownMenu : FrameLayout {
 
             popupWindow.height = height + marginBottom + marginTop
 
-            viewBinding.imageView.rotate(0.0F, 180.0F, Duration.ROTATION)
+            viewBinding.imageView.rotate(0.0f, 180.0f, Duration.ROTATION)
             popupWindow.showAsDropDown(this)
         }
     }

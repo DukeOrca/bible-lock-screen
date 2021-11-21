@@ -30,7 +30,7 @@ class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean)
                         }
 
                         override fun onAnimationEnd(animation: Animator?) {
-                            if (position >= 1.0F) {
+                            if (position >= 1.0f) {
                                 pageAnimatorListener?.onPageAnimationEnd()
                                 pageAnimatorListener = null
                                 isAnimationScheduled.set(false)

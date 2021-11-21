@@ -1,7 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
@@ -20,7 +20,7 @@ class FavoritesViewModel @Inject constructor(
     private val favorites = MutableLiveData<List<BibleVerse>>()
     private val nativeAds = MutableLiveData<List<NativeAd>>()
 
-    val adapterItems = MediatorLiveData<List<BibleVerseAdapter.AdapterItem>>().apply {
+    val adapterItems = MediatorLiveData<List<VerseAdapter.AdapterItem>>().apply {
         addSource(favorites) {
             value = combine(favorites, nativeAds)
         }
@@ -49,24 +49,24 @@ class FavoritesViewModel @Inject constructor(
     private fun combine(
         source1: LiveData<List<BibleVerse>>,
         source2: LiveData<List<NativeAd>>
-    ): List<BibleVerseAdapter.AdapterItem> {
+    ): List<VerseAdapter.AdapterItem> {
         val bibleVerses = source1.value ?: emptyList()
         val nativeAds = source2.value ?: emptyList()
 
-        val adapterItems = arrayListOf<BibleVerseAdapter.AdapterItem>()
+        val adapterItems = arrayListOf<VerseAdapter.AdapterItem>()
 
-        adapterItems.addAll(bibleVerses.map { BibleVerseAdapter.AdapterItem.AdapterBibleVerse(it) })
+        adapterItems.addAll(bibleVerses.map { VerseAdapter.AdapterItem.AdapterBibleVerse(it) })
 
         for (i in 0 until nativeAds.count()) {
             if (i == 0) {
-                adapterItems.add(0, BibleVerseAdapter.AdapterItem.AdapterNativeAd(-1, nativeAds[0]))
+                adapterItems.add(0, VerseAdapter.AdapterItem.AdapterNativeAd(-1, nativeAds[0]))
             } else {
                 val index = i * AD_INTERVAL
 
                 if (index <= adapterItems.count()) {
                     adapterItems.add(
                         index,
-                        BibleVerseAdapter.AdapterItem.AdapterNativeAd(-index, nativeAds[i])
+                        VerseAdapter.AdapterItem.AdapterNativeAd(-index, nativeAds[i])
                     )
                 } else {
                     break

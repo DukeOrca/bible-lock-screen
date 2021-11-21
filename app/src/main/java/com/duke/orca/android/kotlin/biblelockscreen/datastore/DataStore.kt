@@ -117,7 +117,7 @@ object DataStore {
     }
 
     object Font {
-        const val DEFAULT_FONT_SIZE = 16.0F
+        const val DEFAULT_FONT_SIZE = 16.0f
 
         object TextAlignment {
             const val CENTER = Gravity.CENTER

@@ -20,7 +20,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleVerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
@@ -32,7 +32,7 @@ import java.util.*
 
 @AndroidEntryPoint
 class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBinding>(),
-    BibleVerseAdapter.OnIconClickListener,
+    VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     override val toolbar: Toolbar? = null
 
@@ -44,7 +44,7 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
     }
 
     private val viewModel by viewModels<BibleVerseSearchViewModel>()
-    private val bibleVerseAdapter by lazy { BibleVerseAdapter(viewModel.bibleBook) }
+    private val bibleVerseAdapter by lazy { VerseAdapter(viewModel.bibleBook) }
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -196,5 +196,5 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
         }
     }
 
-    private fun BibleVerse.toAdapterItem() = BibleVerseAdapter.AdapterItem.AdapterBibleVerse(this)
+    private fun BibleVerse.toAdapterItem() = VerseAdapter.AdapterItem.AdapterBibleVerse(this)
 }

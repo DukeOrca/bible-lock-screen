@@ -42,10 +42,17 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
         val textAlignment = DataStore.Font.Bible.getTextAlignment(requireContext())
 
         with(viewBinding) {
-            val text = "${font}dp"
+            val text = String.format("%.0f", font)
+            val resId = when(textAlignment) {
+                DataStore.Font.TextAlignment.LEFT -> R.drawable.ic_round_format_align_left_24
+                DataStore.Font.TextAlignment.CENTER -> R.drawable.ic_round_format_align_center_24
+                DataStore.Font.TextAlignment.RIGHT -> R.drawable.ic_round_format_align_right_24
+                else -> R.drawable.ic_round_format_align_left_24
+            }
 
             textViewFontSizeSummary.text = text
             slider.value = font
+            imageViewTextAlignment.setImageResource(resId)
 
             val id = when(textAlignment) {
                 DataStore.Font.TextAlignment.LEFT -> R.id.material_button_align_left
@@ -61,7 +68,7 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private fun bind() {
         viewBinding.slider.addOnChangeListener { _, value, fromUser ->
             if (fromUser) {
-                val text = "${value}dp"
+                val text = String.format("%.0f", value)
 
                 viewBinding.textViewFontSizeSummary.text = text
             }
@@ -77,11 +84,23 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
         })
 
         viewBinding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            val imageView = viewBinding.imageViewTextAlignment
             val textAlignment = when(checkedId) {
-                R.id.material_button_align_left -> DataStore.Font.TextAlignment.LEFT
-                R.id.material_button_align_center -> DataStore.Font.TextAlignment.CENTER
-                R.id.material_button_align_right -> DataStore.Font.TextAlignment.RIGHT
-                else -> DataStore.Font.TextAlignment.LEFT
+                R.id.material_button_align_left -> {
+                    imageView.setImageResource(R.drawable.ic_round_format_align_left_24)
+                    DataStore.Font.TextAlignment.LEFT
+                }
+                R.id.material_button_align_center -> {
+                    imageView.setImageResource(R.drawable.ic_round_format_align_center_24)
+                    DataStore.Font.TextAlignment.CENTER
+                }
+                R.id.material_button_align_right -> {
+                    imageView.setImageResource(R.drawable.ic_round_format_align_right_24)
+                    DataStore.Font.TextAlignment.RIGHT
+                }
+                else -> {
+                    DataStore.Font.TextAlignment.LEFT
+                }
             }
 
             viewModel.putTextAlignment(textAlignment)

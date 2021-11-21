@@ -31,16 +31,16 @@ class BlindScreenPresenter {
     var isBlindScreenVisible = false
 
     private object Unlock {
-        var x = 0F
-        var y = 0F
-        const val endRange = 600F
+        var x = 0.0f
+        var y = 0.0f
+        const val endRange = 600.0f
         var outOfEndRange = false
     }
 
     private fun restoreVisibility(duration: Long) {
         viewBinding.frameLayoutUnlock.hideRipple()
-        viewBinding.linearLayout.scale(1.0F, duration = duration)
-        viewBinding.imageViewUnlock.scale(1.0F, duration = duration)
+        viewBinding.linearLayout.scale(1.0f, duration = duration)
+        viewBinding.imageViewUnlock.scale(1.0f, duration = duration)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -64,14 +64,14 @@ class BlindScreenPresenter {
                     viewBinding.frameLayoutUnlock.showRipple()
 
                     val distance = sqrt((Unlock.x - event.x).pow(2) + (Unlock.y - event.y).pow(2))
-                    var scale = abs(Unlock.endRange - distance * 0.4F) / Unlock.endRange
+                    var scale = abs(Unlock.endRange - distance * 0.4f) / Unlock.endRange
 
                     when {
-                        scale >= 1.0F -> scale = 1.0F
-                        scale < 0.8F -> scale = 0.8F
+                        scale >= 1.0f -> scale = 1.0f
+                        scale < 0.8f -> scale = 0.8f
                     }
 
-                    val alpha = (scale - 0.8F) * 5.0F
+                    val alpha = (scale - 0.8f) * 5.0f
 
                     viewBinding.linearLayout.alpha = alpha
                     viewBinding.linearLayout.scaleX = scale
@@ -80,7 +80,7 @@ class BlindScreenPresenter {
                     viewBinding.imageViewUnlock.scaleX = scale
                     viewBinding.imageViewUnlock.scaleY = scale
 
-                    Unlock.outOfEndRange = distance * 1.25F > Unlock.endRange * 0.75F
+                    Unlock.outOfEndRange = distance * 1.25f > Unlock.endRange * 0.75f
                 }
                 MotionEvent.ACTION_UP -> {
                     if (Unlock.outOfEndRange)
