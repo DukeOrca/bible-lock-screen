@@ -200,4 +200,16 @@
         <item name="strokeColor">@color/color_stroke</item>
     </style>
 
+
+    <style name="Icon">
+        <item name="tint">@color/icon</item>
+    </style>
+
+    <style name="Icon.OptionBar" parent="Icon">
+        <item name="android:width">@dimen/width_48dp</item>
+        <item name="android:height">@dimen/height_48dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/padding_12dp</item>
+    </style>
+
 </resources>

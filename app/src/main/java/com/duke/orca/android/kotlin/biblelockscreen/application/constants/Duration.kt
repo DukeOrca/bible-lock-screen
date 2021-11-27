@@ -14,6 +14,8 @@ internal object Duration {
     const val MEDIUM = 400L
     const val LONG = 500L
 
+    const val COLLAPSE = 300L
+    const val EXPAND = 300L
     const val FADE_IN = LONG
     const val FADE_OUT = MEDIUM
     const val ROTATION = 300L

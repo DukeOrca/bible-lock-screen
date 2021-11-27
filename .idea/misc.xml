@@ -70,6 +70,8 @@
         <entry key="app/src/main/res/layout/fragment_bible_verses.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_book_selection_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_chapter.xml" value="0.13645833333333332" />
+        <entry key="app/src/main/res/layout/fragment_chapter_pager.xml" value="0.13489583333333333" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/fragment_font_settings_bottom_sheet_dialog.xml" value="0.42722117202268434" />
         <entry key="app/src/main/res/layout/fragment_permission_rationale_dialog.xml" value="0.1308876811594203" />
@@ -92,8 +94,11 @@
         <entry key="app/src/main/res/layout/text_alignment_choice_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/translation_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/translation_selection_item.xml" value="0.1484375" />
+        <entry key="app/src/main/res/layout/verse_item.xml" value="0.13645833333333332" />
+        <entry key="app/src/main/res/layout/verse_option_bar.xml" value="0.335" />
         <entry key="app/src/main/res/layout/verse_word.xml" value="0.36007462686567165" />
         <entry key="app/src/main/res/layout/word.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/word_item.xml" value="0.13645833333333332" />
         <entry key="app/src/main/res/menu/bookmark.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/bookmarks.xml" value="0.1484375" />
         <entry key="app/src/main/res/menu/navigation_drawer.xml" value="0.375" />

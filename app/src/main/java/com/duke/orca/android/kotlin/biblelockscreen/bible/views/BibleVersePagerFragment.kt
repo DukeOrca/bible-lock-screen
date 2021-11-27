@@ -338,19 +338,19 @@ class BibleVersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             }
         )
 
-        compositeDisposable.add(
-            BehaviourEventBus.getInstance().subscribe(Sku::class.java) {
-                when(it) {
-                    is Sku.RemoveAds -> {
-                        if (it.isPurchased) {
-                            onAdsRemoved()
-                        } else {
-                            onAdsPending()
-                        }
+        BehaviourEventBus.subscribe(Sku::class.java) {
+            when(it) {
+                is Sku.RemoveAds -> {
+                    if (it.isPurchased) {
+                        onAdsRemoved()
+                    } else {
+                        onAdsPending()
                     }
                 }
             }
-        )
+        }?.let {
+            compositeDisposable.add(it)
+        }
     }
 
     private fun launch(simpleName: String) {

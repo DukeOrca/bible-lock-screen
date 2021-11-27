@@ -7,52 +7,33 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
+import androidx.activity.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.Purchase
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseLockScreenActivity
-import com.duke.orca.android.kotlin.biblelockscreen.billing.REMOVE_ADS
-import com.duke.orca.android.kotlin.biblelockscreen.billing.model.Sku
-import com.duke.orca.android.kotlin.biblelockscreen.billing.module.BillingModule
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.eventbus.BehaviourEventBus
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
+import com.duke.orca.android.kotlin.biblelockscreen.main.viewmodel.MainViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatus
 import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatusTracker
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
 import com.duke.orca.android.kotlin.biblelockscreen.permission.view.PermissionRationaleDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment.OnPermissionAllowClickListener {
-    private val behaviourEventBus = BehaviourEventBus.getInstance()
-    private val billingModule by lazy {
-        BillingModule(this, object : BillingModule.Callback {
-            override fun onBillingSetupFinished(billingClient: BillingClient) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    behaviourEventBus.post(Sku.RemoveAds(BillingModule.isPurchased(billingClient, REMOVE_ADS)))
-                }
-            }
-
-            override fun onFailure(responseCode: Int) {
-            }
-
-            override fun onSuccess(purchase: Purchase) {
-            }
-        })
-    }
+    private val viewModel by viewModels<MainViewModel>()
 
     private var handler: Handler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        BehaviourEventBus.newInstance()
 
         if (PermissionRationaleDialogFragment.permissionsGranted(this).not()) {
             PermissionRationaleDialogFragment().also {
@@ -60,17 +41,16 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
             }
         }
 
-        lifecycleScope.launch {
-            NetworkStatusTracker(applicationContext).networkStatus.collect {
-                when(it) {
-                    NetworkStatus.Available -> billingModule.startConnection()
-                    NetworkStatus.Unavailable -> {
+        NetworkStatusTracker(applicationContext).networkStatus
+            .asLiveData(lifecycleScope.coroutineContext)
+            .observe(this) {
+                with(viewModel) {
+                    when (it) {
+                        NetworkStatus.Available -> billingModule.startConnection()
+                        NetworkStatus.Unavailable -> billingModule.endConnection()
                     }
                 }
-
-                behaviourEventBus.post(it)
             }
-        }
 
         startService()
     }
@@ -81,6 +61,12 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
         if (DataStore.isFirstTime(this)) {
             DataStore.putFirstTime(this, false)
         }
+    }
+
+    override fun onDestroy() {
+        BehaviourEventBus.clear()
+        viewModel.billingModule.removeCallback()
+        super.onDestroy()
     }
 
     override fun onPermissionAllowClick() {

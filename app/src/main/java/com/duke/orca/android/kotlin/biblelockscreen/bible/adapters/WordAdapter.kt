@@ -5,24 +5,44 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.duke.orca.android.kotlin.biblelockscreen.application.hide
+import com.duke.orca.android.kotlin.biblelockscreen.application.*
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordItemBinding
 
 class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordAdapter.ViewHolder>(DiffCallback()) {
     private val layoutInflater = LayoutInflater.from(context)
 
+    private var currentFocus: Int = -1
     private var font: Font? = null
+    private var onOptionsItemSelectedListener: OnOptionsItemSelectedListener? = null
+
+    interface OnOptionsItemSelectedListener {
+        fun onOptionsItemSelected(item: AdapterItem.Word, optionsItem: OptionsItem)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(WordBinding.inflate(layoutInflater, parent, false))
+        return ViewHolder(WordItemBinding.inflate(layoutInflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(position)
+    }
+
+    private fun setCurrentFocus(position: Int) {
+        if (currentFocus.`is`(position)) return
+
+        notifyItemChanged(currentFocus)
+
+        with(position) {
+            currentFocus = this
+            notifyItemChanged(this)
+        }
     }
 
     fun setFont(font: Font) {
@@ -30,10 +50,14 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
         notifyItemRangeChanged(0, itemCount)
     }
 
-    inner class ViewHolder(private val viewBinding: WordBinding) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: AdapterItem) {
-            when(item) {
-                is AdapterItem.AdapterWord -> {
+    fun setOnOptionsItemSelectedListener(onOptionsItemSelectedListener: OnOptionsItemSelectedListener) {
+        this.onOptionsItemSelectedListener = onOptionsItemSelectedListener
+    }
+
+    inner class ViewHolder(private val viewBinding: WordItemBinding) : RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind(position: Int) {
+            when(val item = getItem(position)) {
+                is AdapterItem.Word -> {
                     val verse = item.verse.toString()
 
                     with(viewBinding) {
@@ -55,10 +79,47 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             textViewSubVerse.hide()
                             textViewSubWord.hide()
                         }
+
+                        if (currentFocus.`is`(position)) {
+                            optionsMenuBar.bind(item)
+                            optionsMenuBar.root.expand(Duration.EXPAND)
+                        } else {
+                            with(optionsMenuBar.root) {
+                                if (isVisible) {
+                                    collapse(Duration.COLLAPSE)
+                                }
+                            }
+                        }
+
+                        constraintLayout.setOnLongClickListener {
+                            setCurrentFocus(position)
+                            true
+                        }
                     }
                 }
             }
+        }
 
+        private fun OptionsMenuBarBinding.bind(item: AdapterItem.Word) {
+            imageViewHighlight.setOnClickListener {
+                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.Highlight)
+            }
+
+            imageViewHighlightColor.setOnClickListener {
+                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.HighlightColor)
+            }
+
+            imageViewBookmark.setOnClickListener {
+                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.Bookmark)
+            }
+
+            imageViewFavorite.setOnClickListener {
+                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.Favorite)
+            }
+
+            imageViewMore.setOnClickListener {
+                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.More)
+            }
         }
     }
 
@@ -75,7 +136,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class AdapterWord(
+        data class Word(
             override val id: Int,
             val book: Book,
             val subBook: Book? = null,
@@ -84,12 +145,20 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
             val subWord: String? = null,
             val bookmark: Boolean,
             @ColorInt val color: Int = -1,
-            val favorites: Boolean,
+            val favorite: Boolean,
         ): AdapterItem() {
             data class Book(
                 val id: Int,
                 val name: String
             )
         }
+    }
+
+    sealed class OptionsItem {
+        object Highlight : OptionsItem()
+        object HighlightColor: OptionsItem()
+        object Bookmark : OptionsItem()
+        object Favorite : OptionsItem()
+        object More : OptionsItem()
     }
 }

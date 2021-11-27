@@ -11,8 +11,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTextWithSearchWord
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.BibleVerseBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.VerseItemBinding
 import com.google.android.gms.ads.nativead.NativeAd
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -58,7 +58,7 @@ class VerseAdapter(
         fun bind(item: AdapterItem) {
             when(item) {
                 is AdapterItem.AdapterBibleVerse -> {
-                    if (viewBinding is BibleVerseBinding) {
+                    if (viewBinding is VerseItemBinding) {
                         val bibleVerse = item.bibleVerse
                         val book = bibleVerse.book
                         val chapter = bibleVerse.chapter
@@ -127,7 +127,7 @@ class VerseAdapter(
         this.inflater = inflater
 
         val viewBinding = when(viewType) {
-            ViewType.BIBLE_VERSE -> BibleVerseBinding.inflate(inflater, parent, false)
+            ViewType.BIBLE_VERSE -> VerseItemBinding.inflate(inflater, parent, false)
             ViewType.NATIVE_AD -> NativeAdBinding.inflate(inflater, parent, false)
             else -> throw IllegalArgumentException()
         }

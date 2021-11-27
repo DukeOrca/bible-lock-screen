@@ -19,12 +19,12 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterPagerAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterPagerViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterPagerBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterPagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>(),
+class ChapterPagerFragment : BaseChildFragment<FragmentChapterPagerBinding>(),
     BookSelectionDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     BookmarksDialogFragment.OnBookmarkClickListener,
@@ -55,7 +55,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>
         }
     }
 
-    private var chapterPagerAdapter: BibleChapterPagerAdapter? = null
+    private var chapterPagerAdapter: ChapterPagerAdapter? = null
     private var currentItem: BibleChapter? = null
 
     private val names: Array<String>
@@ -64,8 +64,8 @@ class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentBibleChapterPagerBinding {
-        return FragmentBibleChapterPagerBinding.inflate(inflater, container, false)
+    ): FragmentChapterPagerBinding {
+        return FragmentChapterPagerBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -214,7 +214,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>
             val currentItem = chapterVerse?.chapter
                 ?: DataStore.BibleChapter.getCurrentChapter(requireContext())
 
-            chapterPagerAdapter = BibleChapterPagerAdapter(
+            chapterPagerAdapter = ChapterPagerAdapter(
                 this@ChapterPagerFragment,
                 chapters
             )
@@ -291,7 +291,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentBibleChapterPagerBinding>
 
             val bookChapters = viewModel.getAll()
 
-            chapterPagerAdapter = BibleChapterPagerAdapter(
+            chapterPagerAdapter = ChapterPagerAdapter(
                 this@ChapterPagerFragment,
                 bookChapters
             )

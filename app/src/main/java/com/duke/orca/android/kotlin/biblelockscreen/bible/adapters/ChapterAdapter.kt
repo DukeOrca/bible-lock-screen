@@ -10,12 +10,12 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTint
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.BibleChapterBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.ChapterItemBinding
 
-class BibleChapterAdapter(
+class ChapterAdapter(
     context: Context,
     private val bibleBook: BibleBook
-) : ListAdapter<BibleChapter, BibleChapterAdapter.ViewHolder>(DiffCallback()) {
+) : ListAdapter<BibleChapter, ChapterAdapter.ViewHolder>(DiffCallback()) {
     private val format = context.getString(R.string.format_bible_chapter)
     private val inflater = LayoutInflater.from(context)
 
@@ -31,14 +31,14 @@ class BibleChapterAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-       return ViewHolder(BibleChapterBinding.inflate(inflater, parent, false))
+       return ViewHolder(ChapterItemBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class ViewHolder(private val viewBinding: BibleChapterBinding): RecyclerView.ViewHolder(viewBinding.root) {
+    inner class ViewHolder(private val viewBinding: ChapterItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: BibleChapter) {
             val text = String.format(format, bibleBook.name(item.book), item.chapter)
 

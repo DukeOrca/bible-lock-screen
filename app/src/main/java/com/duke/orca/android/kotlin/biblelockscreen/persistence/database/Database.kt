@@ -63,7 +63,11 @@ abstract class Database: RoomDatabase() {
         private fun getBuilder(context: Context): Builder<Database> {
             val fileName = DataStore.Translation.getFileName(context).run {
                 if (isBlank()) {
-                    return@run Translation.getFileNameInLanguage(context)
+                    return@run {
+                        Translation.getFileNameInLanguage(context).also {
+                            DataStore.Translation.putFileName(context, it)
+                        }
+                    }
                 }
 
                 return@run this

@@ -11,11 +11,11 @@ class BehaviourEventBus private constructor() {
         BehaviorSubject.create<Any>()
     }
 
-    fun post(value: Any) {
+    private fun post(value: Any) {
         behaviorSubject.onNext(value)
     }
 
-    fun <T> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable {
+    private fun <T> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable {
         return behaviorSubject
             .ofType(clazz)
             .subscribeOn(Schedulers.io())
@@ -30,10 +30,22 @@ class BehaviourEventBus private constructor() {
     companion object {
         private var INSTANCE: BehaviourEventBus? = null
 
-        fun getInstance(): BehaviourEventBus {
+        fun post(value: Any) {
+            INSTANCE?.post(value)
+        }
+
+        fun <T> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable? {
+            return INSTANCE?.subscribe(clazz, subscribe)
+        }
+
+        fun newInstance(): BehaviourEventBus {
             return INSTANCE ?: BehaviourEventBus().also {
                 INSTANCE = it
             }
+        }
+
+        fun clear() {
+            INSTANCE = null
         }
     }
 }

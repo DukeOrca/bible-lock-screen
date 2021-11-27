@@ -19,7 +19,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -126,13 +125,13 @@ class BibleChapterViewModel @Inject constructor(
         val adapterItems = arrayListOf<WordAdapter.AdapterItem>()
         val words = if (subVerses.isNotEmpty()) {
             verses.zip(subVerses) { verse, subVerse ->
-                WordAdapter.AdapterItem.AdapterWord(
+                WordAdapter.AdapterItem.Word(
                     id = verse.id,
-                    book = WordAdapter.AdapterItem.AdapterWord.Book(
+                    book = WordAdapter.AdapterItem.Word.Book(
                         verse.book,
                         book.name(verse.book)
                     ),
-                    subBook = WordAdapter.AdapterItem.AdapterWord.Book(
+                    subBook = WordAdapter.AdapterItem.Word.Book(
                         subVerse.book,
                         subBook?.name(subVerse.book) ?: BLANK
                     ),
@@ -141,14 +140,14 @@ class BibleChapterViewModel @Inject constructor(
                     subWord = subVerse.word,
                     bookmark = verse.bookmark,
                     color = -1,
-                    favorites = verse.favorites
+                    favorite = verse.favorites
                 )
             }
         } else {
             verses.map { verse ->
-                WordAdapter.AdapterItem.AdapterWord(
+                WordAdapter.AdapterItem.Word(
                     id = verse.id,
-                    book = WordAdapter.AdapterItem.AdapterWord.Book(
+                    book = WordAdapter.AdapterItem.Word.Book(
                         verse.book,
                         book.name(verse.book)
                     ),
@@ -156,7 +155,7 @@ class BibleChapterViewModel @Inject constructor(
                     word = verse.word,
                     bookmark = verse.bookmark,
                     color = -1,
-                    favorites = verse.favorites
+                    favorite = verse.favorites
                 )
             }
         }

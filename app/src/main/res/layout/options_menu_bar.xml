@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/height_48dp"
+    android:orientation="horizontal"
+    android:background="@drawable/rounded_corners"
+    android:backgroundTint="@color/background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:gravity="center_vertical"
+    android:paddingEnd="@dimen/padding_8dp"
+    android:paddingStart="@dimen/padding_8dp">
+
+    <ImageView
+        android:id="@+id/image_view_highlight"
+        android:layout_width="@dimen/width_48dp"
+        android:layout_height="@dimen/height_48dp"
+        app:srcCompat="@drawable/ic_highlight_128px"
+        style="@style/Icon.OptionBar"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/image_view_highlight_color"
+        android:layout_width="@dimen/width_40dp"
+        android:layout_height="@dimen/height_40dp"
+        app:srcCompat="@drawable/ic_round_circle_24"
+        style="@style/Icon.OptionBar"
+        tools:ignore="ContentDescription"/>
+
+    <ImageView
+        android:id="@+id/image_view_bookmark"
+        android:layout_width="@dimen/width_48dp"
+        android:layout_height="@dimen/height_48dp"
+        android:layout_marginStart="@dimen/margin_24dp"
+        app:srcCompat="@drawable/ic_round_bookmark_24"
+        style="@style/Icon.OptionBar"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/image_view_favorite"
+        android:layout_width="@dimen/width_48dp"
+        android:layout_height="@dimen/height_48dp"
+        app:srcCompat="@drawable/ic_round_favorite_24"
+        style="@style/Icon.OptionBar"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/image_view_more"
+        android:layout_width="@dimen/width_48dp"
+        android:layout_height="@dimen/height_48dp"
+        app:srcCompat="@drawable/ic_round_more_vert_24"
+        style="@style/Icon.OptionBar"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>

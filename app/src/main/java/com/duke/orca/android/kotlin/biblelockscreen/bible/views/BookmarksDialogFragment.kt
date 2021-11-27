@@ -10,7 +10,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Durati
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.BibleChapterAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookmarksDialogBinding
@@ -18,12 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBinding>(),
-    BibleChapterAdapter.OnItemClickListener {
+    ChapterAdapter.OnItemClickListener {
     override val setWindowAnimation: Boolean
         get() = true
 
     private val viewModel by viewModels<BibleChapterPagerViewModel>()
-    private val bibleChapterAdapter by lazy { BibleChapterAdapter(requireContext(), viewModel.bibleBook) }
+    private val chapterAdapter by lazy { ChapterAdapter(requireContext(), viewModel.bibleBook) }
 
     private var onBookmarkClickListener: OnBookmarkClickListener? = null
 
@@ -72,7 +72,7 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
 
     private fun observe() {
         viewModel.getBookmarks().observe(viewLifecycleOwner, {
-            bibleChapterAdapter.submitList(it) {
+            chapterAdapter.submitList(it) {
                 delayOnLifecycle(Duration.SHORT) {
                     if (it.isEmpty()) {
                         viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
@@ -89,10 +89,10 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
     }
 
     private fun bind() {
-        bibleChapterAdapter.setOnItemClickListener(this)
+        chapterAdapter.setOnItemClickListener(this)
 
         viewBinding.recyclerView.apply {
-            adapter = bibleChapterAdapter
+            adapter = chapterAdapter
             layoutManager = LinearLayoutManagerWrapper(requireContext())
             setHasFixedSize(true)
         }

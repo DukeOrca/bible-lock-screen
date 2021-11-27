@@ -23,6 +23,8 @@ class LockScreenSettingsFragment : PreferenceChildFragment() {
     override val toolbar by lazy { viewBinding.toolbar }
     override val toolbarTitleResId: Int = R.string.lock_screen
 
+    private val items = arrayListOf<AdapterItem>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,58 +42,69 @@ class LockScreenSettingsFragment : PreferenceChildFragment() {
         val showOnLockScreen = DataStore.LockScreen.getShowOnLockScreen(requireContext())
         val unlockWithBackKey = DataStore.LockScreen.getUnlockWithBackKey(requireContext())
 
-        val list: List<AdapterItem> = arrayListOf(
-            AdapterItem.SwitchPreference(
-                drawable = ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_unlock_90px
-                ),
-                isChecked = showOnLockScreen,
-                onCheckedChange = { isChecked ->
-                    lifecycleScope.launch {
-                        withContext(Dispatchers.IO) {
-                            DataStore.LockScreen.putShowOnLockScreen(requireContext(), isChecked)
+        with(items) {
+            add(
+                AdapterItem.SwitchPreference(
+                    drawable = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.ic_unlock_90px
+                    ),
+                    isChecked = showOnLockScreen,
+                    onCheckedChange = { isChecked ->
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.IO) {
+                                DataStore.LockScreen.putShowOnLockScreen(requireContext(), isChecked)
+                            }
+
+                            with(items.toMutableList()) {
+                                if (isChecked.not()) {
+                                    removeAt(1)
+                                }
+
+                                preferenceAdapter.submitList(toList())
+                            }
                         }
-
-                        val adapterItem = preferenceAdapter.getItem(Id.DISPLAY_AFTER_UNLOCKING)
-                        val position = preferenceAdapter.getPosition(Id.DISPLAY_AFTER_UNLOCKING)
-
-                        adapterItem?.isClickable = isChecked
-                        adapterItem?.isVisible = isChecked
-
-                        if (position != -1) {
-                            preferenceAdapter.notifyItemChanged(position)
-                        }
-                    }
-                },
-                body = getString(R.string.show_on_lock_screen)
-            ),
-            AdapterItem.SwitchPreference(
-                drawable = null,
-                id = Id.DISPLAY_AFTER_UNLOCKING,
-                isChecked = displayAfterUnlocking,
-                isClickable = showOnLockScreen,
-                isVisible = showOnLockScreen,
-                onCheckedChange = { isChecked ->
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        DataStore.LockScreen.putDisplayAfterUnlocking(requireContext(), isChecked)
-                    }
-                },
-                body = getString(R.string.display_after_unlocking)
-            ),
-            AdapterItem.SwitchPreference(
-                drawable = null,
-                isChecked = unlockWithBackKey,
-                onCheckedChange = { isChecked ->
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        DataStore.LockScreen.putUnlockWithBackKey(requireContext(), isChecked)
-                    }
-                },
-                body = getString(R.string.unlock_with_back_button)
+                    },
+                    body = getString(R.string.show_on_lock_screen)
+                )
             )
-        )
 
-        preferenceAdapter.submitList(list)
+            add(
+                AdapterItem.SwitchPreference(
+                    drawable = null,
+                    id = Id.DISPLAY_AFTER_UNLOCKING,
+                    isChecked = displayAfterUnlocking,
+                    isClickable = showOnLockScreen,
+                    onCheckedChange = { isChecked ->
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            DataStore.LockScreen.putDisplayAfterUnlocking(requireContext(), isChecked)
+                        }
+                    },
+                    body = getString(R.string.display_after_unlocking)
+                )
+            )
+
+            add(
+                AdapterItem.SwitchPreference(
+                    drawable = null,
+                    isChecked = unlockWithBackKey,
+                    onCheckedChange = { isChecked ->
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            DataStore.LockScreen.putUnlockWithBackKey(requireContext(), isChecked)
+                        }
+                    },
+                    body = getString(R.string.unlock_with_back_button)
+                )
+            )
+        }
+
+        with(items.toMutableList()) {
+            if (showOnLockScreen.not()) {
+                removeAt(1)
+            }
+
+            preferenceAdapter.submitList(toList())
+        }
     }
 
     private fun bind() {

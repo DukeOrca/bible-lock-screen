@@ -23,11 +23,13 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleChapterBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -40,7 +42,7 @@ class ChapterFragment : BaseViewStubFragment(),
     OptionChoiceDialogFragment.OnOptionChoiceListener
 {
     override val layoutResource: Int
-        get() = R.layout.fragment_bible_chapter
+        get() = R.layout.fragment_chapter
 
     private val viewModel by viewModels<BibleChapterViewModel>()
     private val bookChapter by lazy { arguments?.getParcelable<BookChapter>(Key.BOOK_CHAPTER) }
@@ -52,19 +54,34 @@ class ChapterFragment : BaseViewStubFragment(),
             runBlocking {
                 setFont(viewModel.font.first())
             }
+
+            setOnOptionsItemSelectedListener(object : WordAdapter.OnOptionsItemSelectedListener {
+                override fun onOptionsItemSelected(
+                    item: WordAdapter.AdapterItem.Word,
+                    optionsItem: WordAdapter.OptionsItem
+                ) {
+                    when(optionsItem) {
+                        is WordAdapter.OptionsItem.Highlight -> {}
+                        is WordAdapter.OptionsItem.HighlightColor -> {}
+                        is WordAdapter.OptionsItem.Bookmark -> {}
+                        is WordAdapter.OptionsItem.Favorite -> viewModel.updateFavorites(item.id, item.favorite.not())
+                        is WordAdapter.OptionsItem.More -> {}
+                    }
+                }
+            })
         }
     }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     private var bibleChapter: BibleChapter? = null
 
-    private var _binding: FragmentBibleChapterBinding? = null
-    private val binding: FragmentBibleChapterBinding get() = _binding!!
+    private var _binding: FragmentChapterBinding? = null
+    private val binding: FragmentChapterBinding get() = _binding!!
 
-    private val isScrolledToPosition = AtomicBoolean(false)
+    private val scrolledToPosition = AtomicBoolean(false)
 
     override fun onInflated(view: View) {
-        _binding = FragmentBibleChapterBinding.bind(view)
+        _binding = FragmentChapterBinding.bind(view)
 
         binding.recyclerViewBibleChapter.apply {
             adapter = wordAdapter
@@ -83,7 +100,7 @@ class ChapterFragment : BaseViewStubFragment(),
         viewModel.bibleChapter.observe(viewLifecycleOwner, {
             bibleChapter = it
 
-            if (isScrolledToPosition.compareAndSet(false, true)) {
+            if (scrolledToPosition.compareAndSet(false, true)) {
                 delayOnLifecycle(Duration.SHORT) {
                     binding.recyclerViewBibleChapter.scrollToPosition(it.position)
                     binding.root.fadeIn(Duration.FADE_IN)
@@ -96,8 +113,6 @@ class ChapterFragment : BaseViewStubFragment(),
                 wordAdapter.setFont(it)
             }
         }
-
-        savePosition()
     }
 
     override fun onCreateView(
@@ -110,6 +125,11 @@ class ChapterFragment : BaseViewStubFragment(),
         observe()
 
         return viewBinding.root
+    }
+
+    override fun onStop() {
+        savePosition()
+        super.onStop()
     }
 
     override fun onDestroyView() {

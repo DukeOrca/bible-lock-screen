@@ -23,11 +23,6 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
         fun bind(adapterItem: AdapterItem) {
             viewBinding.root.isClickable = adapterItem.isClickable
 
-            if (adapterItem.isVisible)
-                viewBinding.root.show()
-            else
-                viewBinding.root.hide()
-
             when(viewBinding) {
                 is PreferenceBinding -> {
                     if (adapterItem is AdapterItem.Preference) {
@@ -129,12 +124,6 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
 
                         viewBinding.root.setOnClickListener {
                             viewBinding.switchMaterial.toggle()
-                        }
-
-                        if (adapterItem.isVisible) {
-                            viewBinding.root.expand(duration)
-                        } else {
-                            viewBinding.root.collapse(duration, 0)
                         }
                     }
                 }
@@ -243,12 +232,10 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
     sealed class AdapterItem {
         abstract val id: Long
         abstract var isClickable: Boolean
-        abstract var isVisible: Boolean
 
         data class MultiSelectListPreference(
             override val id: Long = -1L,
             override var isClickable: Boolean = true,
-            override var isVisible: Boolean = true,
             val adapter: RecyclerView.Adapter<*>,
             val body: String,
             val drawable: Drawable?,
@@ -259,7 +246,6 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
         data class Preference(
             override val id: Long = -1L,
             override var isClickable: Boolean = true,
-            override var isVisible: Boolean = true,
             val body: String,
             val drawable: Drawable?,
             val onClick: (Preference) -> Unit,
@@ -269,20 +255,17 @@ class PreferenceAdapter: ListAdapter<PreferenceAdapter.AdapterItem, PreferenceAd
         data class PreferenceCategory(
             override val id: Long = -1L,
             override var isClickable: Boolean = true,
-            override var isVisible: Boolean = true,
             val category: String
         ) : AdapterItem()
 
         data class Space(
             override val id: Long = -1L,
             override var isClickable: Boolean = false,
-            override var isVisible: Boolean = true,
         ) : AdapterItem()
 
         data class SwitchPreference(
             override val id: Long = -1L,
             override var isClickable: Boolean = true,
-            override var isVisible: Boolean = true,
             val body: String,
             val drawable: Drawable?,
             val isChecked: Boolean,

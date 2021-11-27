@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.MainThread
 import com.android.billingclient.api.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
+import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.billing.REMOVE_ADS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,7 @@ import timber.log.Timber
 
 class BillingModule(
     context: Context,
-    private val callback: Callback
+    private var callback: Callback?
 ) {
     interface Callback {
         fun onBillingSetupFinished(billingClient: BillingClient)
@@ -35,7 +36,7 @@ class BillingModule(
                     }
                 }
                 else -> {
-                    callback.onFailure(billingResult.responseCode)
+                    callback?.onFailure(billingResult.responseCode)
                 }
             }
         }
@@ -49,9 +50,9 @@ class BillingModule(
     private val billingClientStateListener = object : BillingClientStateListener {
         override fun onBillingSetupFinished(billingResult: BillingResult) {
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                callback.onBillingSetupFinished(billingClient)
+                callback?.onBillingSetupFinished(billingClient)
             } else {
-                callback.onFailure(billingResult.responseCode)
+                callback?.onFailure(billingResult.responseCode)
             }
         }
 
@@ -61,10 +62,21 @@ class BillingModule(
 
     fun startConnection() {
         try {
-            billingClient.startConnection(billingClientStateListener)
+            val connected = BillingClient.ConnectionState.CONNECTED
+            val connecting = BillingClient.ConnectionState.CONNECTING
+
+            with(billingClient) {
+                if (connectionState.not(connected) and connectionState.not(connecting)) {
+                    billingClient.startConnection(billingClientStateListener)
+                }
+            }
         } catch (e: IllegalStateException) {
             Timber.e(e)
         }
+    }
+
+    fun endConnection() {
+        billingClient.endConnection()
     }
 
     private fun handlePurchase(purchase: Purchase) {
@@ -79,7 +91,7 @@ class BillingModule(
 
                     withContext(Dispatchers.Main) {
                         if (consumeResult.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                            callback.onSuccess(purchase)
+                            callback?.onSuccess(purchase)
                         }
                     }
                 }
@@ -95,15 +107,19 @@ class BillingModule(
 
                         withContext(Dispatchers.Main) {
                             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                                callback.onSuccess(purchase)
+                                callback?.onSuccess(purchase)
                             } else {
-                                callback.onFailure(billingResult.responseCode)
+                                callback?.onFailure(billingResult.responseCode)
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    fun removeCallback() {
+        callback = null
     }
 
     companion object {

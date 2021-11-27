@@ -68,10 +68,11 @@ fun View.collapse(duration: Long) {
                 layoutParams.height = 0
                 visibility = View.GONE
             } else {
-                layoutParams.height = if ((measuredHeight - (measuredHeight * interpolatedTime).toInt()) > 0)
-                    measuredHeight - (measuredHeight * interpolatedTime).toInt()
-                else
-                    0
+                val animatedValue = measuredHeight - (measuredHeight * interpolatedTime).toInt()
+                val height = if (animatedValue > 0) animatedValue else 0
+
+                layoutParams.height = height
+                alpha = height.toFloat() / measuredHeight.toFloat()
                 requestLayout()
             }
         }
@@ -119,7 +120,6 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
         override fun onAnimationRepeat(animation: Animator?) {}
     })
 
-    valueAnimator.interpolator = DecelerateInterpolator()
     valueAnimator.duration = duration
     valueAnimator.start()
 }
