@@ -4,28 +4,29 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Book
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleBookDao
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleChapterDao
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.BibleVerseDao
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.dao.VerseDao
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.migration.MIGRATION_1_2
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.typeconverters.TypeConverters
 
-@androidx.room.Database(entities = [BibleBook::class, BibleChapter::class, BibleVerse::class], version = 1)
+@androidx.room.Database(entities = [Book::class, BibleChapter::class, Verse::class], version = 2)
 @androidx.room.TypeConverters(TypeConverters::class)
 abstract class Database: RoomDatabase() {
     abstract fun bibleBookDao(): BibleBookDao
     abstract fun bibleChapterDao(): BibleChapterDao
-    abstract fun bibleVerseDao(): BibleVerseDao
+    abstract fun verseDao(): VerseDao
 
     companion object {
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.persistence.database"
         private const val CLASS_NAME = "Database"
         private const val NAME = "$PACKAGE_NAME.$CLASS_NAME"
-        private const val VERSION = "1.0.0"
+        private const val VERSION = "1.0.1"
 
         @Volatile
         private var INSTANCE: Database? = null
@@ -78,6 +79,7 @@ abstract class Database: RoomDatabase() {
                 Database::class.java,
                 "$NAME.$fileName:$VERSION"
             )
+                .addMigrations(MIGRATION_1_2)
                 .allowMainThreadQueries()
                 .createFromAsset("$fileName.db")
                 .fallbackToDestructiveMigration()

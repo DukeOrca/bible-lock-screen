@@ -8,6 +8,8 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Handler
 import android.os.Looper
 import android.text.Html
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewPropertyAnimator
@@ -17,6 +19,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import com.duke.orca.android.kotlin.biblelockscreen.application.color.toHexColor
 
 fun View.enable() {
     isEnabled = true
@@ -81,6 +84,7 @@ fun View.collapse(duration: Long) {
     }
 
     animation.duration = duration
+    animation.interpolator = DecelerateInterpolator()
     startAnimation(animation)
 }
 
@@ -121,6 +125,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
     })
 
     valueAnimator.duration = duration
+    valueAnimator.interpolator = DecelerateInterpolator()
     valueAnimator.start()
 }
 
@@ -416,4 +421,11 @@ fun AutoCompleteTextView.setStringArrayAdapter(stringArray: Array<String>, @Layo
             stringArray
         )
     )
+}
+
+fun TextView.setHighlightedText(@ColorInt color: Int, text: String) {
+    SpannableString(text).apply {
+        setSpan(BackgroundColorSpan(color), 0, text.length, 0)
+        setText(this)
+    }
 }

@@ -1,9 +1,9 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -13,31 +13,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BibleVerseSearchViewModel @Inject constructor(
-    private val bibleBookRepository: BibleBookRepository,
-    private val bibleVerseRepository: BibleVerseRepository,
+    private val bookRepository: BookRepository,
+    private val verseRepository: VerseRepository,
 ) : ViewModel() {
     private val _searchResult = MutableLiveData<SearchResult>()
     val searchResult: LiveData<SearchResult> = _searchResult
-    val bibleBook by lazy { bibleBookRepository.get() }
+    val bibleBook by lazy { bookRepository.get() }
 
-    fun get(id: Int) = bibleVerseRepository.get(id).asLiveData(viewModelScope.coroutineContext)
+    fun get(id: Int) = verseRepository.get(id).asLiveData(viewModelScope.coroutineContext)
 
     fun search(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
-                _searchResult.value = SearchResult(bibleVerseRepository.search(text).first(), text)
+                _searchResult.value = SearchResult(verseRepository.search(text).first(), text)
             }
         }
     }
 
     fun updateFavorites(id: Int, favorites: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            bibleVerseRepository.updateFavorites(id, favorites)
+            verseRepository.updateFavorite(id, favorites)
         }
     }
 }
 
 data class SearchResult(
-    val searchResults: List<BibleVerse>,
+    val searchResults: List<Verse>,
     val searchWord: String
 )

@@ -14,7 +14,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BookSelectionDialogViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookSelectionItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookSelectionDialogBinding

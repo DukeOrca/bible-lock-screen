@@ -8,14 +8,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceChildFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LockScreenSettingsFragment : PreferenceChildFragment() {
+class LockScreenSettingsFragment : PreferenceFragment() {
     private object Id {
         const val DISPLAY_AFTER_UNLOCKING = 0L
     }

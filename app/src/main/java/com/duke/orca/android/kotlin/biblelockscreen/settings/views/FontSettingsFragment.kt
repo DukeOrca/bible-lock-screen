@@ -12,13 +12,13 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceChildFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FontSettingsFragment : PreferenceChildFragment(),
+class FontSettingsFragment : PreferenceFragment(),
     FontSizeChoiceDialogFragment.OnItemClickListener,
     TextAlignmentChoiceDialogFragment.OnItemClickListener {
     private object Id {
@@ -43,7 +43,7 @@ class FontSettingsFragment : PreferenceChildFragment(),
 
     override fun onItemClick(dialogFragment: DialogFragment, item: Float) {
         lifecycleScope.launch(Dispatchers.IO) {
-            DataStore.Font.putFontSize(requireContext(), item)
+            DataStore.Font.putSize(requireContext(), item)
         }
 
         preferenceAdapter.updateSummary(Id.FONT_SIZE, String.format("%.0f", item))
@@ -129,8 +129,8 @@ class FontSettingsFragment : PreferenceChildFragment(),
     private fun getTextAlignmentSummary(textAlignment: Int): String {
         @StringRes
         val id = when(textAlignment) {
-            DataStore.Font.TextAlignment.CENTER -> R.string.align_center
             DataStore.Font.TextAlignment.LEFT -> R.string.align_left
+            DataStore.Font.TextAlignment.CENTER -> R.string.align_center
             DataStore.Font.TextAlignment.RIGHT -> R.string.align_right
             else -> throw IllegalArgumentException()
         }

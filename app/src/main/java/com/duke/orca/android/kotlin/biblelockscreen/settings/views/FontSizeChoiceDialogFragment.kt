@@ -23,7 +23,7 @@ class FontSizeChoiceDialogFragment : SingleChoiceDialogFragment<Float>() {
         }
     }
 
-    override val items: Array<Float> = arrayOf(12f, 14f, 16f, 20f, 24f, 32f, 40f)
+    override val items: Array<Float> = arrayOf(12.0f, 14.0f, 16.0f, 20.0f, 24.0f, 32.0f)
 
     override fun bind(viewBinding: SingleChoiceItemBinding, item: Float) {
         val text = String.format("%.0f", item)

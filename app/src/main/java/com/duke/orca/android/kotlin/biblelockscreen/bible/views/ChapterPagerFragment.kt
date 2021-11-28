@@ -23,7 +23,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterPagerA
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterPagerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterPagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
@@ -46,7 +46,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentChapterPagerBinding>(),
     override val toolbar: Toolbar by lazy { viewBinding.toolbar }
 
     private val activityViewModel by activityViewModels<FragmentContainerViewModel>()
-    private val viewModel by viewModels<BibleChapterPagerViewModel>()
+    private val viewModel by viewModels<ChapterPagerViewModel>()
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -179,7 +179,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentChapterPagerBinding>(),
                 }
 
                 currentItem = it
-                DataStore.BibleChapter.putCurrentChapter(requireContext(), it.id)
+                DataStore.Chapter.putCurrentChapter(requireContext(), it.id)
             }
         })
     }
@@ -212,7 +212,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentChapterPagerBinding>(),
             val chapters = viewModel.getAll()
 
             val currentItem = chapterVerse?.chapter
-                ?: DataStore.BibleChapter.getCurrentChapter(requireContext())
+                ?: DataStore.Chapter.getCurrentChapter(requireContext())
 
             chapterPagerAdapter = ChapterPagerAdapter(
                 this@ChapterPagerFragment,
@@ -300,7 +300,7 @@ class ChapterPagerFragment : BaseChildFragment<FragmentChapterPagerBinding>(),
                 adapter = chapterPagerAdapter
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(
-                    DataStore.BibleChapter.getCurrentChapter(requireContext()),
+                    DataStore.Chapter.getCurrentChapter(requireContext()),
                     false
                 )
             }

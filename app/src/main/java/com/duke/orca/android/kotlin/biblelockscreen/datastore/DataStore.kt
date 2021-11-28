@@ -3,6 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.datastore
 import android.content.Context
 import android.content.res.Configuration
 import android.view.Gravity
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -83,19 +84,19 @@ object DataStore {
         putBoolean(context, PreferencesKeys.isFirstTime, value)
     }
 
-    object BibleChapter {
-        fun getCurrentChapter(context: Context) = getInt(context, PreferencesKeys.BibleChapter.currentChapter, 0)
+    object Chapter {
+        fun getCurrentChapter(context: Context) = getInt(context, PreferencesKeys.Chapter.currentChapter, 0)
 
         fun putCurrentChapter(context: Context, value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.BibleChapter.currentChapter, value)
+            putInt(context, PreferencesKeys.Chapter.currentChapter, value)
         }
     }
 
-    object BibleVerse {
-        fun getCurrentItem(context: Context) = getInt(context, PreferencesKeys.BibleVerse.currentItem, 0)
+    object Verse {
+        fun getCurrentVerse(context: Context) = getInt(context, PreferencesKeys.Verse.currentVerse, 0)
 
-        fun putCurrentItem(context: Context, value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.BibleVerse.currentItem, value)
+        fun putCurrentVerse(context: Context, value: Int) = runBlocking {
+            putInt(context, PreferencesKeys.Verse.currentVerse, value)
         }
     }
 
@@ -117,7 +118,7 @@ object DataStore {
     }
 
     object Font {
-        const val DEFAULT_FONT_SIZE = 16.0f
+        const val DEFAULT_SIZE = 16.0f
 
         object TextAlignment {
             const val CENTER = Gravity.CENTER
@@ -125,11 +126,11 @@ object DataStore {
             const val RIGHT = Gravity.RIGHT
         }
 
-        fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.size, DEFAULT_FONT_SIZE)
+        fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.size, DEFAULT_SIZE)
         fun getBold(context: Context) = getBoolean(context, PreferencesKeys.Font.bold, false)
         fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.textAlignment, TextAlignment.LEFT)
 
-        suspend fun putFontSize(context: Context, value: Float) {
+        suspend fun putSize(context: Context, value: Float) {
             putFloat(context, PreferencesKeys.Font.size, value)
         }
 
@@ -142,7 +143,7 @@ object DataStore {
         }
 
         object Bible {
-            fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.Bible.size, DEFAULT_FONT_SIZE)
+            fun getSize(context: Context) = getFloat(context, PreferencesKeys.Font.Bible.size, DEFAULT_SIZE)
             fun getTextAlignment(context: Context) = getInt(context, PreferencesKeys.Font.Bible.textAlignment, TextAlignment.LEFT)
 
             suspend fun putSize(context: Context, value: Float) {
@@ -183,6 +184,18 @@ object DataStore {
 
         fun putSubFileName(context: Context, value: String) = runBlocking {
             putString(context, PreferencesKeys.Translation.subFileName, value)
+        }
+    }
+
+    object HighlightColor {
+        @ColorInt
+        const val DEFAULT = 0xEF9A9A
+
+        @ColorInt
+        fun getHighlightColor(context: Context): Int = getInt(context, PreferencesKeys.HighlightColor.highlightColor, DEFAULT)
+
+        fun putHighlightColor(context: Context, @ColorInt value: Int) = runBlocking {
+            putInt(context, PreferencesKeys.HighlightColor.highlightColor, value)
         }
     }
 }

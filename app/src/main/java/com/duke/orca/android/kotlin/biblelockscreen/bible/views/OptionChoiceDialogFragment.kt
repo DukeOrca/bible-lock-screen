@@ -5,15 +5,15 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.SingleChoiceDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.SingleChoiceItemBinding
 
 class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {
     interface OnOptionChoiceListener {
-        fun onOptionChoice(dialogFragment: DialogFragment, option: String, bibleVerse: BibleVerse?)
+        fun onOptionChoice(dialogFragment: DialogFragment, option: String, verse: Verse?)
     }
 
-    private val bibleVerse by lazy { arguments?.getParcelable<BibleVerse>(Key.BIBLE_VERSE) }
+    private val bibleVerse by lazy { arguments?.getParcelable<Verse>(Key.BIBLE_VERSE) }
 
     private var onOptionChoiceListener: OnOptionChoiceListener? = null
 
@@ -44,11 +44,11 @@ class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {
             const val BIBLE_VERSE = "$PACKAGE_NAME.BIBLE_VERSE"
         }
 
-        fun newInstance(items: Array<String>, bibleVerse: BibleVerse): OptionChoiceDialogFragment {
+        fun newInstance(items: Array<String>, verse: Verse): OptionChoiceDialogFragment {
             return OptionChoiceDialogFragment().apply {
                 arguments = bundleOf(
                     Key.ITEMS to items,
-                    Key.BIBLE_VERSE to bibleVerse
+                    Key.BIBLE_VERSE to verse
                 )
             }
         }

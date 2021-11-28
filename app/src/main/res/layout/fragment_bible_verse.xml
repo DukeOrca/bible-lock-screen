@@ -135,8 +135,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/image_view_more_vert"
             app:layout_constraintEnd_toStartOf="@+id/image_view_more_vert"
             app:layout_constraintTop_toTopOf="@+id/image_view_more_vert"
-            app:like_drawable="@drawable/ic_like_24"
-            app:unlike_drawable="@drawable/ic_unlike_dark_24" />
+            app:like_drawable="@drawable/ic_favorite_like_24"
+            app:unlike_drawable="@drawable/ic_favorite_unlike_24" />
 
         <ImageView
             style="@style/SelectableItemBackgroundBorderless"

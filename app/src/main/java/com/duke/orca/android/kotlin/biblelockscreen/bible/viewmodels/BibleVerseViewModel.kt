@@ -6,9 +6,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -18,28 +19,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BibleVerseViewModel @Inject constructor(
-    private val bibleBookRepository: BibleBookRepository,
-    private val bibleVerseRepository: BibleVerseRepository,
+    private val bookRepository: BookRepository,
+    private val verseRepository: VerseRepository,
     application: Application
 ) : BaseViewModel(application) {
-    private val bibleVerse = MutableLiveData<BibleVerse>()
+    private val verse = MutableLiveData<Verse>()
 
-    val bibleBook by lazy { bibleBookRepository.get() }
+    val bibleBook by lazy { bookRepository.get() }
 
-    val pair = MediatorLiveData<Pair<BibleVerse, AttributeSet>?>().apply {
-        addSource(attributeSet) {
-            value = combine(attributeSet, bibleVerse)
+    val pair = MediatorLiveData<Pair<Verse, Font>?>().apply {
+        addSource(font) {
+            value = combine(font, verse)
         }
 
-        addSource(bibleVerse) {
-            value = combine(attributeSet, bibleVerse)
+        addSource(verse) {
+            value = combine(font, verse)
         }
     }
 
     private fun combine(
-        source1: LiveData<AttributeSet>,
-        source2: LiveData<BibleVerse>
-    ): Pair<BibleVerse, AttributeSet>? {
+        source1: LiveData<Font>,
+        source2: LiveData<Verse>
+    ): Pair<Verse, Font>? {
         val attributeSet = source1.value ?: return null
         val bibleVerse = source2.value ?: return null
 
@@ -48,21 +49,15 @@ class BibleVerseViewModel @Inject constructor(
 
     fun get(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            bibleVerseRepository.get(id).flowOn(Dispatchers.IO).collect {
-                bibleVerse.postValue(it)
+            verseRepository.get(id).flowOn(Dispatchers.IO).collect {
+                verse.postValue(it)
             }
         }
     }
 
     fun updateFavorites(id: Int, favorites: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            bibleVerseRepository.updateFavorites(id, favorites)
+            verseRepository.updateFavorite(id, favorites)
         }
     }
 }
-
-data class AttributeSet (
-    val bold: Boolean,
-    val fontSize: Float,
-    val textAlignment: Int
-)

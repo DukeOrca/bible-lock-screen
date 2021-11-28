@@ -2,9 +2,9 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import com.google.android.gms.ads.nativead.NativeAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -14,10 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    private val bibleBookRepository: BibleBookRepository,
-    private val bibleVerseRepository: BibleVerseRepository
+    private val bookRepository: BookRepository,
+    private val verseRepository: VerseRepository
 ) : ViewModel() {
-    private val favorites = MutableLiveData<List<BibleVerse>>()
+    private val favorites = MutableLiveData<List<Verse>>()
     private val nativeAds = MutableLiveData<List<NativeAd>>()
 
     val adapterItems = MediatorLiveData<List<VerseAdapter.AdapterItem>>().apply {
@@ -30,11 +30,11 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
-    val bibleBook by lazy { bibleBookRepository.get() }
+    val bibleBook by lazy { bookRepository.get() }
 
     fun getFavorites() {
         viewModelScope.launch {
-            bibleVerseRepository.getFavorites().collect {
+            verseRepository.getFavorites().collect {
                 favorites.value = it
             }
         }
@@ -42,12 +42,12 @@ class FavoritesViewModel @Inject constructor(
 
     fun updateFavorites(id: Int, favorites: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            bibleVerseRepository.updateFavorites(id, favorites)
+            verseRepository.updateFavorite(id, favorites)
         }
     }
 
     private fun combine(
-        source1: LiveData<List<BibleVerse>>,
+        source1: LiveData<List<Verse>>,
         source2: LiveData<List<NativeAd>>
     ): List<VerseAdapter.AdapterItem> {
         val bibleVerses = source1.value ?: emptyList()

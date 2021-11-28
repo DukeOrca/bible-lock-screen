@@ -1,15 +1,18 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.color.view.ColorPickerDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
@@ -19,32 +22,31 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BookChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleChapterViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterBinding
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 @FlowPreview
 @AndroidEntryPoint
 class ChapterFragment : BaseViewStubFragment(),
+    ColorPickerDialogFragment.OnColorPickedListener,
     VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener
 {
     override val layoutResource: Int
         get() = R.layout.fragment_chapter
 
-    private val viewModel by viewModels<BibleChapterViewModel>()
+    private val viewModel by viewModels<ChapterViewModel>()
     private val bookChapter by lazy { arguments?.getParcelable<BookChapter>(Key.BOOK_CHAPTER) }
     private val book by lazy { bookChapter?.book ?: 1 }
     private val chapter by lazy { bookChapter?.chapter ?: 1 }
@@ -61,10 +63,14 @@ class ChapterFragment : BaseViewStubFragment(),
                     optionsItem: WordAdapter.OptionsItem
                 ) {
                     when(optionsItem) {
-                        is WordAdapter.OptionsItem.Highlight -> {}
-                        is WordAdapter.OptionsItem.HighlightColor -> {}
-                        is WordAdapter.OptionsItem.Bookmark -> {}
-                        is WordAdapter.OptionsItem.Favorite -> viewModel.updateFavorites(item.id, item.favorite.not())
+                        is WordAdapter.OptionsItem.Highlight -> viewModel.updateHighlightColor(item.id, optionsItem.highlightColor)
+                        is WordAdapter.OptionsItem.HighlightColor -> {
+                            ColorPickerDialogFragment().also {
+                                it.show(childFragmentManager, it.tag)
+                            }
+                        }
+                        is WordAdapter.OptionsItem.Bookmark -> viewModel.updateBookmark(item.id, optionsItem.liked)
+                        is WordAdapter.OptionsItem.Favorite -> viewModel.updateFavorite(item.id, optionsItem.liked)
                         is WordAdapter.OptionsItem.More -> {}
                     }
                 }
@@ -108,6 +114,10 @@ class ChapterFragment : BaseViewStubFragment(),
             }
         })
 
+        viewModel.highlightColor.observe(viewLifecycleOwner, {
+            wordAdapter.setHighlightColor(it)
+        })
+
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.font.distinctUntilChanged().collectLatest {
                 wordAdapter.setFont(it)
@@ -135,6 +145,15 @@ class ChapterFragment : BaseViewStubFragment(),
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+
+    override fun onColorPicked(dialogFragment: DialogFragment, @ColorInt color: Int) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            DataStore.HighlightColor.putHighlightColor(requireContext(), color)
+            delay(Duration.Delay.DISMISS)
+            dialogFragment.dismiss()
+        }
     }
 
     private fun initData() {
@@ -165,12 +184,12 @@ class ChapterFragment : BaseViewStubFragment(),
         }
     }
 
-    override fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean) {
-        viewModel.updateFavorites(bibleVerse.id, favorites)
+    override fun onFavoriteClick(verse: Verse, favorites: Boolean) {
+        viewModel.updateFavorite(verse.id, favorites)
     }
 
-    override fun onMoreVertClick(bibleVerse: BibleVerse) {
-        OptionChoiceDialogFragment.newInstance(options, bibleVerse).also {
+    override fun onMoreVertClick(verse: Verse) {
+        OptionChoiceDialogFragment.newInstance(options, verse).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -178,17 +197,17 @@ class ChapterFragment : BaseViewStubFragment(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        bibleVerse: BibleVerse?
+        verse: Verse?
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.book, it) }
+                verse?.let { copyToClipboard(requireContext(), viewModel.book, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), viewModel.book, it) }
+                verse?.let { share(requireContext(), viewModel.book, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

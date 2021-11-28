@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/bibleVersePagerFragment"
-        android:name="com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleVersePagerFragment"
+        android:name="com.duke.orca.android.kotlin.biblelockscreen.bible.views.VersePagerFragment"
         android:label="BibleVersePagerFragment" />
 </navigation>

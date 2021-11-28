@@ -1,9 +1,9 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.di.module
 
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleVerseDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleVerseDatasourceImpl
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepositoryImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasource
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasourceImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepositoryImpl
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import dagger.Module
 import dagger.Provides
@@ -14,12 +14,12 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 object VerseModule {
     @Provides
-    fun provideVerseDatasource(database: Database): BibleVerseDatasource {
-        return BibleVerseDatasourceImpl(database)
+    fun provideVerseDatasource(database: Database): VerseDatasource {
+        return VerseDatasourceImpl(database)
     }
 
     @Provides
-    fun provideVerseRepository(datasource: BibleVerseDatasource): BibleVerseRepository {
-        return BibleVerseRepositoryImpl(datasource)
+    fun provideVerseRepository(datasource: VerseDatasource): VerseRepository {
+        return VerseRepositoryImpl(datasource)
     }
 }

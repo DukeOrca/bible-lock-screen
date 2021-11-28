@@ -1,41 +1,50 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local
 
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import androidx.annotation.ColorInt
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SubVerseDatasourceImpl @Inject constructor(private val database: SubDatabase) : SubVerseDatasource {
-    override fun get(id: Int): Flow<BibleVerse> {
-        return database.bibleVerseDao().get(id)
+class SubVerseDatasourceImpl @Inject constructor(private val database: SubDatabase) : VerseDatasource {
+    override fun get(id: Int): Flow<Verse> {
+        return database.verseDao().get(id)
     }
 
-    override fun get(book: Int, chapter: Int): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().get(book, chapter)
+    override fun get(book: Int, chapter: Int): Flow<List<Verse>> {
+        return database.verseDao().get(book, chapter)
     }
 
-    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?> {
-        return database.bibleVerseDao().get(book, chapter, verse)
+    override fun get(book: Int, chapter: Int, verse: Int): Flow<Verse?> {
+        return database.verseDao().get(book, chapter, verse)
     }
 
-    override fun getFavorites(): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().getFavorites()
+    override fun getFavorites(): Flow<List<Verse>> {
+        return database.verseDao().getFavorites()
     }
 
-    override fun search(text: String): Flow<List<BibleVerse>> {
-        return database.bibleVerseDao().search(text)
+    override fun search(text: String): Flow<List<Verse>> {
+        return database.verseDao().search(text)
     }
 
-    override fun single(id: Int): Single<BibleVerse> {
-        return database.bibleVerseDao().single(id)
+    override fun single(id: Int): Single<Verse> {
+        return database.verseDao().single(id)
     }
 
     override suspend fun getVerseCount(book: Int, chapter: Int): Int {
-        return database.bibleVerseDao().getVerseCount(book, chapter)
+        return database.verseDao().getVerseCount(book, chapter)
     }
 
-    override suspend fun updateFavorites(id: Int, favorites: Boolean) {
-        database.bibleVerseDao().updateFavorites(id, favorites)
+    override suspend fun updateBookmark(id: Int, bookmark: Boolean) {
+        database.verseDao().updateBookmark(id, bookmark)
+    }
+
+    override suspend fun updateFavorite(id: Int, favorite: Boolean) {
+        database.verseDao().updateFavorite(id, favorite)
+    }
+
+    override suspend fun updateHighlightColor(id: Int, @ColorInt highlightColor: Int) {
+        database.verseDao().updateHighlightColor(id, highlightColor)
     }
 }

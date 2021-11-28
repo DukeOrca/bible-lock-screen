@@ -2,9 +2,9 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import android.app.Application
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleBookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleVerseRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.flow.first
@@ -13,15 +13,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BibleVersePagerViewModel @Inject constructor(
-    private val bibleBookRepository: BibleBookRepository,
-    private val bibleVerseRepository: BibleVerseRepository,
+    private val bookRepository: BookRepository,
+    private val verseRepository: VerseRepository,
     application: Application
 ) : BaseViewModel(application) {
-    val bibleBook by lazy { bibleBookRepository.get() }
+    val bibleBook by lazy { bookRepository.get() }
     val behaviorSubject: BehaviorSubject<Any> by lazy { BehaviorSubject.create() }
 
     fun get(id: Int) {
-        bibleVerseRepository.single(id)
+        verseRepository.single(id)
             .subscribe ({
                 behaviorSubject.onNext(it)
             }) {
@@ -30,10 +30,10 @@ class BibleVersePagerViewModel @Inject constructor(
     }
 
     suspend fun getVerseCount(book: Int, chapter: Int): Int {
-        return bibleVerseRepository.getVerseCount(book, chapter)
+        return verseRepository.getVerseCount(book, chapter)
     }
 
-    suspend fun get(book: Int, chapter: Int, verse: Int): BibleVerse? {
-        return bibleVerseRepository.get(book, chapter, verse).first()
+    suspend fun get(book: Int, chapter: Int, verse: Int): Verse? {
+        return verseRepository.get(book, chapter, verse).first()
     }
 }

@@ -1,9 +1,9 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.di.module
 
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleChapterDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BibleChapterDatasourceImpl
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleChapterRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BibleChapterRepositoryImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.ChapterDatasource
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.ChapterDatasourceImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.ChapterRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.ChapterRepositoryImpl
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import dagger.Module
 import dagger.Provides
@@ -14,12 +14,12 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 object ChapterModule {
     @Provides
-    fun provideBibleChapterDatasource(database: Database): BibleChapterDatasource {
-        return BibleChapterDatasourceImpl(database)
+    fun provideBibleChapterDatasource(database: Database): ChapterDatasource {
+        return ChapterDatasourceImpl(database)
     }
 
     @Provides
-    fun provideBibleChapterRepository(datasource: BibleChapterDatasource): BibleChapterRepository {
-        return BibleChapterRepositoryImpl(datasource)
+    fun provideBibleChapterRepository(datasource: ChapterDatasource): ChapterRepository {
+        return ChapterRepositoryImpl(datasource)
     }
 }

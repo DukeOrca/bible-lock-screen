@@ -9,14 +9,14 @@ object PreferencesKeys {
 
     val isFirstTime = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.isFirstTime")
 
-    object BibleChapter {
-        private const val OBJECT_NAME = "BibleChapter"
+    object Chapter {
+        private const val OBJECT_NAME = "Chapter"
         val currentChapter = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentChapter")
     }
 
-    object BibleVerse {
-        private const val OBJECT_NAME = "BibleVerse"
-        val currentItem = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentItem")
+    object Verse {
+        private const val OBJECT_NAME = "Verse"
+        val currentVerse = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.currentVerse")
     }
 
     object Font {
@@ -48,5 +48,10 @@ object PreferencesKeys {
         private const val OBJECT_NAME = "Translation"
         val fileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fileName")
         val subFileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.subFileName")
+    }
+
+    object HighlightColor {
+        private const val OBJECT_NAME = "HighlightColor"
+        val highlightColor = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.highlightColor")
     }
 }

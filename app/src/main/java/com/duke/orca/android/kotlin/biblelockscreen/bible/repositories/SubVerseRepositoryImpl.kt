@@ -1,33 +1,34 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
-import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import androidx.annotation.ColorInt
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasource
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SubVerseRepositoryImpl @Inject constructor(private val datasource: SubVerseDatasource) : SubVerseRepository {
-    override fun get(id: Int): Flow<BibleVerse> {
+class SubVerseRepositoryImpl @Inject constructor(private val datasource: VerseDatasource) : VerseRepository {
+    override fun get(id: Int): Flow<Verse> {
         return datasource.get(id)
     }
 
-    override fun get(book: Int, chapter: Int): Flow<List<BibleVerse>> {
+    override fun get(book: Int, chapter: Int): Flow<List<Verse>> {
         return datasource.get(book, chapter)
     }
 
-    override fun get(book: Int, chapter: Int, verse: Int): Flow<BibleVerse?> {
+    override fun get(book: Int, chapter: Int, verse: Int): Flow<Verse?> {
         return datasource.get(book, chapter, verse)
     }
 
-    override fun getFavorites(): Flow<List<BibleVerse>> {
+    override fun getFavorites(): Flow<List<Verse>> {
         return datasource.getFavorites()
     }
 
-    override fun search(text: String): Flow<List<BibleVerse>> {
+    override fun search(text: String): Flow<List<Verse>> {
         return datasource.search(text)
     }
 
-    override fun single(id: Int): Single<BibleVerse> {
+    override fun single(id: Int): Single<Verse> {
         return datasource.single(id)
     }
 
@@ -35,7 +36,15 @@ class SubVerseRepositoryImpl @Inject constructor(private val datasource: SubVers
         return datasource.getVerseCount(book, chapter)
     }
 
-    override suspend fun updateFavorites(id: Int, favorites: Boolean) {
-        datasource.updateFavorites(id, favorites)
+    override suspend fun updateBookmark(id: Int, bookmark: Boolean) {
+        datasource.updateBookmark(id, bookmark)
+    }
+
+    override suspend fun updateFavorite(id: Int, favorite: Boolean) {
+        datasource.updateFavorite(id, favorite)
+    }
+
+    override suspend fun updateHighlightColor(id: Int, @ColorInt highlightColor: Int) {
+        datasource.updateHighlightColor(id, highlightColor)
     }
 }

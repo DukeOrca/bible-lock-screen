@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTextWithSearchWord
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleBook
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Book
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.VerseItemBinding
 import com.google.android.gms.ads.nativead.NativeAd
@@ -18,8 +18,8 @@ import com.like.LikeButton
 import com.like.OnLikeListener
 
 class VerseAdapter(
-    private val bibleBook: BibleBook,
-    private val onItemClick: ((item: BibleVerse) -> Unit)? = null
+    private val book: Book,
+    private val onItemClick: ((item: Verse) -> Unit)? = null
 ) : ListAdapter<VerseAdapter.AdapterItem, VerseAdapter.ViewHolder>(DiffCallback()) {
     private var inflater: LayoutInflater? = null
     private var onIconClickListener: OnIconClickListener? = null
@@ -30,8 +30,8 @@ class VerseAdapter(
     private var color = 0
 
     interface OnIconClickListener {
-        fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean)
-        fun onMoreVertClick(bibleVerse: BibleVerse)
+        fun onFavoriteClick(verse: Verse, favorites: Boolean)
+        fun onMoreVertClick(verse: Verse)
     }
 
     fun setOnIconClickListener(onIconClickListener: OnIconClickListener) {
@@ -59,15 +59,15 @@ class VerseAdapter(
             when(item) {
                 is AdapterItem.AdapterBibleVerse -> {
                     if (viewBinding is VerseItemBinding) {
-                        val bibleVerse = item.bibleVerse
+                        val bibleVerse = item.verse
                         val book = bibleVerse.book
                         val chapter = bibleVerse.chapter
                         val verse = bibleVerse.verse
                         val word = bibleVerse.word
 
-                        val favorites = bibleVerse.favorites
+                        val favorite = bibleVerse.favorite
 
-                        viewBinding.textViewBook.text = bibleBook.name(book)
+                        viewBinding.textViewBook.text = this@VerseAdapter.book.name(book)
                         viewBinding.textViewChapter.text = chapter.toString()
                         viewBinding.textViewVerse.text = verse.toString()
 
@@ -81,7 +81,7 @@ class VerseAdapter(
                             )
                         }
 
-                        viewBinding.likeButton.isLiked = favorites
+                        viewBinding.likeButton.isLiked = favorite
                         viewBinding.likeButton.setOnLikeListener(object : OnLikeListener {
                             override fun liked(likeButton: LikeButton?) {
                                 onIconClickListener?.onFavoriteClick(bibleVerse, true)
@@ -159,8 +159,8 @@ class VerseAdapter(
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class AdapterBibleVerse(val bibleVerse: BibleVerse): AdapterItem() {
-            override val id = bibleVerse.id
+        data class AdapterBibleVerse(val verse: Verse): AdapterItem() {
+            override val id = verse.id
         }
 
         data class AdapterNativeAd(

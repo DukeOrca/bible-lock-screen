@@ -15,7 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleVerse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
@@ -88,12 +88,12 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
         }
     }
 
-    override fun onFavoriteClick(bibleVerse: BibleVerse, favorites: Boolean) {
-        viewModel.updateFavorites(bibleVerse.id, favorites)
+    override fun onFavoriteClick(verse: Verse, favorites: Boolean) {
+        viewModel.updateFavorites(verse.id, favorites)
     }
 
-    override fun onMoreVertClick(bibleVerse: BibleVerse) {
-        OptionChoiceDialogFragment.newInstance(options, bibleVerse).also {
+    override fun onMoreVertClick(verse: Verse) {
+        OptionChoiceDialogFragment.newInstance(options, verse).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -101,17 +101,17 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        bibleVerse: BibleVerse?
+        verse: Verse?
     ) {
         when(option) {
             options[0] -> {
-                bibleVerse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
+                verse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                bibleVerse?.let { share(requireContext(), viewModel.bibleBook, it) }
+                verse?.let { share(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

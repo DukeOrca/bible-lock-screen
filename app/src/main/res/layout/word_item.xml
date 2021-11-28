@@ -14,6 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:elevation="@dimen/elevation_1dp"
         android:foreground="?attr/selectableItemBackground"
         android:paddingBottom="@dimen/padding_8dp"
         android:paddingTop="@dimen/padding_8dp">
@@ -65,11 +68,25 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/options_menu_bar"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/height_72dp"
+        android:background="@color/divider"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="@dimen/padding_8dp"
         android:visibility="gone"
-        layout="@layout/options_menu_bar" />
+        tools:visibility="visible">
+
+        <include
+            android:id="@+id/options_menu_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_56dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            layout="@layout/options_menu_bar" />
+
+    </FrameLayout>
 
 </LinearLayout>
