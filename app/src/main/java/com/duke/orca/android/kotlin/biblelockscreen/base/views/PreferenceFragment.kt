@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentPreferenceBinding
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.preferencesDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter
 
 abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>() {
     abstract val toolbarTitleResId: Int
 
-    protected val dataStore by lazy { requireContext().dataStore }
+    protected val dataStore by lazy { requireContext().preferencesDataStore }
     protected val preferenceAdapter = PreferenceAdapter()
 
     override fun inflate(inflater: LayoutInflater, container: ViewGroup?): FragmentPreferenceBinding {

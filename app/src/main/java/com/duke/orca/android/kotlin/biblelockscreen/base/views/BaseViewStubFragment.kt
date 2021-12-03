@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.annotation.LayoutRes
-import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
@@ -19,11 +18,11 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     abstract val layoutResource: Int
 
     private var viewStub: ViewStub? = null
-    private var onResumed = AtomicBoolean(false)
+    private val onResumed = AtomicBoolean(false)
 
-    protected var isInflated = AtomicBoolean(false)
+    private val isInflated = AtomicBoolean(false)
 
-    abstract fun onInflated(view: View)
+    abstract fun onInflate(view: View)
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -63,7 +62,7 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
                 viewStub?.inflate()?.let {
                     viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
                         delayOnLifecycle(Duration.Delay.SHORT) {
-                            onInflated(it)
+                            onInflate(it)
                             afterOnInflated()
                         }
                     }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/background"
     android:clipChildren="false"
     android:clipToPadding="false"
@@ -11,7 +12,7 @@
     tools:visibility="visible">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_bible_chapter"
+        android:id="@+id/recycler_view_chapter"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/background"

@@ -3,33 +3,35 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 import android.app.Application
 import androidx.annotation.ColorInt
 import androidx.lifecycle.*
-import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasourceImpl
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.*
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.SubBookRepositoryImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.SubVerseRepositoryImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.dataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.preferencesDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChapterViewModel @Inject constructor(
     private val bookRepository: BookRepository,
-    private val chapterRepository: ChapterRepository,
     private val verseRepository: VerseRepository,
     application: Application
 ) : AndroidViewModel(application) {
-    private val dataStore = application.dataStore
+    private val dataStore = application.preferencesDataStore
 
     val highlightColor = dataStore.data.map {
         it[PreferencesKeys.HighlightColor.highlightColor] ?: DataStore.HighlightColor.DEFAULT
@@ -63,9 +65,6 @@ class ChapterViewModel @Inject constructor(
     val book by lazy { bookRepository.get() }
     private val subBook by lazy { subBookRepository?.get() }
 
-    private val _bibleChapter = MutableLiveData<BibleChapter>()
-    val bibleChapter: LiveData<BibleChapter> = _bibleChapter
-
     val font = dataStore.data.mapLatest {
         val size = it[PreferencesKeys.Font.Bible.size] ?: DataStore.Font.DEFAULT_SIZE
         val textAlignment = it[PreferencesKeys.Font.Bible.textAlignment] ?: DataStore.Font.TextAlignment.LEFT
@@ -75,14 +74,6 @@ class ChapterViewModel @Inject constructor(
             size = size,
             textAlignment = textAlignment
         )
-    }
-
-    fun getBibleChapter(book: Int, chapter: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            chapterRepository.get(book, chapter).collect {
-                _bibleChapter.postValue(it)
-            }
-        }
     }
 
     fun getVerses(book: Int, chapter: Int) {
@@ -120,11 +111,11 @@ class ChapterViewModel @Inject constructor(
     }
 
     fun updatePosition(id: Int, position: Int) {
-        if (position == RecyclerView.NO_POSITION) return
-
-        viewModelScope.launch(Dispatchers.IO) {
-            chapterRepository.updatePosition(id, position)
-        }
+//        if (position == RecyclerView.NO_POSITION) return
+//
+//        viewModelScope.launch(Dispatchers.IO) {
+//            chapterRepository.updatePosition(id, position)
+//        }
     }
 
     private fun combine(
@@ -147,6 +138,7 @@ class ChapterViewModel @Inject constructor(
                         subVerse.book,
                         subBook?.name(subVerse.book) ?: BLANK
                     ),
+                    chapter = verse.chapter,
                     verse = verse.verse,
                     word = verse.word,
                     subWord = subVerse.word,
@@ -163,6 +155,7 @@ class ChapterViewModel @Inject constructor(
                         verse.book,
                         book.name(verse.book)
                     ),
+                    chapter = verse.chapter,
                     verse = verse.verse,
                     word = verse.word,
                     bookmark = verse.bookmark,

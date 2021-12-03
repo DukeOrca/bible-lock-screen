@@ -1,15 +1,18 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
+import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.ChapterRepositoryImpl
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.preferencesDataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.recentlyReadDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,33 +20,38 @@ class ChapterPagerViewModel @Inject constructor(
     private val bookRepository: BookRepository,
     application: Application
 ) : AndroidViewModel(application) {
-    private var chapterRepository = ChapterRepositoryImpl.from(application)
+    private val _currentChapter = MutableLiveData<Int>()
+    val currentChapter: LiveData<Int>
+        get() = _currentChapter
 
-    private val _currentItem = MutableLiveData<BibleChapter>()
-    val currentItem: LiveData<BibleChapter> = _currentItem
     val bibleBook by lazy { bookRepository.get() } // todo 확인필.
 
-    fun get(id: Int) {
-        viewModelScope.launch {
-            _currentItem.value = chapterRepository.get(id).first()
+    val preferencesDataStore = application.preferencesDataStore
+    val recentlyReadDataStore = application.recentlyReadDataStore
+
+    var dy = runBlocking {
+        preferencesDataStore.data.map {
+            it[PreferencesKeys.RecentlyRead.Dy]
+        }.first() ?: 0
+    }
+
+    fun setCurrentChapter(value: Int) {
+        _currentChapter.value = value
+    }
+
+    fun updateRecentlyRead(book: Int, chapter: Int) = runBlocking {
+        recentlyReadDataStore.updateData {
+            it.toBuilder()
+                .setBook(book)
+                .setChapter(chapter)
+                .setDy(dy)
+                .build()
         }
     }
 
-    fun getBookmarks() = chapterRepository.getBookmarks().asLiveData(viewModelScope.coroutineContext)
-
-    fun refresh() {
-        chapterRepository = ChapterRepositoryImpl.from(getApplication())
-    }
-
-    fun updateBookmark(id: Int, bookmark: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            chapterRepository.updateBookmark(id, bookmark)
+    fun updateDy() = runBlocking {
+        preferencesDataStore.edit {
+            it[PreferencesKeys.RecentlyRead.Dy] = dy
         }
     }
-
-    suspend fun get(book: Int, chapter: Int): BibleChapter {
-        return chapterRepository.get(book, chapter).first()
-    }
-
-    suspend fun getAll() = chapterRepository.getAll().flowOn(Dispatchers.IO).first()
 }

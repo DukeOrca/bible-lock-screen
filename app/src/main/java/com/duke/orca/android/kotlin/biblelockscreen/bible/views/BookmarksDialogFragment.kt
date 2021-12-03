@@ -67,25 +67,25 @@ class BookmarksDialogFragment : BaseDialogFragment<FragmentBookmarksDialogBindin
     }
 
     override fun onIconClick(item: BibleChapter) {
-        viewModel.updateBookmark(item.id, item.bookmark.not())
+
     }
 
     private fun observe() {
-        viewModel.getBookmarks().observe(viewLifecycleOwner, {
-            chapterAdapter.submitList(it) {
-                delayOnLifecycle(Duration.SHORT) {
-                    if (it.isEmpty()) {
-                        viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
-                    } else {
-                        with(viewBinding.recyclerView) {
-                            if (isInvisible) {
-                                fadeIn(Duration.FADE_IN)
-                            }
-                        }
-                    }
-                }
-            }
-        })
+//        viewModel.getBookmarks().observe(viewLifecycleOwner, {
+//            chapterAdapter.submitList(it) {
+//                delayOnLifecycle(Duration.SHORT) {
+//                    if (it.isEmpty()) {
+//                        viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
+//                    } else {
+//                        with(viewBinding.recyclerView) {
+//                            if (isInvisible) {
+//                                fadeIn(Duration.FADE_IN)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        })
     }
 
     private fun bind() {

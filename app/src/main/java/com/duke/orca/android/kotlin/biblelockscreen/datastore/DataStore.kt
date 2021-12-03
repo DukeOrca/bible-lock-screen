@@ -6,74 +6,80 @@ import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.serializers.RecentlyReadSerializer
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "${Application.PACKAGE_NAME}.settings")
+val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "${Application.PACKAGE_NAME}.settings")
+val Context.recentlyReadDataStore: DataStore<RecentlyRead> by dataStore(
+    fileName = "recently_read.pb",
+    serializer = RecentlyReadSerializer
+)
 
 object DataStore {
     private fun getBoolean(context: Context, key: Preferences.Key<Boolean>, defValue: Boolean): Boolean = runBlocking {
-        context.dataStore.data.map {
+        context.preferencesDataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
     private fun getInt(context: Context, key: Preferences.Key<Int>, defValue: Int): Int = runBlocking {
-        context.dataStore.data.map {
+        context.preferencesDataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
     private fun getFloat(context: Context, key: Preferences.Key<Float>, defValue: Float): Float = runBlocking {
-        context.dataStore.data.map {
+        context.preferencesDataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
     private fun getLong(context: Context, key: Preferences.Key<Long>, defValue: Long): Long = runBlocking {
-        context.dataStore.data.map {
+        context.preferencesDataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
     private fun getString(context: Context, key: Preferences.Key<String>, defValue: String): String = runBlocking {
-        context.dataStore.data.map {
+        context.preferencesDataStore.data.map {
             it[key] ?: defValue
         }.first()
     }
 
     suspend fun putBoolean(context: Context, key: Preferences.Key<Boolean>, value: Boolean) {
-        context.dataStore.edit {
+        context.preferencesDataStore.edit {
             it[key] = value
         }
     }
 
     suspend fun putInt(context: Context, key: Preferences.Key<Int>, value: Int) {
-        context.dataStore.edit {
+        context.preferencesDataStore.edit {
             it[key] = value
         }
     }
 
     suspend fun putFloat(context: Context, key: Preferences.Key<Float>, value: Float) {
-        context.dataStore.edit {
+        context.preferencesDataStore.edit {
             it[key] = value
         }
     }
 
     suspend fun putLong(context: Context, key: Preferences.Key<Long>, value: Long) {
-        context.dataStore.edit {
+        context.preferencesDataStore.edit {
             it[key] = value
         }
     }
 
     suspend fun putString(context: Context, key: Preferences.Key<String>, value: String) {
-        context.dataStore.edit {
+        context.preferencesDataStore.edit {
             it[key] = value
         }
     }
@@ -170,6 +176,14 @@ object DataStore {
         }
         suspend fun putUnlockWithBackKey(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, value)
+        }
+    }
+
+    object RecentlyRead {
+        fun getDy(context: Context): Int = getInt(context, PreferencesKeys.RecentlyRead.Dy, 0)
+
+        fun putDy(context: Context, value: Int) = runBlocking {
+            putInt(context, PreferencesKeys.RecentlyRead.Dy, value)
         }
     }
 

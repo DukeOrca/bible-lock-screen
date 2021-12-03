@@ -156,6 +156,16 @@ class DropdownMenu : FrameLayout {
     }
 
     fun setAdapter(arrayAdapter: ArrayAdapter, currentItem: Int = 0) {
+        setAdapter(arrayAdapter)
+
+        try {
+            viewBinding.textView.text = arrayAdapter.getItem(currentItem)
+        } catch (e: IndexOutOfBoundsException) {
+            Timber.e(e)
+        }
+    }
+
+    fun setAdapter(arrayAdapter: ArrayAdapter) {
         this.arrayAdapter = arrayAdapter.apply {
             onItemClickListener?.let { setOnItemClickListener(it) }
         }
@@ -163,12 +173,6 @@ class DropdownMenu : FrameLayout {
         popupWindowBinding.recyclerView.apply {
             adapter = arrayAdapter
             layoutManager = LinearLayoutManagerWrapper(context)
-        }
-
-        try {
-            viewBinding.textView.text = arrayAdapter.getItem(currentItem)
-        } catch (e: IndexOutOfBoundsException) {
-            Timber.e(e)
         }
     }
 

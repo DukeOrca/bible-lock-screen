@@ -44,6 +44,12 @@ object PreferencesKeys {
         val unlockWithBackKey = booleanPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.unlockWithBackKey")
     }
 
+    object RecentlyRead {
+        private const val OBJECT_NAME = "RecentlyRead"
+
+        val Dy = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.Dy")
+    }
+
     object Translation {
         private const val OBJECT_NAME = "Translation"
         val fileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fileName")

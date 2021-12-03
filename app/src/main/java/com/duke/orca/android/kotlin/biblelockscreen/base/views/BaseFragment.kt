@@ -16,10 +16,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import timber.log.Timber
 
 abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     private var _viewBinding: VB? = null
@@ -79,9 +77,13 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         dispatcher: CoroutineDispatcher = Dispatchers.Main,
         block: () -> Unit
     ) {
-        viewLifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
-            delay(timeMillis)
-            block()
+        try {
+            viewLifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
+                delay(timeMillis)
+                block()
+            }
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
         }
     }
 

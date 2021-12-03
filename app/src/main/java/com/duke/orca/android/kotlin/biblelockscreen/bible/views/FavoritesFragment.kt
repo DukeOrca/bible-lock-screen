@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_VERSE
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -16,7 +18,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.ChapterVerse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
@@ -38,15 +39,14 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     private val viewModel by viewModels<FavoritesViewModel>()
     private val verseAdapter by lazy {
         VerseAdapter(viewModel.bibleBook) {
-            val chapterVerse = ChapterVerse(it.chapter.dec(), it.verse)
-
-            addFragment(
-                R.id.fragment_container_view,
-                parentFragmentManager,
-                ChapterPagerFragment.newInstance(chapterVerse)
-            )
+            with(Intent(requireContext(), ChapterPagerActivity::class.java)) {
+                putExtra(EXTRA_VERSE, it)
+                startActivity(this)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
+            }
         }
     }
+
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     override fun onCreateView(

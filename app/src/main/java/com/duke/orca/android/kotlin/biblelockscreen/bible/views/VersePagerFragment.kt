@@ -29,11 +29,13 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VersePagerAda
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.biblelockscreen.bible.unlock.UnlockController
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVersePagerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VersePagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.billing.model.Sku
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.RecentlyRead
+import com.duke.orca.android.kotlin.biblelockscreen.datastore.recentlyReadDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.annotation.RequireDeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.eventbus.BehaviourEventBus
@@ -51,7 +53,10 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -69,7 +74,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         return FragmentBibleVersePagerBinding.inflate(inflater, container, false)
     }
 
-    private val viewModel by viewModels<BibleVersePagerViewModel>()
+    private val viewModel by viewModels<VersePagerViewModel>()
     private val drawerLayout by lazy { viewBinding.drawerLayout }
     private val versePagerAdapter by lazy { VersePagerAdapter(this) }
     private val unlockController by lazy {
@@ -175,6 +180,16 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             }
         }
 
+        putActivityResultLauncher(Key.CHAPTER_PAGER) { activityResult ->
+            if (activityResult.resultCode == Activity.RESULT_OK) {
+                activityResult.data?.let { data ->
+                    if (data.getBooleanExtra(EXTRA_RECREATE, false)) {
+                        recreate()
+                    }
+                }
+            }
+        }
+
         putBehaviourSubject(Key.DROPDOWN_MENU, BehaviorSubject.create())
         putBehaviourSubject(Key.VIEW_PAGER2, BehaviorSubject.create())
 
@@ -211,12 +226,12 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.item_search -> launch(BibleVerseSearchFragment::class.java.simpleName)
-            R.id.item_favorites -> launch(FavoritesFragment::class.java.simpleName)
-            R.id.item_bible -> launch(ChapterPagerFragment::class.java.simpleName)
-            R.id.item_settings -> launch(SettingsFragment::class.java.simpleName)
-            R.id.item_lock_screen -> launch(LockScreenSettingsFragment::class.java.simpleName)
-            R.id.item_font -> launch(FontSettingsFragment::class.java.simpleName)
+            R.id.item_search -> launchFragmentContainerActivity(BibleVerseSearchFragment::class.java.simpleName)
+            R.id.item_favorites -> launchFragmentContainerActivity(FavoritesFragment::class.java.simpleName)
+            R.id.item_bible -> launchChapterPagerActivity()
+            R.id.item_settings -> launchFragmentContainerActivity(SettingsFragment::class.java.simpleName)
+            R.id.item_lock_screen -> launchFragmentContainerActivity(LockScreenSettingsFragment::class.java.simpleName)
+            R.id.item_font -> launchFragmentContainerActivity(FontSettingsFragment::class.java.simpleName)
             R.id.item_share_the_app -> shareApplication(requireContext())
             R.id.item_write_review -> Review.launchReviewFlow(requireActivity())
         }
@@ -231,15 +246,15 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
         viewBinding.imageViewBible.setOnClickListener {
-            launch(ChapterPagerFragment::class.java.simpleName)
+            launchChapterPagerActivity()
         }
 
         viewBinding.imageViewSearch.setOnClickListener {
-            launch(BibleVerseSearchFragment::class.java.simpleName)
+            launchFragmentContainerActivity(BibleVerseSearchFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewFavorite.setOnClickListener {
-            launch(FavoritesFragment::class.java.simpleName)
+            launchFragmentContainerActivity(FavoritesFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewMenu.setOnClickListener {
@@ -353,11 +368,25 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         }
     }
 
-    private fun launch(simpleName: String) {
+    private fun launchFragmentContainerActivity(simpleName: String) {
         Intent(requireContext(), FragmentContainerActivity::class.java).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             it.putExtra(EXTRA_SIMPLE_NAME, simpleName)
             getActivityResultLauncher(Key.FRAGMENT_CONTAINER)?.launch(it)
             overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
+        }
+    }
+
+    private fun launchChapterPagerActivity() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val recentlyRead = viewModel.recentlyRead.first()
+
+            Intent(requireContext(), ChapterPagerActivity::class.java).also {
+                it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                it.putExtra(EXTRA_RECENTLY_READ, recentlyRead.toByteArray())
+                getActivityResultLauncher(Key.CHAPTER_PAGER)?.launch(it)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
+            }
         }
     }
 
@@ -531,6 +560,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
 
         private object Key {
+            const val CHAPTER_PAGER = "$PACKAGE_NAME.CHAPTER_PAGER"
             const val DEVICE_CREDENTIAL = "$PACKAGE_NAME.DEVICE_CREDENTIAL"
             const val DROPDOWN_MENU = "$PACKAGE_NAME.DROPDOWN_MENU"
             const val FRAGMENT_CONTAINER = "$PACKAGE_NAME.FRAGMENT_CONTAINER"

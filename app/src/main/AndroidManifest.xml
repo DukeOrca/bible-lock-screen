@@ -48,6 +48,15 @@
             android:windowSoftInputMode="adjustNothing|stateHidden" />
 
         <activity
+            android:name=".bible.views.ChapterPagerActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+
+            android:theme="@style/Theme.FragmentContainerActivity"
+            android:windowSoftInputMode="adjustNothing|stateHidden" />
+
+        <activity
             android:name=".settings.views.DisplaySettingsActivity"
             android:excludeFromRecents="true"
             android:exported="true"

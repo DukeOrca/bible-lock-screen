@@ -35,6 +35,8 @@ fun IntRange.toStringArray() = map { it.toString() }.toTypedArray()
 fun String.`is`(other: String): Boolean = this == other
 fun String.not(other: String): Boolean = `is`(other).not()
 
+fun Array<Int>.toStringArray() = map { "$it" }.toTypedArray()
+
 inline fun <T: Any> ifLet(vararg elements: T?, closure: (List<T>) -> Unit) {
     if (elements.all { it.notNull }) {
         closure(elements.filterNotNull())

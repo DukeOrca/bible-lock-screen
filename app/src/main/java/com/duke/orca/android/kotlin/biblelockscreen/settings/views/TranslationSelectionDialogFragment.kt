@@ -63,9 +63,15 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        with(parentFragment) {
-            if (this is OnClickListener) {
-                onClickListener = this
+        parentFragment?.let {
+            if (it is OnClickListener) {
+                onClickListener = it
+            }
+        } ?: run {
+            with(context) {
+                if (this is OnClickListener) {
+                    onClickListener = this
+                }
             }
         }
     }

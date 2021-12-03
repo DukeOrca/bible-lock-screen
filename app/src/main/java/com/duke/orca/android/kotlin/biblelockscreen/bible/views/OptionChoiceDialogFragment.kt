@@ -13,7 +13,7 @@ class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {
         fun onOptionChoice(dialogFragment: DialogFragment, option: String, verse: Verse?)
     }
 
-    private val bibleVerse by lazy { arguments?.getParcelable<Verse>(Key.BIBLE_VERSE) }
+    private val verse by lazy { arguments?.getParcelable<Verse>(Key.VERSE) }
 
     private var onOptionChoiceListener: OnOptionChoiceListener? = null
 
@@ -30,7 +30,7 @@ class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {
     override fun bind(viewBinding: SingleChoiceItemBinding, item: String) {
         viewBinding.root.text = item
         viewBinding.root.setOnClickListener {
-            onOptionChoiceListener?.onOptionChoice(this, item, bibleVerse)
+            onOptionChoiceListener?.onOptionChoice(this, item, verse)
         }
     }
 
@@ -41,14 +41,14 @@ class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {
 
         private object Key {
             const val ITEMS = "$PACKAGE_NAME.ITEMS"
-            const val BIBLE_VERSE = "$PACKAGE_NAME.BIBLE_VERSE"
+            const val VERSE = "$PACKAGE_NAME.VERSE"
         }
 
         fun newInstance(items: Array<String>, verse: Verse): OptionChoiceDialogFragment {
             return OptionChoiceDialogFragment().apply {
                 arguments = bundleOf(
                     Key.ITEMS to items,
-                    Key.BIBLE_VERSE to verse
+                    Key.VERSE to verse
                 )
             }
         }

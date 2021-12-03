@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BibleVerseViewModel @Inject constructor(
+class VerseViewModel @Inject constructor(
     private val bookRepository: BookRepository,
     private val verseRepository: VerseRepository,
     application: Application

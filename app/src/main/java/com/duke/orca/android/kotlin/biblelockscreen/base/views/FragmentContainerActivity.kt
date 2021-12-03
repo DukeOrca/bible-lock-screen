@@ -9,7 +9,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_SIMPLE_NAM
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.notNull
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.views.ChapterPagerFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleVerseSearchFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.FavoritesFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -59,14 +58,13 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
     }
 
     @CallSuper
-    override fun onBackPressed() {
-        super.onBackPressed()
+    override fun finish() {
+        super.finish()
         overridePendingTransition(R.anim.z_adjustment_bottom, R.anim.slide_out_right)
     }
 
     private fun replaceFragment(simpleName: String) {
         val fragment = when (simpleName) {
-            ChapterPagerFragment::class.java.simpleName -> ChapterPagerFragment()
             BibleVerseSearchFragment::class.java.simpleName -> BibleVerseSearchFragment()
             FavoritesFragment::class.java.simpleName -> FavoritesFragment()
             FontSettingsFragment::class.java.simpleName -> FontSettingsFragment()
@@ -82,7 +80,6 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
 
     private fun addFragment(simpleName: String) {
         val fragment = when (simpleName) {
-            ChapterPagerFragment::class.java.simpleName -> ChapterPagerFragment()
             BibleVerseSearchFragment::class.java.simpleName -> BibleVerseSearchFragment()
             FavoritesFragment::class.java.simpleName -> FavoritesFragment()
             FontSettingsFragment::class.java.simpleName -> FontSettingsFragment()

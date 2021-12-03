@@ -4,5 +4,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Applic
 
 private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.application"
 
+const val EXTRA_RECENTLY_READ = "$PACKAGE_NAME.RECENTLY_READ"
 const val EXTRA_RECREATE = "$PACKAGE_NAME.RECREATE"
 const val EXTRA_SIMPLE_NAME = "$PACKAGE_NAME.SIMPLE_NAME"
+const val EXTRA_VERSE = "$PACKAGE_NAME.EXTRA_VERSE"

@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -63,18 +64,28 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
     private var lifecycleCallback: LifecycleCallback? = null
     private var onBookSelectedListener: OnBookSelectedListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
 
-        with(parentFragment) {
-            if (this is LifecycleCallback) {
-                lifecycleCallback = this
+        parentFragment?.let {
+            if (it is LifecycleCallback) {
+                lifecycleCallback = it
             }
 
-            if (this is OnBookSelectedListener) {
-                onBookSelectedListener = this
+            if (it is OnBookSelectedListener) {
+                onBookSelectedListener = it
             }
         }
+
+        with(context) {
+                if (this is LifecycleCallback) {
+                    lifecycleCallback = this
+                }
+
+                if (this is OnBookSelectedListener) {
+                    onBookSelectedListener = this
+                }
+            }
     }
 
     override fun onCreateView(
@@ -169,7 +180,10 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         data class Book(
             override val text: String,
             val index: Int
-        ) : AdapterItem()
+        ) : AdapterItem() {
+            val book: Int
+                get() = index.inc()
+        }
 
         data class Testament(
             override val text: String

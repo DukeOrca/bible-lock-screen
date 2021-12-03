@@ -1,0 +1,11 @@
+
+syntax = "proto3";
+
+option java_package = "com.duke.orca.android.kotlin.biblelockscreen.datastore";
+option java_multiple_files = true;
+
+message RecentlyRead {
+  int32 book = 1;
+  int32 chapter = 2;
+  int32 dy = 3;
+}

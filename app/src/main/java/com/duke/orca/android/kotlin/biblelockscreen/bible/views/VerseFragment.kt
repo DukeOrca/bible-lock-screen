@@ -18,7 +18,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVerseViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VerseViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseBinding
 import com.like.LikeButton
 import com.like.OnLikeListener
@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     OptionChoiceDialogFragment.OnOptionChoiceListener {
-    private val viewModel by viewModels<BibleVerseViewModel>()
+    private val viewModel by viewModels<VerseViewModel>()
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
     override fun inflate(

@@ -1,8 +1,8 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.Context
-import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Parcelable
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,19 +10,19 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
-import com.duke.orca.android.kotlin.biblelockscreen.application.color.ColorCalculator
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
+import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.like.LikeButton
 import com.like.OnLikeListener
+import kotlinx.parcelize.Parcelize
 
 class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordAdapter.ViewHolder>(DiffCallback()) {
     private val layoutInflater = LayoutInflater.from(context)
@@ -238,20 +238,34 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
     sealed class AdapterItem {
         abstract val id: Int
 
+        @Parcelize
         data class Word(
             override val id: Int,
             val book: Book,
             val subBook: Book? = null,
+            val chapter: Int,
             val verse: Int,
             val word: String,
             val subWord: String? = null,
             val bookmark: Boolean,
             val favorite: Boolean,
             @ColorInt val highlightColor: Int,
-        ): AdapterItem() {
+        ): AdapterItem(), Parcelable {
+            @Parcelize
             data class Book(
                 val id: Int,
                 val name: String
+            ) : Parcelable
+
+            fun toVerse() = Verse(
+                id = id,
+                book = book.id,
+                bookmark = bookmark,
+                chapter = chapter,
+                favorite = favorite,
+                highlightColor = highlightColor,
+                verse = verse,
+                word = word
             )
         }
     }
