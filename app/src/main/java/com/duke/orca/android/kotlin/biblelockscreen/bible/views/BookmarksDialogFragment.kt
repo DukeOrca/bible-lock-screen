@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isInvisible
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBookmarksDialogBinding
 import dagger.hilt.android.AndroidEntryPoint

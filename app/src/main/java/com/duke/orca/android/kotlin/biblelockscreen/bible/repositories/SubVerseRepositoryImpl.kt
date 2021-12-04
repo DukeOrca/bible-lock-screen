@@ -1,8 +1,11 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
 import androidx.annotation.ColorInt
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -32,6 +35,10 @@ class SubVerseRepositoryImpl @Inject constructor(private val datasource: VerseDa
         return datasource.single(id)
     }
 
+    override fun loadHighlights(): Flowable<List<Verse>> {
+        return datasource.loadHighlights()
+    }
+
     override suspend fun getVerseCount(book: Int, chapter: Int): Int {
         return datasource.getVerseCount(book, chapter)
     }
@@ -46,5 +53,11 @@ class SubVerseRepositoryImpl @Inject constructor(private val datasource: VerseDa
 
     override suspend fun updateHighlightColor(id: Int, @ColorInt highlightColor: Int) {
         datasource.updateHighlightColor(id, highlightColor)
+    }
+
+    companion object {
+        fun from(database: SubDatabase): VerseRepository {
+            return SubVerseRepositoryImpl(SubVerseDatasourceImpl(database))
+        }
     }
 }

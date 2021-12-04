@@ -6,8 +6,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

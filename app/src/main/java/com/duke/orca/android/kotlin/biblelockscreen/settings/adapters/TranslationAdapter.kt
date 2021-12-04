@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation.Language.toDisplayName
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation.Model
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation.Language.toDisplayName
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation.Model
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.TranslationItemBinding
 
 class TranslationAdapter(

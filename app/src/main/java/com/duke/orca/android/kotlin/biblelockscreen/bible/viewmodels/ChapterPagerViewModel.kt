@@ -26,14 +26,7 @@ class ChapterPagerViewModel @Inject constructor(
 
     val bibleBook by lazy { bookRepository.get() } // todo 확인필.
 
-    val preferencesDataStore = application.preferencesDataStore
     val recentlyReadDataStore = application.recentlyReadDataStore
-
-    var dy = runBlocking {
-        preferencesDataStore.data.map {
-            it[PreferencesKeys.RecentlyRead.Dy]
-        }.first() ?: 0
-    }
 
     fun setCurrentChapter(value: Int) {
         _currentChapter.value = value
@@ -44,14 +37,7 @@ class ChapterPagerViewModel @Inject constructor(
             it.toBuilder()
                 .setBook(book)
                 .setChapter(chapter)
-                .setDy(dy)
                 .build()
-        }
-    }
-
-    fun updateDy() = runBlocking {
-        preferencesDataStore.edit {
-            it[PreferencesKeys.RecentlyRead.Dy] = dy
         }
     }
 }

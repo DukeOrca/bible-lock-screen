@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
 import com.duke.orca.android.kotlin.biblelockscreen.application.not
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import java.util.*
 

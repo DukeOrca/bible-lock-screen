@@ -181,7 +181,6 @@ class DropdownMenu : FrameLayout {
     }
 
     class ArrayAdapter(private val array: Array<String>) : RecyclerView.Adapter<ArrayAdapter.ViewHolder>() {
-        private var itemRippleDrawable: Drawable? = null
         private var onItemClickListener: OnItemClickListener? = null
 
         fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {

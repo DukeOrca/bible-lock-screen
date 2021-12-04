@@ -17,11 +17,11 @@ fun shareApplication(context: Context) {
     }
 }
 
-val Any?.`null`: Boolean
+val Any?.isNull: Boolean
     get() = this == null
 
 val Any?.notNull: Boolean
-    get() = `null`.not()
+    get() = isNull.not()
 
 fun Int?.isZero() = this == 0
 fun Int?.isNonZero() = isZero().not()

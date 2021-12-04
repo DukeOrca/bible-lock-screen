@@ -2,15 +2,12 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import android.app.Application
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.BaseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.recentlyReadDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,7 +19,6 @@ class VersePagerViewModel @Inject constructor(
 ) : BaseViewModel(application) {
     val bibleBook by lazy { bookRepository.get() }
     val behaviorSubject: BehaviorSubject<Any> by lazy { BehaviorSubject.create() }
-    val recentlyRead = application.recentlyReadDataStore.data.flowOn(Dispatchers.IO)
 
     fun get(id: Int) {
         verseRepository.single(id)

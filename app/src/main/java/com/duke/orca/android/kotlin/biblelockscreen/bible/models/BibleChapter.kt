@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.model
+package com.duke.orca.android.kotlin.biblelockscreen.bible.models
 
 import android.os.Parcelable
 import androidx.room.Entity

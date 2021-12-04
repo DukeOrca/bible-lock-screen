@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ItemTouchCallback
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.SelectedTranslationItemBinding
 import java.util.*
 

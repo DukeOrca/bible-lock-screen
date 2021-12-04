@@ -1,11 +1,19 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BookDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Book
+import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasourceImpl
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import javax.inject.Inject
 
 class SubBookRepositoryImpl @Inject constructor(private val datasource: BookDatasource) : BookRepository {
-    override fun get(): Book {
+    override fun get(): Bible {
         return datasource.get()
+    }
+
+    companion object {
+        fun from(database: SubDatabase): BookRepository {
+            return SubBookRepositoryImpl(SubBookDatasourceImpl(database))
+        }
     }
 }

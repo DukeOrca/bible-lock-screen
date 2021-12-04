@@ -9,10 +9,15 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.CallSuper
+import androidx.annotation.IdRes
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.Database
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -24,13 +29,16 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     protected val viewBinding: VB
         get() = _viewBinding!!
 
+    open val toolbar: Toolbar? = null
+
     private val activityResultLauncherHashMap = hashMapOf<String, ActivityResultLauncher<Intent>>()
     private val behaviourSubjectHashMap = hashMapOf<String, BehaviorSubject<Any>>()
     private val publishSubjectHashMap = hashMapOf<String, PublishSubject<Any>>()
 
-    protected val compositeDisposable = CompositeDisposable()
+    protected val bible: Bible
+        get() = Database.getInstance(requireContext()).bibleBookDao().get()
 
-    val chapters: IntArray by lazy { resources.getIntArray(R.array.chapters) }
+    protected val compositeDisposable = CompositeDisposable()
 
     protected fun putActivityResultLauncher(key: String, onActivityResult: (ActivityResult) -> Unit) {
         activityResultLauncherHashMap[key] = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -62,6 +70,10 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     ): View? {
         _viewBinding = inflate(inflater, container)
 
+        toolbar?.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         return viewBinding.root
     }
 
@@ -70,6 +82,24 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         _viewBinding = null
         compositeDisposable.dispose()
         super.onDestroyView()
+    }
+
+    protected fun addFragment(
+        @IdRes containerViewId: Int,
+        fragmentManager: FragmentManager,
+        fragment: Fragment
+    ) {
+        fragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .setReorderingAllowed(true)
+            .add(containerViewId, fragment, fragment.tag)
+            .addToBackStack(fragment.tag)
+            .commit()
     }
 
     protected fun delayOnLifecycle(

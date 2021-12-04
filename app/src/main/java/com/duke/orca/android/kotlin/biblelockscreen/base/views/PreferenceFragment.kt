@@ -8,7 +8,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentPreferen
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.preferencesDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter
 
-abstract class PreferenceFragment : BaseChildFragment<FragmentPreferenceBinding>() {
+abstract class PreferenceFragment : BaseFragment<FragmentPreferenceBinding>() {
     abstract val toolbarTitleResId: Int
 
     protected val dataStore by lazy { requireContext().preferencesDataStore }

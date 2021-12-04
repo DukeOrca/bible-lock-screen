@@ -19,10 +19,10 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.ONE_SE
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVerseSearchViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseSearchBinding
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBinding>(),
+class BibleVerseSearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     override val toolbar: Toolbar? = null
@@ -196,5 +196,5 @@ class BibleVerseSearchFragment : BaseChildFragment<FragmentBibleVerseSearchBindi
         }
     }
 
-    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.AdapterBibleVerse(this)
+    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.AdapterVerse(this)
 }

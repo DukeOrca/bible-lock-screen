@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Font
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -28,7 +28,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
     private val layoutInflater = LayoutInflater.from(context)
 
     private var currentFocus: Int = -1
-    private var font: Font? = null
+    private var currentFont: Font? = null
     @ColorInt
     private var highlightColor: Int = DataStore.HighlightColor.DEFAULT
     private var recyclerView: RecyclerView? = null
@@ -63,8 +63,15 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
     }
 
     fun setFont(font: Font) {
-        this.font = font
-        notifyItemRangeChanged(0, itemCount)
+        this.currentFont?.let {
+            if(it.contentEquals(font).not()) {
+                this.currentFont = font
+                notifyItemRangeChanged(0, itemCount)
+            }
+        } ?: run {
+            this.currentFont = font
+            notifyItemRangeChanged(0, itemCount)
+        }
     }
 
     fun setHighlightColor(@ColorInt highlightColor: Int) {
@@ -86,7 +93,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                     val verse = item.verse.toString()
 
                     with(viewBinding) {
-                        font?.let {
+                        currentFont?.let {
                             textViewVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
 
                             textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)

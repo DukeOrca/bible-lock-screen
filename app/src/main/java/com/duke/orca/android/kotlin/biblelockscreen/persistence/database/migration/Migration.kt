@@ -30,3 +30,17 @@ internal val MIGRATION_2_3 = object : Migration(2, 3) {
         database.execSQL("DROP TABLE bible_chapter")
     }
 }
+
+internal val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL("""
+                CREATE TABLE position (
+                    book INTEGER NOT NULL,
+                    chapter INTEGER NOT NULL,
+                    value INTEGER NOT NULL,
+                    
+                    CONSTRAINT primaryKeys PRIMARY KEY (book, chapter)
+                )
+                """.trimIndent())
+    }
+}

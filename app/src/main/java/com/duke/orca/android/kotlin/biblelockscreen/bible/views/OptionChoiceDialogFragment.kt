@@ -5,7 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.SingleChoiceDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.SingleChoiceItemBinding
 
 class OptionChoiceDialogFragment : SingleChoiceDialogFragment<String>() {

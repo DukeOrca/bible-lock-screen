@@ -26,7 +26,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.FragmentContainerActivity
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VersePagerAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BookToChapters
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTransformer
 import com.duke.orca.android.kotlin.biblelockscreen.bible.unlock.UnlockController
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VersePagerViewModel
@@ -34,8 +35,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.billing.model.Sku
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.RecentlyRead
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.recentlyReadDataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.annotation.RequireDeviceCredential
 import com.duke.orca.android.kotlin.biblelockscreen.eventbus.BehaviourEventBus
@@ -53,10 +52,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -228,7 +224,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         when(item.itemId) {
             R.id.item_search -> launchFragmentContainerActivity(BibleVerseSearchFragment::class.java.simpleName)
             R.id.item_favorites -> launchFragmentContainerActivity(FavoritesFragment::class.java.simpleName)
-            R.id.item_bible -> launchChapterPagerActivity()
+            R.id.item_bible -> launchFragmentContainerActivity(ChapterPagerFragment::class.java.simpleName)
             R.id.item_settings -> launchFragmentContainerActivity(SettingsFragment::class.java.simpleName)
             R.id.item_lock_screen -> launchFragmentContainerActivity(LockScreenSettingsFragment::class.java.simpleName)
             R.id.item_font -> launchFragmentContainerActivity(FontSettingsFragment::class.java.simpleName)
@@ -246,7 +242,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         viewBinding.navigationView.setNavigationItemSelectedListener(this)
 
         viewBinding.imageViewBible.setOnClickListener {
-            launchChapterPagerActivity()
+            launchFragmentContainerActivity(ChapterPagerFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewSearch.setOnClickListener {
@@ -330,7 +326,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                 if (currentItem?.book.not(it.book)) {
                     viewBinding.dropdownMenuChapter.setAdapter(
                         DropdownMenu.ArrayAdapter(
-                            intRange(1, chapters[it.book.dec()]).toStringArray()
+                            BookToChapters.get(it.book).toStringArray()
                         ), it.chapter.dec()
                     )
                 }
@@ -374,19 +370,6 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
             it.putExtra(EXTRA_SIMPLE_NAME, simpleName)
             getActivityResultLauncher(Key.FRAGMENT_CONTAINER)?.launch(it)
             overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
-        }
-    }
-
-    private fun launchChapterPagerActivity() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            val recentlyRead = viewModel.recentlyRead.first()
-
-            Intent(requireContext(), ChapterPagerActivity::class.java).also {
-                it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                it.putExtra(EXTRA_RECENTLY_READ, recentlyRead.toByteArray())
-                getActivityResultLauncher(Key.CHAPTER_PAGER)?.launch(it)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
-            }
         }
     }
 
@@ -450,7 +433,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     }
 
     private fun populateNativeAdView() {
-        if (nativeAd.`null`) {
+        if (nativeAd.isNull) {
             AdLoader.loadNativeAd(requireContext()) {
                 try {
                     with(NativeAdBinding.bind(viewBinding.nativeAd.root)) {

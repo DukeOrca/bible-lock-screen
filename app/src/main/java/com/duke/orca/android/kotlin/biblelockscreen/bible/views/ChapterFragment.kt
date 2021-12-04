@@ -6,56 +6,44 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
 import com.duke.orca.android.kotlin.biblelockscreen.application.color.view.ColorPickerDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseViewStubFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.ViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
-import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 @FlowPreview
 @AndroidEntryPoint
-class ChapterFragment : BaseViewStubFragment(),
+class ChapterFragment : ViewStubFragment(),
     ColorPickerDialogFragment.OnColorPickedListener,
-    VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener
 {
     override val layoutResource: Int
         get() = R.layout.fragment_chapter
 
-    private val activityViewModel by activityViewModels<ChapterPagerViewModel>()
     private val viewModel by viewModels<ChapterViewModel>()
     private val book by lazy { arguments?.getInt(Key.BOOK) ?: 1 }
     private val chapter by lazy { arguments?.getInt(Key.CHAPTER) ?: 1 }
 
     private val wordAdapter by lazy {
         WordAdapter(requireContext()).apply {
-            runBlocking {
-                setFont(viewModel.font.first())
-            }
-
             setOnOptionsItemSelectedListener(object : WordAdapter.OnOptionsItemSelectedListener {
                 override fun onOptionsItemSelected(
                     item: WordAdapter.AdapterItem.Word,
@@ -83,58 +71,40 @@ class ChapterFragment : BaseViewStubFragment(),
 
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
-    private var _binding: FragmentChapterBinding? = null
-    private val binding: FragmentChapterBinding get() = _binding!!
+    private var _viewBinding: FragmentChapterBinding? = null
+    private val viewBinding: FragmentChapterBinding get() = _viewBinding!!
 
     private val scrolledToPosition = AtomicBoolean(false)
 
-    private var dy = 0
-
     override fun onInflate(view: View) {
-        _binding = FragmentChapterBinding.bind(view)
-
-        binding.recyclerViewChapter.apply {
-            adapter = wordAdapter
-            layoutManager = LinearLayoutManagerWrapper(requireContext())
-            setHasFixedSize(true)
-
-            with(itemAnimator) {
-                if (this is SimpleItemAnimator) {
-                    supportsChangeAnimations = false
-                }
-            }
-
-
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    this@ChapterFragment.dy += dy
-                }
-            })
-        }
-
-        if (scrolledToPosition.compareAndSet(false, true)) {
-
-            val recentlyRead = runBlocking {
-                activityViewModel.recentlyReadDataStore.data.first()
-            }
-
-            if (recentlyRead.book.`is`(book) && recentlyRead.chapter.`is`(chapter)) {
-                binding.recyclerViewChapter.smoothScrollBy(0, activityViewModel.dy)
-            }
-
-            delayOnLifecycle(Duration.SHORT) {
-                binding.root.fadeIn(Duration.FADE_IN)
-            }
-        }
+        _viewBinding = FragmentChapterBinding.bind(view)
 
         viewModel.highlightColor.observe(viewLifecycleOwner, {
             wordAdapter.setHighlightColor(it)
         })
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.font.distinctUntilChanged().collectLatest {
-                wordAdapter.setFont(it)
+        with(viewBinding) {
+            if (scrolledToPosition.compareAndSet(false, true)) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val position = viewModel.getPosition(book, chapter)
+
+                    delayOnLifecycle(Duration.SHORT) {
+                        recyclerViewChapter.scrollToPosition(position)
+                        recyclerViewChapter.fadeIn(Duration.FADE_IN)
+                    }
+                }
+            }
+
+            recyclerViewChapter.apply {
+                adapter = wordAdapter
+                layoutManager = LinearLayoutManagerWrapper(requireContext())
+                setHasFixedSize(true)
+
+                with(itemAnimator) {
+                    if (this is SimpleItemAnimator) {
+                        supportsChangeAnimations = false
+                    }
+                }
             }
         }
     }
@@ -145,14 +115,34 @@ class ChapterFragment : BaseViewStubFragment(),
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
+
         initData()
         observe()
 
-        return viewBinding.root
+        return viewStubBinding.root
+    }
+
+    override fun onPause() {
+        insertPosition()
+        super.onPause()
+    }
+
+    private fun insertPosition() {
+        try {
+            val layoutManager = viewBinding.recyclerViewChapter.layoutManager
+
+            if (layoutManager is LinearLayoutManager) {
+                val position = layoutManager.findLastCompletelyVisibleItemPosition()
+
+                viewModel.insertPosition(book, chapter, position)
+            }
+        } catch (e: NullPointerException) {
+            Timber.e(e)
+        }
     }
 
     override fun onDestroyView() {
-        _binding = null
+        _viewBinding = null
         super.onDestroyView()
     }
 
@@ -171,19 +161,11 @@ class ChapterFragment : BaseViewStubFragment(),
     }
 
     private fun observe() {
-        viewModel.adapterItems.observe(viewLifecycleOwner, {
-            wordAdapter.submitList(it)
+        viewModel.pair.observe(viewLifecycleOwner, { (adapterItems, font) ->
+            wordAdapter.submitList(adapterItems) {
+                wordAdapter.setFont(font)
+            }
         })
-    }
-
-    override fun onFavoriteClick(verse: Verse, favorites: Boolean) {
-        viewModel.updateFavorite(verse.id, favorites)
-    }
-
-    override fun onMoreVertClick(verse: Verse) {
-        OptionChoiceDialogFragment.newInstance(options, verse).also {
-            it.show(childFragmentManager, it.tag)
-        }
     }
 
     override fun onOptionChoice(

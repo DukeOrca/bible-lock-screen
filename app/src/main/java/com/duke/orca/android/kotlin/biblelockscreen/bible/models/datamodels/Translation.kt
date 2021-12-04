@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.model
+package com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels
 
 import android.content.Context
 import android.os.Build

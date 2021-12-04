@@ -29,6 +29,7 @@
     <string name="favorites">즐겨찾기</string>
     <string name="font">글꼴</string>
     <string name="font_size">글꼴 크기</string>
+    <string name="highlights">하이라이트</string>
     <string name="lock_screen">잠금화면</string>
     <string name="lock_setting">잠금 설정</string>
     <string name="lock_type">잠금 방식</string>

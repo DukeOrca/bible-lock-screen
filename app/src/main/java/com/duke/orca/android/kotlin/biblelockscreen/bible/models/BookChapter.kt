@@ -1,9 +1,7 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.model
+package com.duke.orca.android.kotlin.biblelockscreen.bible.models
 
 import android.os.Parcelable
-import androidx.room.ColumnInfo
 import kotlinx.parcelize.Parcelize
-import java.util.stream.IntStream
 
 @Parcelize
 class BookChapter (

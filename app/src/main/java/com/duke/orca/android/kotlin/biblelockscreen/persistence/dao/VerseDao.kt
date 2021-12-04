@@ -3,7 +3,8 @@ package com.duke.orca.android.kotlin.biblelockscreen.persistence.dao
 import androidx.annotation.ColorInt
 import androidx.room.Dao
 import androidx.room.Query
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 
@@ -29,6 +30,9 @@ interface VerseDao {
 
     @Query("SELECT * FROM verse WHERE id = :id")
     fun single(id: Int): Single<Verse>
+
+    @Query("SELECT * FROM verse WHERE highlight_color != 0")
+    fun loadHighlights(): Flowable<List<Verse>>
 
     @Query("SELECT COUNT(id) FROM verse WHERE book = :book AND chapter = :chapter")
     suspend fun getVerseCount(book: Int, chapter: Int): Int

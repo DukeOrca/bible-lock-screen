@@ -11,7 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_RECREATE
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.EXTRA_RECREATE
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
@@ -19,7 +19,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem

@@ -6,25 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewStub
 import androidx.annotation.LayoutRes
-import com.duke.orca.android.kotlin.biblelockscreen.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.coroutineScope
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentViewStubBinding
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
+abstract class ViewStubFragment : Fragment() {
     @get:LayoutRes
     abstract val layoutResource: Int
 
-    private var viewStub: ViewStub? = null
+    private val isInflated = AtomicBoolean(false)
     private val onResumed = AtomicBoolean(false)
 
-    private val isInflated = AtomicBoolean(false)
+    private var _viewStubBinding: FragmentViewStubBinding? = null
+    protected val viewStubBinding: FragmentViewStubBinding
+        get() = _viewStubBinding!!
+
+    private var viewStub: ViewStub? = null
 
     abstract fun onInflate(view: View)
 
-    override fun inflate(
+    private fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentViewStubBinding {
@@ -38,11 +47,14 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        viewStub = viewBinding.root.findViewById(R.id.view_stub)
+        _viewStubBinding = inflate(inflater, container)
+
+        viewStub = viewStubBinding.viewStub
         viewStub?.layoutResource = layoutResource
+
         inflate()
 
-        return viewBinding.root
+        return viewStubBinding.root
     }
 
     override fun onResume() {
@@ -56,14 +68,19 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
         super.onPause()
     }
 
+    override fun onDestroyView() {
+        _viewStubBinding = null
+        super.onDestroyView()
+    }
+
     private fun inflate() {
         if (onResumed.get() and isInflated.get().not()) {
             try {
                 viewStub?.inflate()?.let {
-                    viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
+                    viewStubBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
                         delayOnLifecycle(Duration.Delay.SHORT) {
                             onInflate(it)
-                            afterOnInflated()
+                            isInflated.set(true)
                         }
                     }
                 }
@@ -73,7 +90,18 @@ abstract class BaseViewStubFragment : BaseFragment<FragmentViewStubBinding>() {
         }
     }
 
-    private fun afterOnInflated() {
-        isInflated.set(true)
+    protected fun delayOnLifecycle(
+        timeMillis: Long,
+        dispatcher: CoroutineDispatcher = Dispatchers.Main,
+        block: () -> Unit
+    ) {
+        try {
+            viewLifecycleOwner.lifecycle.coroutineScope.launch(dispatcher) {
+                delay(timeMillis)
+                block()
+            }
+        } catch (e: IllegalStateException) {
+            Timber.e(e)
+        }
     }
 }

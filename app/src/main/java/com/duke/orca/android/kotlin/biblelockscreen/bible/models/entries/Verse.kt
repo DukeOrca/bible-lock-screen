@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.model
+package com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries
 
 import android.os.Parcelable
 import androidx.annotation.ColorInt
@@ -20,4 +20,6 @@ data class Verse(
     @ColorInt val highlightColor: Int,
     val verse: Int,
     val word: String
-): Parcelable
+): Parcelable {
+    fun toPosition() = Position(book, chapter, verse)
+}

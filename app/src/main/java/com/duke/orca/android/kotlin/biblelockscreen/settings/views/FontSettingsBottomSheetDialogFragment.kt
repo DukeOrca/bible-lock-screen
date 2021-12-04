@@ -83,7 +83,7 @@ class FontSettingsBottomSheetDialogFragment : BottomSheetDialogFragment() {
             }
         })
 
-        viewBinding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        viewBinding.materialButtonToggleGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             val imageView = viewBinding.imageViewTextAlignment
             val textAlignment = when(checkedId) {
                 R.id.material_button_align_left -> {

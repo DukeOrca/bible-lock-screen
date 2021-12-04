@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTint
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Book
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.BibleChapter
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BibleChapter
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.ChapterItemBinding
 
 class ChapterAdapter(
     context: Context,
-    private val book: Book
+    private val bible: Bible
 ) : ListAdapter<BibleChapter, ChapterAdapter.ViewHolder>(DiffCallback()) {
     private val format = context.getString(R.string.format_bible_chapter)
     private val inflater = LayoutInflater.from(context)
@@ -40,7 +40,7 @@ class ChapterAdapter(
 
     inner class ViewHolder(private val viewBinding: ChapterItemBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: BibleChapter) {
-            val text = String.format(format, book.name(item.book), item.chapter)
+            val text = String.format(format, bible.name(item.book), item.chapter)
 
             with(viewBinding) {
                 textView.text = text

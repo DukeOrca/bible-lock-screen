@@ -90,14 +90,6 @@ object DataStore {
         putBoolean(context, PreferencesKeys.isFirstTime, value)
     }
 
-    object Chapter {
-        fun getCurrentChapter(context: Context) = getInt(context, PreferencesKeys.Chapter.currentChapter, 0)
-
-        fun putCurrentChapter(context: Context, value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.Chapter.currentChapter, value)
-        }
-    }
-
     object Verse {
         fun getCurrentVerse(context: Context) = getInt(context, PreferencesKeys.Verse.currentVerse, 0)
 
@@ -176,14 +168,6 @@ object DataStore {
         }
         suspend fun putUnlockWithBackKey(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, value)
-        }
-    }
-
-    object RecentlyRead {
-        fun getDy(context: Context): Int = getInt(context, PreferencesKeys.RecentlyRead.Dy, 0)
-
-        fun putDy(context: Context, value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.RecentlyRead.Dy, value)
         }
     }
 

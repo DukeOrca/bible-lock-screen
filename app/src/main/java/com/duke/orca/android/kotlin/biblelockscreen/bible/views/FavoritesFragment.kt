@@ -1,33 +1,35 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.EXTRA_VERSE
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.RequestKey
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
-import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseChildFragment
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
+class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
-    override val toolbar: Toolbar by lazy { viewBinding.toolbar }
+    override val toolbar: Toolbar? by lazy { viewBinding.toolbar }
 
     override fun inflate(
         inflater: LayoutInflater,
@@ -39,12 +41,27 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
     private val viewModel by viewModels<FavoritesViewModel>()
     private val verseAdapter by lazy {
         VerseAdapter(viewModel.bibleBook) {
-            with(Intent(requireContext(), ChapterPagerActivity::class.java)) {
-                putExtra(EXTRA_VERSE, it)
-                startActivity(this)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.z_adjustment_bottom)
+            if (fragmentResultSetRequired) {
+                viewModel.insertPosition(it.toPosition())
+
+                setFragmentResult(
+                    RequestKey.HIGHLIGHTS_FRAGMENT,
+                    bundleOf(Key.VERSE to it)
+                )
+
+                parentFragmentManager.popBackStackImmediate()
+            } else {
+                addFragment(
+                    R.id.fragment_container_view,
+                    parentFragmentManager,
+                    ChapterPagerFragment.newInstance(it)
+                )
             }
         }
+    }
+
+    private val fragmentResultSetRequired by lazy {
+        arguments?.getBoolean(Key.FRAGMENT_RESULT_SET_REQUIRED) ?: false
     }
 
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
@@ -57,7 +74,7 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
         super.onCreateView(inflater, container, savedInstanceState)
         observe()
         bind()
-        viewModel.getFavorites()
+        viewModel.loadFavorites()
 
         return viewBinding.root
     }
@@ -114,6 +131,16 @@ class FavoritesFragment : BaseChildFragment<FragmentFavoritesBinding>(),
                 verse?.let { share(requireContext(), viewModel.bibleBook, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
+                }
+            }
+        }
+    }
+
+    companion object {
+        fun newInstance(fragmentResultSetRequired: Boolean): FavoritesFragment {
+            return FavoritesFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(Key.FRAGMENT_RESULT_SET_REQUIRED, fragmentResultSetRequired)
                 }
             }
         }

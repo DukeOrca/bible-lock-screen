@@ -1,7 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

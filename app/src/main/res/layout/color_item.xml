@@ -7,7 +7,7 @@
     android:elevation="@dimen/elevation_4dp"
     android:layout_width="@dimen/width_40dp"
     android:layout_height="@dimen/height_40dp"
-    android:layout_margin="@dimen/padding_8dp">
+    android:layout_margin="@dimen/margin_8dp">
 
     <ImageView
         android:id="@+id/image_view"

@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.biblelockscreen.bible.model
+package com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -8,7 +8,7 @@ import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "bible_book")
 @Parcelize
-data class Book (
+data class Bible (
     @PrimaryKey
     val names: Array<String>,
 ) : Parcelable {
@@ -16,7 +16,7 @@ data class Book (
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Book
+        other as Bible
 
         if (!names.contentEquals(other.names)) return false
 

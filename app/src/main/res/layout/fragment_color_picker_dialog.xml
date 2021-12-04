@@ -4,9 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_corners"
-    android:backgroundTint="@color/surface"
-    android:paddingBottom="@dimen/padding_8dp"
-    android:paddingTop="@dimen/padding_8dp">
+    android:backgroundTint="@color/surface">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

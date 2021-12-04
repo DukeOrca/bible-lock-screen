@@ -11,7 +11,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentTranslationSelectionDialogBinding
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.SelectedTranslationAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.TranslationAdapter

@@ -197,6 +197,7 @@ fun View.rotate(
         .rotation(degrees)
         .setDuration(duration)
         .setListener(animationListenerAdapter)
+        .withLayer()
         .start()
 }
 

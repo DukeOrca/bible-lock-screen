@@ -2,7 +2,8 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
 import androidx.annotation.ColorInt
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasource
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -30,6 +31,10 @@ class VerseRepositoryImpl @Inject constructor(private val datasource: VerseDatas
 
     override fun single(id: Int): Single<Verse> {
         return datasource.single(id)
+    }
+
+    override fun loadHighlights(): Flowable<List<Verse>> {
+        return datasource.loadHighlights()
     }
 
     override suspend fun getVerseCount(book: Int, chapter: Int): Int {

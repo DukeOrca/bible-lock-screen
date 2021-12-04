@@ -16,7 +16,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Durati
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.model.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VerseViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseBinding

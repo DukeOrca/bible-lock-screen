@@ -28,6 +28,7 @@
     <string name="favorites">Favorites</string>
     <string name="font">Font</string>
     <string name="font_size">Font size</string>
+    <string name="highlights">Highlights</string>
     <string name="lock_screen">Lock screen</string>
     <string name="lock_setting">Lock setting</string>
     <string name="lock_type">Lock type</string>
