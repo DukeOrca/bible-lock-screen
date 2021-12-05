@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable-v24/ripple_unlock.xml" value="0.13229166666666667" />
         <entry key="app/src/main/res/drawable/ad_notification_shape.xml" value="0.12604166666666666" />
         <entry key="app/src/main/res/drawable/ad_shape.xml" value="0.19375" />
+        <entry key="app/src/main/res/drawable/background_rounded_corners.xml" value="0.20052083333333334" />
         <entry key="app/src/main/res/drawable/ic_bookmark_like_24.xml" value="0.2101851851851852" />
         <entry key="app/src/main/res/drawable/ic_bookmark_unlike_24.xml" value="0.2101851851851852" />
         <entry key="app/src/main/res/drawable/ic_favorite_like_24.xml" value="0.2101851851851852" />
@@ -105,7 +106,7 @@
         <entry key="app/src/main/res/layout/text_alignment_choice_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/translation_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/translation_selection_item.xml" value="0.1484375" />
-        <entry key="app/src/main/res/layout/verse_item.xml" value="0.13645833333333332" />
+        <entry key="app/src/main/res/layout/verse_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/verse_option_bar.xml" value="0.335" />
         <entry key="app/src/main/res/layout/verse_word.xml" value="0.36007462686567165" />
         <entry key="app/src/main/res/layout/word.xml" value="0.335" />

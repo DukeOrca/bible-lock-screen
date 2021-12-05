@@ -223,7 +223,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
-            R.id.item_search -> launchFragmentContainerActivity(BibleVerseSearchFragment::class.java.simpleName)
+            R.id.item_search -> launchFragmentContainerActivity(SearchFragment::class.java.simpleName)
             R.id.item_favorites -> launchFragmentContainerActivity(FavoritesFragment::class.java.simpleName)
             R.id.item_bible -> launchFragmentContainerActivity(ChapterPagerFragment::class.java.simpleName)
             R.id.item_settings -> launchFragmentContainerActivity(SettingsFragment::class.java.simpleName)
@@ -247,7 +247,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         }
 
         viewBinding.imageViewSearch.setOnClickListener {
-            launchFragmentContainerActivity(BibleVerseSearchFragment::class.java.simpleName)
+            launchFragmentContainerActivity(SearchFragment::class.java.simpleName)
         }
 
         viewBinding.imageViewFavorite.setOnClickListener {

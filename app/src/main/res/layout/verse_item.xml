@@ -1,104 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/background"
-    android:clipChildren="false"
-    android:clipToPadding="false"
-    android:foreground="?attr/selectableItemBackground"
-    android:paddingBottom="@dimen/padding_12dp"
-    android:paddingEnd="@dimen/padding_16dp"
-    android:paddingStart="@dimen/padding_16dp"
-    android:paddingTop="@dimen/padding_16dp">
+    app:cardCornerRadius="@dimen/radius_8dp">
 
-    <TextView
-        android:id="@+id/text_view_word"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:textSize="@dimen/text_size_16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="태초에 하나님이 천지를 창조하시니라" />
+        android:background="@color/background"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingBottom="@dimen/padding_12dp"
+        android:padding="@dimen/padding_16dp">
 
-    <TextView
-        android:id="@+id/text_view_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_1dp"
-        android:layout_marginTop="@dimen/margin_12dp"
-        android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/text_view_word"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_word"
-        tools:text="창세기" />
+        <TextView
+            android:id="@+id/text_view_word"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:textSize="@dimen/text_size_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_book"
+            tools:text="태초에 하나님이 천지를 창조하시니라" />
 
-    <TextView
-        android:id="@+id/text_view_chapter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_8dp"
-        android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/text_view_book"
-        app:layout_constraintStart_toEndOf="@+id/text_view_book"
-        app:layout_constraintTop_toTopOf="@+id/text_view_book"
-        tools:text="1" />
+        <TextView
+            android:id="@+id/text_view_book"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:textSize="@dimen/text_size_16dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/text_view_word"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="창세기" />
 
-    <TextView
-        android:id="@+id/text_view_colon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:gravity="center"
-        android:paddingEnd="@dimen/padding_4dp"
-        android:paddingStart="@dimen/padding_4dp"
-        android:text="@string/colon"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/text_view_chapter"
-        app:layout_constraintStart_toEndOf="@+id/text_view_chapter"
-        app:layout_constraintTop_toTopOf="@+id/text_view_chapter" />
+        <TextView
+            android:id="@+id/text_view_chapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:textSize="@dimen/text_size_16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_book"
+            app:layout_constraintStart_toEndOf="@+id/text_view_book"
+            app:layout_constraintTop_toTopOf="@+id/text_view_book"
+            tools:text="1" />
 
-    <TextView
-        android:id="@+id/text_view_verse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/font_family_nanum_myeongjo"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/text_view_colon"
-        app:layout_constraintStart_toEndOf="@+id/text_view_colon"
-        app:layout_constraintTop_toTopOf="@+id/text_view_colon"
-        tools:text="1" />
+        <TextView
+            android:id="@+id/text_view_colon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:gravity="center"
+            android:paddingEnd="@dimen/padding_4dp"
+            android:paddingStart="@dimen/padding_4dp"
+            android:text="@string/colon"
+            android:textSize="@dimen/text_size_16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_chapter"
+            app:layout_constraintStart_toEndOf="@+id/text_view_chapter"
+            app:layout_constraintTop_toTopOf="@+id/text_view_chapter" />
 
-    <com.like.LikeButton
-        android:id="@+id/like_button"
-        android:layout_width="@dimen/width_24dp"
-        android:layout_height="@dimen/height_24dp"
-        android:layout_marginEnd="@dimen/margin_8dp"
-        app:circle_end_color="@color/circle_end"
-        app:circle_start_color="@color/circle_start"
-        app:dots_primary_color="@color/dots_primary"
-        app:dots_secondary_color="@color/dots_secondary"
-        app:icon_size="@dimen/width_24dp"
-        app:icon_type="heart"
-        app:like_drawable="@drawable/ic_favorite_like_24"
-        app:unlike_drawable="@drawable/ic_favorite_unlike_24"
-        app:layout_constraintBottom_toBottomOf="@+id/image_view_more_vert"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_more_vert"
-        app:layout_constraintTop_toTopOf="@+id/image_view_more_vert" />
+        <TextView
+            android:id="@+id/text_view_verse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:textSize="@dimen/text_size_16dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/text_view_colon"
+            app:layout_constraintStart_toEndOf="@+id/text_view_colon"
+            app:layout_constraintTop_toTopOf="@+id/text_view_colon"
+            tools:text="1" />
 
-    <ImageView
-        android:id="@+id/image_view_more_vert"
-        android:layout_width="@dimen/width_24dp"
-        android:layout_height="@dimen/height_24dp"
-        android:layout_marginTop="@dimen/margin_16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_word"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_word"
-        app:srcCompat="@drawable/ic_round_more_vert_24"
-        app:tint="@color/icon"/>
+        <com.like.LikeButton
+            android:id="@+id/like_button_bookmark"
+            android:layout_width="@dimen/width_24dp"
+            android:layout_height="@dimen/height_24dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            app:circle_end_color="@color/circle_end"
+            app:circle_start_color="@color/circle_start"
+            app:dots_primary_color="@color/dots_primary"
+            app:dots_secondary_color="@color/dots_secondary"
+            app:icon_size="@dimen/width_24dp"
+            app:icon_type="heart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
+            app:like_drawable="@drawable/ic_bookmark_like_24"
+            app:unlike_drawable="@drawable/ic_bookmark_unlike_24" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.like.LikeButton
+            android:id="@+id/like_button_favorite"
+            android:layout_width="@dimen/width_24dp"
+            android:layout_height="@dimen/height_24dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            app:circle_end_color="@color/circle_end"
+            app:circle_start_color="@color/circle_start"
+            app:dots_primary_color="@color/dots_primary"
+            app:dots_secondary_color="@color/dots_secondary"
+            app:icon_size="@dimen/width_24dp"
+            app:icon_type="heart"
+            app:layout_constraintBottom_toBottomOf="@+id/like_button_bookmark"
+            app:layout_constraintStart_toEndOf="@+id/like_button_bookmark"
+            app:layout_constraintTop_toTopOf="@+id/like_button_bookmark"
+            app:like_drawable="@drawable/ic_favorite_like_24"
+            app:unlike_drawable="@drawable/ic_favorite_unlike_24" />
+
+        <ImageView
+            android:id="@+id/image_view_more_vert"
+            android:layout_width="@dimen/width_24dp"
+            android:layout_height="@dimen/height_24dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_word"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
+            app:srcCompat="@drawable/ic_round_more_vert_24"
+            app:tint="@color/icon"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

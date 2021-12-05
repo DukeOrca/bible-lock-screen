@@ -75,11 +75,12 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
         }
     }
 
-    fun setHighlightColor(@ColorInt highlightColor: Int) {
+    fun setHighlightColor(@ColorInt highlightColor: Int, onNotifyItemChanged: (AdapterItem) -> Unit) {
         this.highlightColor = highlightColor
 
         if (currentFocus.not(-1)) {
             notifyItemChanged(currentFocus)
+            onNotifyItemChanged.invoke(getItem(currentFocus))
         }
     }
 

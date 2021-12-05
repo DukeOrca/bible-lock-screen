@@ -21,6 +21,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentCont
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
+import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
 
@@ -62,6 +63,7 @@ class SettingsFragment : PreferenceFragment(),
                 DataStore.Translation.putSubFileName(requireContext(), BLANK)
             }
 
+            SubDatabase.refresh(requireContext())
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
         }
 

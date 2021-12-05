@@ -99,7 +99,7 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
                 val map = list.groupBy { it.highlightColor }
 
                 highlightAdapter.submitMap(map) {
-                    if (selectedItem.`is`(-1)) {
+                    if (map.isNotEmpty() && selectedItem.`is`(-1)) {
                         highlightAdapter.select(0)
                     }
                 }

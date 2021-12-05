@@ -98,7 +98,7 @@
     <color name="green_700">#388E3C</color>
 
     <color name="card_background">#61000000</color>
-    <color name="divider">#1F000000</color>
+    <color name="divider">#E0E0E0</color> <!-- #1F000000 -->
     <color name="hint_text">#99FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>
     <color name="nothing_found">#61000000</color>

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Highlight
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.HighlightItemBinding
+import timber.log.Timber
 
 class HighlightAdapter(
     private val onItemSelected: (selectedItem: Highlight) -> Unit
@@ -31,9 +32,13 @@ class HighlightAdapter(
     }
 
     fun select(position: Int) {
-        with(getItem(position)) {
-            selectedItem = this
-            onItemSelected.invoke(this)
+        try {
+            with(getItem(position)) {
+                selectedItem = this
+                onItemSelected.invoke(this)
+            }
+        } catch (e: IndexOutOfBoundsException) {
+            Timber.e(e)
         }
     }
 

@@ -9,7 +9,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.EXTRA_
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.notNull
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.bible.views.BibleVerseSearchFragment
+import com.duke.orca.android.kotlin.biblelockscreen.bible.views.SearchFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.ChapterPagerFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.FavoritesFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.views.HighlightsFragment
@@ -71,7 +71,7 @@ class FragmentContainerActivity : BaseLockScreenActivity() {
 
     private fun replaceFragment(simpleName: String) {
         val fragment = when (simpleName) {
-            BibleVerseSearchFragment::class.java.simpleName -> BibleVerseSearchFragment()
+            SearchFragment::class.java.simpleName -> SearchFragment()
             ChapterPagerFragment::class.java.simpleName -> ChapterPagerFragment()
             FavoritesFragment::class.java.simpleName -> FavoritesFragment()
             FontSettingsFragment::class.java.simpleName -> FontSettingsFragment()

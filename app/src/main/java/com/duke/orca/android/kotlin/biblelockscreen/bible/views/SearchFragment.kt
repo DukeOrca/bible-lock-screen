@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class BibleVerseSearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
+class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     override val toolbar: Toolbar? = null
@@ -165,8 +165,12 @@ class BibleVerseSearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>()
         }
     }
 
-    override fun onFavoriteClick(verse: Verse, favorites: Boolean) {
-        viewModel.updateFavorites(verse.id, favorites)
+    override fun onBookmarkClick(verse: Verse, bookmark: Boolean) {
+        viewModel.updateBookmark(verse.id, bookmark)
+    }
+
+    override fun onFavoriteClick(verse: Verse, favorite: Boolean) {
+        viewModel.updateFavorite(verse.id, favorite)
     }
 
     override fun onMoreVertClick(verse: Verse) {

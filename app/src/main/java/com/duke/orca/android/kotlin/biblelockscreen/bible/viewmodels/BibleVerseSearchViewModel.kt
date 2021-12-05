@@ -30,9 +30,15 @@ class BibleVerseSearchViewModel @Inject constructor(
         }
     }
 
-    fun updateFavorites(id: Int, favorites: Boolean) {
+    fun updateBookmark(id: Int, bookmark: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
-            verseRepository.updateFavorite(id, favorites)
+            verseRepository.updateBookmark(id, bookmark)
+        }
+    }
+
+    fun updateFavorite(id: Int, favorite: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            verseRepository.updateFavorite(id, favorite)
         }
     }
 }

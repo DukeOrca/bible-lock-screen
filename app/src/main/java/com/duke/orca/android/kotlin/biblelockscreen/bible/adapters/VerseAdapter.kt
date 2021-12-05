@@ -31,7 +31,8 @@ class VerseAdapter(
     private var color = 0
 
     interface OnIconClickListener {
-        fun onFavoriteClick(verse: Verse, favorites: Boolean)
+        fun onBookmarkClick(verse: Verse, bookmark: Boolean)
+        fun onFavoriteClick(verse: Verse, favorite: Boolean)
         fun onMoreVertClick(verse: Verse)
     }
 
@@ -66,10 +67,6 @@ class VerseAdapter(
         }
     }
 
-    private fun Verse.toAdapterVerse(): AdapterItem.AdapterVerse {
-        return AdapterItem.AdapterVerse(this)
-    }
-
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
@@ -81,6 +78,7 @@ class VerseAdapter(
                 is AdapterItem.AdapterVerse -> {
                     if (viewBinding is VerseItemBinding) {
                         val verse = item.verse
+                        val bookmark = verse.bookmark
                         val favorite = verse.favorite
 
                         viewBinding.textViewBook.text = bible.name(verse.book)
@@ -97,8 +95,19 @@ class VerseAdapter(
                             )
                         }
 
-                        viewBinding.likeButton.isLiked = favorite
-                        viewBinding.likeButton.setOnLikeListener(object : OnLikeListener {
+                        viewBinding.likeButtonBookmark.isLiked = bookmark
+                        viewBinding.likeButtonBookmark.setOnLikeListener(object : OnLikeListener {
+                            override fun liked(likeButton: LikeButton?) {
+                                TODO("Not yet implemented")
+                            }
+
+                            override fun unLiked(likeButton: LikeButton?) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+
+                        viewBinding.likeButtonFavorite.isLiked = favorite
+                        viewBinding.likeButtonFavorite.setOnLikeListener(object : OnLikeListener {
                             override fun liked(likeButton: LikeButton?) {
                                 onIconClickListener?.onFavoriteClick(verse, true)
                             }

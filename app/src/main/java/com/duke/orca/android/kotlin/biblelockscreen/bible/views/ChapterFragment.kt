@@ -15,6 +15,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.color.view.Color
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.isNonZero
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.ViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
@@ -79,8 +80,14 @@ class ChapterFragment : ViewStubFragment(),
     override fun onInflate(view: View) {
         _viewBinding = FragmentChapterBinding.bind(view)
 
-        viewModel.highlightColor.observe(viewLifecycleOwner, {
-            wordAdapter.setHighlightColor(it)
+        viewModel.highlightColor.observe(viewLifecycleOwner, { highlightColor ->
+            wordAdapter.setHighlightColor(highlightColor) { adapterItem ->
+                adapterItem.also {
+                    if (it is WordAdapter.AdapterItem.Word && it.highlightColor.isNonZero()) {
+                        viewModel.updateHighlightColor(it.id, highlightColor)
+                    }
+                }
+            }
         })
 
         with(viewBinding) {
