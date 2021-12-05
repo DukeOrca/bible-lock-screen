@@ -3,6 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.application
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.graphics.drawable.RippleDrawable
 import android.os.Handler

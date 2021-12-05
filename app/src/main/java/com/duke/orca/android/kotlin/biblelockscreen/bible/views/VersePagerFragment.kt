@@ -32,7 +32,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.pagetransformer.PageTr
 import com.duke.orca.android.kotlin.biblelockscreen.bible.unlock.UnlockController
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VersePagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.billing.model.Sku
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentVersePagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.devicecredential.DeviceCredential
@@ -59,15 +59,15 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 @RequireDeviceCredential
-class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
+class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
     BookSelectionDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     NavigationView.OnNavigationItemSelectedListener {
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentBibleVersePagerBinding {
-        return FragmentBibleVersePagerBinding.inflate(inflater, container, false)
+    ): FragmentVersePagerBinding {
+        return FragmentVersePagerBinding.inflate(inflater, container, false)
     }
 
     private val viewModel by viewModels<VersePagerViewModel>()
@@ -96,6 +96,7 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
     }
 
     private var currentItem: Verse? = null
+    private var currentPageMargin = 0.0f
     private var nativeAd: NativeAd? = null
     private var nativeAdBinding: NativeAdBinding? = null
 
@@ -415,6 +416,8 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
         onPageAnimationEnd: (() -> Unit)? = null
     ) {
         try {
+            if (currentPageMargin == pageMargin) return
+
             viewBinding.viewPager2.setPageTransformer(PageTransformer(
                 pageMargin,
                 scheduleAnimation
@@ -427,6 +430,8 @@ class VersePagerFragment : BaseFragment<FragmentBibleVersePagerBinding>(),
                     })
                 }
             })
+
+            currentPageMargin = pageMargin
         } catch (e: NullPointerException) {
             Timber.e(e)
         }

@@ -1,6 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Parcelable
 import android.util.TypedValue
@@ -95,31 +96,31 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                     with(viewBinding) {
                         currentFont?.let {
                             textViewVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
-
                             textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
                             textViewWord.gravity = it.textAlignment
 
                             textViewSubVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
-
                             textViewSubWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
                             textViewSubWord.gravity = it.textAlignment
                         }
 
                         textViewVerse.text = verse
+                        textViewWord.text = item.word
 
                         if (item.highlightColor.isZero()) {
-                            textViewWord.text = item.word
+                            textViewWord.backgroundTintList = null
                         } else {
-                            textViewWord.setHighlightedText(item.highlightColor, item.word)
+                            textViewWord.backgroundTintList = ColorStateList.valueOf(item.highlightColor)
                         }
 
                         item.subWord?.let {
                             textViewSubVerse.text = verse
+                            textViewSubWord.text = it
 
                             if (item.highlightColor.isZero()) {
-                                textViewSubWord.text = it
+                                textViewSubWord.backgroundTintList = null
                             } else {
-                                textViewSubWord.setHighlightedText(item.highlightColor, it)
+                                textViewSubWord.backgroundTintList = ColorStateList.valueOf(item.highlightColor)
                             }
                         } ?: run {
                             textViewSubVerse.hide()

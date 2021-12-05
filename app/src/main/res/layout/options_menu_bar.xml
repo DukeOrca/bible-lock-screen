@@ -29,7 +29,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/text_view_verse"
         android:layout_marginStart="@dimen/margin_16dp"
-        app:srcCompat="@drawable/ic_highlight_128px"
+        app:srcCompat="@drawable/ic_highlight_64px"
         style="@style/Icon.OptionBar"
         tools:ignore="ContentDescription" />
 

@@ -40,7 +40,14 @@ class VerseAdapter(
     }
 
     fun submitMap(map: Map<AdapterItem.AdapterBook, List<AdapterItem.AdapterVerse>>) {
+        val arrayList = arrayListOf<AdapterItem>()
 
+        map.forEach { (book, verses) ->
+            arrayList.add(book)
+            arrayList.addAll(verses)
+        }
+
+        submitList(arrayList)
     }
 
     fun submitList(
@@ -59,10 +66,6 @@ class VerseAdapter(
         }
     }
 
-    fun submitVerses(list: List<Verse>) {
-        submitList(list.map { it.toAdapterVerse() })
-    }
-
     private fun Verse.toAdapterVerse(): AdapterItem.AdapterVerse {
         return AdapterItem.AdapterVerse(this)
     }
@@ -70,13 +73,17 @@ class VerseAdapter(
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
+                is AdapterItem.AdapterBook -> {
+                    if (viewBinding is BookItemBinding) {
+                        viewBinding.root.text = bible.name(item.value)
+                    }
+                }
                 is AdapterItem.AdapterVerse -> {
                     if (viewBinding is VerseItemBinding) {
                         val verse = item.verse
-
                         val favorite = verse.favorite
 
-                        viewBinding.textViewBook.text = this@VerseAdapter.bible.name(verse.book)
+                        viewBinding.textViewBook.text = bible.name(verse.book)
                         viewBinding.textViewChapter.text = "${verse.chapter}"
                         viewBinding.textViewVerse.text = "${verse.verse}"
 
@@ -170,7 +177,7 @@ class VerseAdapter(
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class AdapterBook(val name: String): AdapterItem() {
+        data class AdapterBook(val value: Int): AdapterItem() {
             override val id = -1
         }
 

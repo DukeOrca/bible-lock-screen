@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_8dp"
             android:fontFamily="@font/font_family_nanum_myeongjo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,12 +35,14 @@
             android:id="@+id/text_view_word"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_16dp"
             android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:background="@drawable/rounded_corners"
             android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:padding="@dimen/padding_8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_view_verse"
-            app:layout_constraintTop_toTopOf="@+id/text_view_verse"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="참고 선을 행하여 영광과 존귀와 썩지 아니함을 구하는 자에게는 영생으로 하시고" />
 
         <TextView
@@ -47,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/font_family_nanum_myeongjo"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
@@ -58,11 +61,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="@dimen/margin_16dp"
+            android:background="@drawable/rounded_corners"
             android:fontFamily="@font/font_family_nanum_myeongjo"
+            android:padding="@dimen/padding_8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_view_sub_verse"
-            app:layout_constraintTop_toTopOf="@+id/text_view_sub_verse"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
             tools:text="참고 선을 행하여 영광과 존귀와 썩지 아니함을 구하는 자에게는 영생으로 하시고" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -105,6 +105,81 @@
 
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/text_view_sub_word"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_24dp"
+                android:layout_marginEnd="@dimen/margin_24dp"
+                android:fontFamily="@font/font_family_nanum_myeongjo"
+                android:scrollbars="vertical"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_20dp"
+                tools:text="In the beginning God created the heaven and the earth." />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_24dp"
+                android:layout_marginBottom="@dimen/margin_24dp"
+                android:layout_marginStart="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_16dp">
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    tools:ignore="UselessParent">
+
+                    <TextView
+                        android:id="@+id/text_view_sub_book"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="Genesis" />
+
+                    <TextView
+                        android:id="@+id/text_view_sub_chapter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                    <TextView
+                        android:id="@+id/text_view_sub_colon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:gravity="center"
+                        android:paddingEnd="@dimen/padding_4dp"
+                        android:paddingStart="@dimen/padding_4dp"
+                        android:text="@string/colon"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text_view_sub_verse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_16dp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

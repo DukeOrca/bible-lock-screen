@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
+import android.app.Application
 import androidx.annotation.ColorInt
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubVerseDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.VerseDatasource
@@ -56,7 +57,9 @@ class SubVerseRepositoryImpl @Inject constructor(private val datasource: VerseDa
     }
 
     companion object {
-        fun from(database: SubDatabase): VerseRepository {
+        fun from(application: Application): VerseRepository? {
+            val database = SubDatabase.getInstance(application) ?: return null
+
             return SubVerseRepositoryImpl(SubVerseDatasourceImpl(database))
         }
     }

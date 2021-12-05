@@ -1,5 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.repositories
 
+import android.app.Application
+import android.content.Context
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.BookDatasource
 import com.duke.orca.android.kotlin.biblelockscreen.bible.datasource.local.SubBookDatasourceImpl
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
@@ -12,7 +14,9 @@ class SubBookRepositoryImpl @Inject constructor(private val datasource: BookData
     }
 
     companion object {
-        fun from(database: SubDatabase): BookRepository {
+        fun from(application: Application): BookRepository? {
+            val database = SubDatabase.getInstance(application) ?: return null
+
             return SubBookRepositoryImpl(SubBookDatasourceImpl(database))
         }
     }

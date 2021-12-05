@@ -7,14 +7,14 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.hideRipple
 import com.duke.orca.android.kotlin.biblelockscreen.application.scale
 import com.duke.orca.android.kotlin.biblelockscreen.application.showRipple
 import com.duke.orca.android.kotlin.biblelockscreen.application.translateX
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVersePagerBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentVersePagerBinding
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
 
 class UnlockController(
-    private val viewBinding: FragmentBibleVersePagerBinding,
+    private val viewBinding: FragmentVersePagerBinding,
     private val callback: Callback
 ) {
     interface Callback {

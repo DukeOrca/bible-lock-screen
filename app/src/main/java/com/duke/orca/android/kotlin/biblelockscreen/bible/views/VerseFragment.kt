@@ -12,29 +12,35 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.hide
+import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.VerseViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentVerseBinding
 import com.like.LikeButton
 import com.like.OnLikeListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
+class VerseFragment : BaseFragment<FragmentVerseBinding>(),
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     private val viewModel by viewModels<VerseViewModel>()
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
+    private var currentFont: Font? = null
+
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentBibleVerseBinding {
-        return FragmentBibleVerseBinding.inflate(inflater, container, false)
+    ): FragmentVerseBinding {
+        return FragmentVerseBinding.inflate(inflater, container, false)
     }
 
     override fun onCreateView(
@@ -45,24 +51,33 @@ class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
         super.onCreateView(inflater, container, savedInstanceState)
         observe(viewBinding)
 
-        viewModel.get(arguments?.getInt(Key.ID) ?: 0)
+        val id = arguments?.getInt(Key.ID) ?: 0
+
+        viewModel.loadVerseById(id)
+        viewModel.loadSubVerseById(id)
 
         return viewBinding.root
     }
 
-    private fun observe(binding: FragmentBibleVerseBinding) {
-        viewModel.pair.observe(viewLifecycleOwner, { pair ->
-            pair?.let {
-                val verse = it.first
-                val font = it.second
-
+    private fun observe(binding: FragmentVerseBinding) {
+        viewModel.triple.observe(viewLifecycleOwner, { triple ->
+            triple?.let { (verse, subVerse, font) ->
                 val typeface = binding.textViewWord.typeface
 
                 with(font) {
+                    currentFont?.let {
+                        if (it.contentEquals(this)) {
+                            return@with
+                        }
+                    }
+
                     binding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
                     binding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
                     binding.textViewWord.gravity = textAlignment
 
+                    binding.textViewSubWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
+                    binding.textViewSubWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+                    binding.textViewSubWord.gravity = textAlignment
 
                     with(size.minus(
                         when {
@@ -75,7 +90,14 @@ class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
                         binding.textViewChapter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
                         binding.textViewColon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
                         binding.textViewVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
+
+                        binding.textViewSubBook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
+                        binding.textViewSubChapter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
+                        binding.textViewSubColon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
+                        binding.textViewSubVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
                     }
+
+                    currentFont = this
                 }
 
                 FrameLayout.LayoutParams(
@@ -84,18 +106,32 @@ class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
                 ).apply {
                     gravity = font.textAlignment
                     binding.linearLayout.layoutParams = this
+                    binding.linearLayoutSub.layoutParams = this
                 }
 
-                bind(binding, verse)
+                bind(binding, verse, subVerse)
             }
         })
     }
 
-    private fun bind(binding: FragmentBibleVerseBinding, verse: Verse) {
+    private fun bind(binding: FragmentVerseBinding, verse: Verse, subVerse: Verse?) {
         binding.textViewWord.text = verse.word
-        binding.textViewBook.text = viewModel.bibleBook.name(verse.book)
-        binding.textViewChapter.text = verse.chapter.toString()
-        binding.textViewVerse.text = verse.verse.toString()
+        binding.textViewBook.text = viewModel.bible.name(verse.book)
+        binding.textViewChapter.text = "${verse.chapter}"
+        binding.textViewVerse.text = "${verse.verse}"
+
+        subVerse?.let {
+            binding.textViewSubWord.show()
+            binding.linearLayoutSub.show()
+
+            binding.textViewSubWord.text = it.word
+            binding.textViewSubBook.text = viewModel.subBible?.name(it.book) ?: BLANK
+            binding.textViewSubChapter.text = "${it.chapter}"
+            binding.textViewSubVerse.text = "${it.verse}"
+        } ?: run {
+            binding.textViewSubWord.hide()
+            binding.linearLayoutSub.hide()
+        }
 
         binding.likeButton.isLiked = verse.favorite
         binding.likeButton.setOnLikeListener(object : OnLikeListener {
@@ -134,13 +170,13 @@ class VerseFragment : BaseFragment<FragmentBibleVerseBinding>(),
     ) {
         when(option) {
             options[0] -> {
-                verse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
+                verse?.let { copyToClipboard(requireContext(), viewModel.bible, it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }
             }
             options[1] -> {
-                verse?.let { share(requireContext(), viewModel.bibleBook,  it) }
+                verse?.let { share(requireContext(), viewModel.bible,  it) }
                 delayOnLifecycle(Duration.Delay.DISMISS) {
                     dialogFragment.dismiss()
                 }

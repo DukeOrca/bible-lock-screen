@@ -39,7 +39,7 @@ abstract class SubDatabase: RoomDatabase() {
         fun getInstance(context: Context): SubDatabase? {
             synchronized(this) {
                 return INSTANCE ?: let {
-                    getBuilder(context)?.build().also {
+                    getBuilder(context.applicationContext)?.build().also {
                         INSTANCE = it
                     }
                 }

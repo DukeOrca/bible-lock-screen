@@ -12,7 +12,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.*
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.PreferencesKeys
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.preferencesDataStore
-import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -31,12 +30,12 @@ class ChapterViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
     private val preferencesDataStore = application.preferencesDataStore
 
-    private val subDatabase = SubDatabase.getInstance(application)
     private val subBookRepository by lazy {
-        subDatabase?.let { SubBookRepositoryImpl.from(it) }
+        SubBookRepositoryImpl.from(application)
     }
+
     private val subVerseRepository by lazy {
-        subDatabase?.let { SubVerseRepositoryImpl.from(it) }
+        SubVerseRepositoryImpl.from(application)
     }
 
     private val verses = MutableLiveData<List<Verse>>()

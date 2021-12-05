@@ -9,6 +9,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.RequestKey
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -36,8 +37,11 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
     }
 
     private val highlightAdapter by lazy {
-        HighlightAdapter {
-            verseAdapter.submitVerses(it.verses)
+        HighlightAdapter { highlight ->
+            val adapterVerses = highlight.verses.map { VerseAdapter.AdapterItem.AdapterVerse(it) }
+            val map = adapterVerses.groupBy { VerseAdapter.AdapterItem.AdapterBook(it.verse.book) }
+
+            verseAdapter.submitMap(map)
         }
     }
 
@@ -62,6 +66,7 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
         }
     }
 
+    private var selectedItem = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,7 +99,9 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
                 val map = list.groupBy { it.highlightColor }
 
                 highlightAdapter.submitMap(map) {
-
+                    if (selectedItem.`is`(-1)) {
+                        highlightAdapter.select(0)
+                    }
                 }
             }
         )
