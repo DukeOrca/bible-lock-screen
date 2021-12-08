@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.not
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
@@ -112,7 +113,9 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
         }
 
         viewBinding.textViewCancel.setOnClickListener {
-            onClickListener?.onNegativeButtonClick(this)
+            delayOnLifecycle(Duration.Delay.DISMISS) {
+                onClickListener?.onNegativeButtonClick(this)
+            }
         }
 
         viewBinding.textViewOk.setOnClickListener {

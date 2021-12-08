@@ -1,7 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Parcelable
 import android.util.TypedValue
@@ -9,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -100,31 +100,25 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
                             textViewWord.gravity = it.textAlignment
 
-                            textViewSubVerse.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
                             textViewSubWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, it.size)
                             textViewSubWord.gravity = it.textAlignment
                         }
 
                         textViewVerse.text = verse
-                        textViewWord.text = item.word
 
                         if (item.highlightColor.isZero()) {
-                            textViewWord.backgroundTintList = null
+                            textViewWord.text = item.word
                         } else {
-                            textViewWord.backgroundTintList = ColorStateList.valueOf(item.highlightColor)
+                            textViewWord.setHighlightedText(item.highlightColor, item.word)
                         }
 
                         item.subWord?.let {
-                            textViewSubVerse.text = verse
-                            textViewSubWord.text = it
-
                             if (item.highlightColor.isZero()) {
-                                textViewSubWord.backgroundTintList = null
+                                textViewSubWord.text = it
                             } else {
-                                textViewSubWord.backgroundTintList = ColorStateList.valueOf(item.highlightColor)
+                                textViewSubWord.setHighlightedText(item.highlightColor, item.subWord)
                             }
                         } ?: run {
-                            textViewSubVerse.hide()
                             textViewSubWord.hide()
                         }
 
@@ -132,7 +126,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             optionsMenuBar.bind(item)
 
                             with(frameLayout) {
-                                if (isVisible.not()) {
+                                if (isGone) {
                                     expand(Duration.EXPAND)
                                 }
                             }
@@ -266,16 +260,8 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                 val name: String
             ) : Parcelable
 
-            fun toVerse() = Verse(
-                id = id,
-                book = book.id,
-                bookmark = bookmark,
-                chapter = chapter,
-                favorite = favorite,
-                highlightColor = highlightColor,
-                verse = verse,
-                word = word
-            )
+            val content: Verse.Content
+                get() = Verse.Content(book.id, chapter, verse, word)
         }
     }
 

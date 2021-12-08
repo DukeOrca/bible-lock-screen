@@ -78,7 +78,7 @@ object Translation {
         const val UPDATED_KING_JAMES_VERSION = "Updated King James Version"
     }
 
-    fun getName(context: Context): String {
+    fun findNameByFileName(context: Context): String {
         return when (DataStore.Translation.getFileName(context)) {
             FileName.AMERICAN_KING_JAMES_VERSION -> Name.AMERICAN_KING_JAMES_VERSION
             FileName.AMERICAN_STANDARD_VERSION -> Name.AMERICAN_STANDARD_VERSION
@@ -122,7 +122,7 @@ object Translation {
         }
     }
 
-    private fun getName(fileName: String): String {
+    fun findNameByFileName(fileName: String): String {
         return when (fileName) {
             FileName.AMERICAN_KING_JAMES_VERSION -> Name.AMERICAN_KING_JAMES_VERSION
             FileName.AMERICAN_STANDARD_VERSION -> Name.AMERICAN_STANDARD_VERSION
@@ -172,7 +172,7 @@ object Translation {
             fileName = fileName,
             isSelected = isSelected,
             language = getLanguage(fileName),
-            name = getName(fileName)
+            name = findNameByFileName(fileName)
         )
     }
 }

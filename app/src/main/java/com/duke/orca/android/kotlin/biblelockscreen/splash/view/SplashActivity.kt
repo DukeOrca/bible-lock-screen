@@ -28,14 +28,14 @@ class SplashActivity: AppCompatActivity() {
         )
 
         lifecycleScope.launch(Dispatchers.Main) {
-            delay(Duration.Delay.SHORT)
+            delay(Duration.Delay.START_ACTIVITY)
             startActivity(customAnimation.toBundle())
         }
     }
 
     private fun startActivity(options: Bundle) {
         findViewById<ImageView>(R.id.image_view)?.let {
-            it.fadeIn(Duration.FADE_IN) {
+            it.fadeIn(Duration.Animation.FADE_IN) {
                 startActivity(Intent(this, MainActivity::class.java), options)
                 finish()
             }

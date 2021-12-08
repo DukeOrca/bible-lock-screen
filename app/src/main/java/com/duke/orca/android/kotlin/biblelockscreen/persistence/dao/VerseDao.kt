@@ -31,6 +31,9 @@ interface VerseDao {
     @Query("SELECT * FROM verse WHERE id = :id")
     fun single(id: Int): Single<Verse>
 
+    @Query("SELECT * FROM verse WHERE bookmark = 1")
+    fun loadBookmarks(): Flowable<List<Verse>>
+
     @Query("SELECT * FROM verse WHERE highlight_color != 0")
     fun loadHighlights(): Flowable<List<Verse>>
 

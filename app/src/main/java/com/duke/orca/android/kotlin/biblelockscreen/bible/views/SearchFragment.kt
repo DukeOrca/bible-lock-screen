@@ -44,7 +44,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     }
 
     private val viewModel by viewModels<BibleVerseSearchViewModel>()
-    private val bibleVerseAdapter by lazy { VerseAdapter(viewModel.bibleBook) }
+    private val verseAdapter by lazy { VerseAdapter(viewModel.bibleBook) }
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -78,7 +78,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
             val searchWord = searchResult.searchWord
 
             viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
-                bibleVerseAdapter.submitList(
+                verseAdapter.submitGroupedList(
                     searchResults.map { it.toAdapterItem() }, searchWord, color
                 ) {
                     delayOnLifecycle(Duration.Delay.DISMISS) {
@@ -94,7 +94,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     }
 
     private fun bind() {
-        bibleVerseAdapter.setOnIconClickListener(this)
+        verseAdapter.setOnIconClickListener(this)
 
         // val searchMagIcon = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_mag_icon)
         // val searchCloseBtn = viewBinding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
@@ -137,7 +137,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
         })
 
         viewBinding.recyclerView.apply {
-            adapter = bibleVerseAdapter
+            adapter = verseAdapter
             layoutManager = LinearLayoutManagerWrapper(context)
             setHasFixedSize(true)
         }
@@ -152,13 +152,13 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
             if (viewBinding.linearLayout.isVisible) {
                 viewBinding.linearLayout.fadeOut(Duration.FADE_OUT) {
                     viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
-                    bibleVerseAdapter.submitList(null)
+                    verseAdapter.submitList(null)
                     viewModel.search(text)
                 }
             } else {
                 viewBinding.recyclerView.fadeOut(Duration.FADE_OUT, true) {
                     viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
-                    bibleVerseAdapter.submitList(null)
+                    verseAdapter.submitList(null)
                     viewModel.search(text)
                 }
             }
@@ -174,7 +174,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     }
 
     override fun onMoreVertClick(verse: Verse) {
-        OptionChoiceDialogFragment.newInstance(options, verse).also {
+        OptionChoiceDialogFragment.newInstance(options, verse.content).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -182,23 +182,19 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        verse: Verse?
+        content: Verse.Content
     ) {
         when(option) {
             options[0] -> {
-                verse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                copyToClipboard(requireContext(), viewModel.bibleBook, content)
+                dialogFragment.dismiss()
             }
             options[1] -> {
-                verse?.let { share(requireContext(), viewModel.bibleBook, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                share(requireContext(), viewModel.bibleBook, content)
+                dialogFragment.dismiss()
             }
         }
     }
 
-    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.AdapterVerse(this)
+    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.VerseItem(this)
 }

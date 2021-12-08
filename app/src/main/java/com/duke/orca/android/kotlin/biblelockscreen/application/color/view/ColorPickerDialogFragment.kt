@@ -10,6 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.color.adapter.ColorAdapter
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentColorPickerDialogBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -23,7 +24,9 @@ class ColorPickerDialogFragment : BaseDialogFragment<FragmentColorPickerDialogBi
             resources.getIntArray(R.array.highlight_colors),
             DataStore.HighlightColor.getHighlightColor(requireContext()),
         ) {
-            onColorPickedListener?.onColorPicked(this, it)
+            delayOnLifecycle(Duration.Delay.DISMISS) {
+                onColorPickedListener?.onColorPicked(this, it)
+            }
         }
     }
 

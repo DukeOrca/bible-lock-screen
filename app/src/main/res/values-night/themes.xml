@@ -82,6 +82,7 @@
         <item name="android:editTextStyle">@style/EditTextStyle</item>
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
+        <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowAnimationStyle">@style/WindowAnimation.Fading</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowIsTranslucent">false</item>
@@ -132,7 +133,7 @@
     </style>
 
     <style name="WindowAnimation.Fading">
-        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 

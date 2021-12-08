@@ -21,5 +21,17 @@ data class Verse(
     val verse: Int,
     val word: String
 ): Parcelable {
-    fun toPosition() = Position(book, chapter, verse)
+    val position: Position
+        get() = Position(book, chapter, verse)
+
+    val content: Content
+        get() = Content(book, chapter, verse, word)
+
+    @Parcelize
+    data class Content(
+        val book: Int,
+        val chapter: Int,
+        val verse: Int,
+        val word: String
+    ) : Parcelable
 }

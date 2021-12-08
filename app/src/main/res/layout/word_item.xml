@@ -17,15 +17,12 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:foreground="?attr/selectableItemBackground"
-        android:paddingBottom="@dimen/padding_8dp"
-        android:paddingTop="@dimen/padding_8dp">
+        android:padding="@dimen/margin_16dp" >
 
         <TextView
             android:id="@+id/text_view_verse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="@dimen/margin_8dp"
             android:fontFamily="@font/font_family_nanum_myeongjo"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,39 +34,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginEnd="@dimen/margin_16dp"
-            android:background="@drawable/background_rounded_corners"
             android:fontFamily="@font/font_family_nanum_myeongjo"
-            android:padding="@dimen/padding_8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_view_verse"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="참고 선을 행하여 영광과 존귀와 썩지 아니함을 구하는 자에게는 영생으로 하시고" />
 
         <TextView
-            android:id="@+id/text_view_sub_verse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="@dimen/margin_16dp"
-            android:fontFamily="@font/font_family_nanum_myeongjo"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_view_word"
-            tools:text="150" />
-
-        <TextView
             android:id="@+id/text_view_sub_word"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="@dimen/margin_16dp"
-            android:background="@drawable/background_rounded_corners"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/font_family_nanum_myeongjo"
-            android:padding="@dimen/padding_8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/text_view_sub_verse"
+            app:layout_constraintEnd_toEndOf="@+id/text_view_word"
+            app:layout_constraintStart_toStartOf="@+id/text_view_word"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
             tools:text="참고 선을 행하여 영광과 존귀와 썩지 아니함을 구하는 자에게는 영생으로 하시고" />
 
@@ -79,7 +57,7 @@
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_72dp"
-        android:background="@color/divider"
+        android:background="@color/background_recycler_view"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:padding="@dimen/padding_8dp"

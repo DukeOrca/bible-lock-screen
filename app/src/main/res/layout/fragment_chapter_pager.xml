@@ -34,58 +34,51 @@
             app:titleTextColor="@color/title_text">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout_translation"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:clipToPadding="false">
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_16dp">
 
-                <LinearLayout
-                    android:id="@+id/linear_layout_book"
+                <TextView
+                    android:id="@+id/text_view_translation"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:clipChildren="false"
-                    android:clipToPadding="false"
-                    android:gravity="center_vertical"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font_family_nanum_myeongjo"
+                    android:textSize="@dimen/text_size_12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/text_view_sub_translation"
+                    app:layout_constraintEnd_toStartOf="@+id/image_view_translation"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="개역한글" />
+
+                <TextView
+                    android:id="@+id/text_view_sub_translation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_4dp"
+                    android:fontFamily="@font/font_family_nanum_myeongjo"
+                    android:textSize="@dimen/text_size_12dp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/image_view_translation"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_view_translation"
                     tools:visibility="visible"
-                    tools:ignore="UseCompoundDrawables">
+                    tools:text="King James Version"/>
 
-                    <TextView
-                        android:id="@+id/text_view_book"
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/height_36dp"
-                        android:layout_weight="1"
-                        android:clickable="false"
-                        android:drawablePadding="@dimen/padding_8dp"
-                        android:ellipsize="end"
-                        android:focusable="false"
-                        android:fontFamily="@font/font_family_nanum_myeongjo"
-                        android:gravity="center"
-                        android:inputType="none"
-                        android:maxLines="1"
-                        android:textColor="@color/text"
-                        android:textSize="@dimen/text_size_16dp"
-                        android:textStyle="bold"
-                        tools:text="데살로니가후서" />
-
-                    <ImageView
-                        android:id="@+id/image_view_book"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_8dp"
-                        android:layout_marginStart="@dimen/margin_24dp"
-                        android:padding="@dimen/padding_8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
-                        app:tint="@color/icon"
-                        tools:ignore="ContentDescription" />
-
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/image_view_translation"
+                    android:layout_width="@dimen/width_28dp"
+                    android:layout_height="@dimen/height_28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_round_arrow_drop_down_24"
+                    app:tint="@color/icon"
+                    tools:ignore="ContentDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,10 +90,58 @@
             android:layout_height="@dimen/height_48dp"
             android:gravity="center_vertical">
 
+            <LinearLayout
+                android:id="@+id/linear_layout_book"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:paddingEnd="@dimen/padding_12dp"
+                android:paddingStart="@dimen/padding_56dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_chapter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseCompoundDrawables"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/text_view_book"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/height_36dp"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:drawablePadding="@dimen/padding_8dp"
+                    android:ellipsize="end"
+                    android:focusable="false"
+                    android:fontFamily="@font/font_family_nanum_myeongjo"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:textColor="@color/text"
+                    android:textSize="@dimen/text_size_14dp"
+                    android:textStyle="bold"
+                    tools:text="데살로니가후서" />
+
+                <ImageView
+                    android:id="@+id/image_view_book"
+                    android:layout_width="@dimen/width_28dp"
+                    android:layout_height="@dimen/height_28dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:srcCompat="@drawable/ic_round_arrow_drop_down_24"
+                    app:tint="@color/icon"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
             <com.duke.orca.android.kotlin.biblelockscreen.widget.DropdownMenu
                 android:id="@+id/dropdown_menu_chapter"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_4dp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,10 +156,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout"
         app:layout_behavior="@string/scrolling_view_behavior"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -196,25 +233,13 @@
                 android:id="@+id/image_view_dark_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="@dimen/padding_8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/image_view_translate"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_round_light_mode_24"
-                app:tint="@color/icon"
-                tools:ignore="ContentDescription"/>
-
-            <ImageView
-                android:id="@+id/image_view_translate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="@dimen/padding_8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_round_translate_24"
+                app:srcCompat="@drawable/ic_round_light_mode_24"
                 app:tint="@color/icon"
                 tools:ignore="ContentDescription"/>
 

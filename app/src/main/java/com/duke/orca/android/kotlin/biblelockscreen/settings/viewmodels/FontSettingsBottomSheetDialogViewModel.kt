@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FontSettingsBottomSheetDialogViewModel(application: Application)
     : AndroidViewModel(application) {
@@ -15,9 +16,7 @@ class FontSettingsBottomSheetDialogViewModel(application: Application)
         }
     }
 
-    fun putTextAlignment(textAlignment: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            DataStore.Font.Bible.putTextAlignment(getApplication(), textAlignment)
-        }
+    fun putTextAlignment(textAlignment: Int) = runBlocking {
+        DataStore.Font.Bible.putTextAlignment(getApplication(), textAlignment)
     }
 }

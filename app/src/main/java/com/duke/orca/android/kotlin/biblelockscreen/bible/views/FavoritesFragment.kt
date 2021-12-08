@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
-import androidx.core.view.isInvisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -15,6 +17,8 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Durati
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.RequestKey
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
+import com.duke.orca.android.kotlin.biblelockscreen.application.isNotVisible
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
@@ -24,6 +28,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 
 @AndroidEntryPoint
 class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
@@ -42,7 +47,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     private val verseAdapter by lazy {
         VerseAdapter(viewModel.bibleBook) {
             if (fragmentResultSetRequired) {
-                viewModel.insertPosition(it.toPosition())
+                viewModel.insertPosition(it.position)
 
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
@@ -66,29 +71,31 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
 
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        observe()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initData()
         bind()
-        viewModel.loadFavorites()
+        observe()
+    }
 
-        return viewBinding.root
+    private fun initData() {
+        viewModel.loadFavorites()
     }
 
     private fun observe() {
         viewModel.adapterItems.observe(viewLifecycleOwner, {
             if (it.isEmpty()) {
-                viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
+                viewBinding.linearLayout.fadeIn(Duration.Animation.FADE_IN)
+            } else {
+                viewBinding.linearLayout.fadeOut(Duration.Animation.FADE_OUT)
             }
 
-            verseAdapter.submitList(it) {
-                if (viewBinding.recyclerView.isInvisible) {
-                    delayOnLifecycle(Duration.Delay.DISMISS) {
-                        viewBinding.recyclerView.fadeIn(Duration.FADE_IN)
+            verseAdapter.submitGroupedList(it) {
+                with(viewBinding.recyclerView) {
+                    if (isNotVisible) {
+                        delayOnLifecycle(Duration.Delay.SLIDE_IN) {
+                            fadeIn(Duration.Animation.FADE_IN)
+                        }
                     }
                 }
             }
@@ -100,6 +107,11 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
 
         viewBinding.recyclerView.apply {
             adapter = verseAdapter
+            itemAnimator = FadeInAnimator().apply {
+                addDuration = 0L
+                moveDuration = Duration.ItemAnimator.MOVE
+                removeDuration = Duration.ItemAnimator.REMOVE
+            }
             layoutManager = LinearLayoutManagerWrapper(context)
             setHasFixedSize(true)
         }
@@ -114,7 +126,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     }
 
     override fun onMoreVertClick(verse: Verse) {
-        OptionChoiceDialogFragment.newInstance(options, verse).also {
+        OptionChoiceDialogFragment.newInstance(options, verse.content).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -122,20 +134,16 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        verse: Verse?
+        content: Verse.Content
     ) {
         when(option) {
             options[0] -> {
-                verse?.let { copyToClipboard(requireContext(), viewModel.bibleBook, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                copyToClipboard(requireContext(), viewModel.bibleBook, content)
+                dialogFragment.dismiss()
             }
             options[1] -> {
-                verse?.let { share(requireContext(), viewModel.bibleBook, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                share(requireContext(), viewModel.bibleBook, content)
+                dialogFragment.dismiss()
             }
         }
     }

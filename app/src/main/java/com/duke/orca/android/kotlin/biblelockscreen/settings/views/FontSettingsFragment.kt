@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.PreferenceFragment
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -47,7 +48,10 @@ class FontSettingsFragment : PreferenceFragment(),
         }
 
         preferenceAdapter.updateSummary(Id.FONT_SIZE, String.format("%.0f", item))
-        dialogFragment.dismiss()
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
     }
 
     override fun onItemClick(dialogFragment: DialogFragment, item: Int) {
@@ -57,7 +61,10 @@ class FontSettingsFragment : PreferenceFragment(),
 
         preferenceAdapter.updateDrawable(Id.TEXT_ALIGNMENT, getTextAlignmentDrawable(item))
         preferenceAdapter.updateSummary(Id.TEXT_ALIGNMENT, getTextAlignmentSummary(item))
-        dialogFragment.dismiss()
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
     }
 
     private fun initData() {

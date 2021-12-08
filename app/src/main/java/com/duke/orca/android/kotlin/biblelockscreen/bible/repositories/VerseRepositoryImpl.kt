@@ -33,6 +33,10 @@ class VerseRepositoryImpl @Inject constructor(private val datasource: VerseDatas
         return datasource.single(id)
     }
 
+    override fun loadBookmarks(): Flowable<List<Verse>> {
+        return datasource.loadBookmarks()
+    }
+
     override fun loadHighlights(): Flowable<List<Verse>> {
         return datasource.loadHighlights()
     }

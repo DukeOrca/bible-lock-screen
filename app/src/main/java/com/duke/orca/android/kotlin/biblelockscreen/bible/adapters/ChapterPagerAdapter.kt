@@ -7,7 +7,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.views.ChapterFragment
 
 class ChapterPagerAdapter(fragment: Fragment, private val book: Int)
     : FragmentStateAdapter(fragment) {
-    private val chapters = BookToChapters.get(book)
+    private val chapters = BookToChapters.findChaptersByBookId(book)
 
     override fun getItemCount(): Int = chapters.count()
 

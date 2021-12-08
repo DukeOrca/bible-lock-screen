@@ -3,24 +3,26 @@ package com.duke.orca.android.kotlin.biblelockscreen.application
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.content.res.ColorStateList
-import android.graphics.PorterDuff
+import android.graphics.*
 import android.graphics.drawable.RippleDrawable
 import android.os.Handler
 import android.os.Looper
-import android.text.Html
-import android.text.SpannableString
-import android.text.style.BackgroundColorSpan
+import android.text.*
+import android.text.style.LineBackgroundSpan
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewPropertyAnimator
 import android.view.animation.*
 import android.widget.*
+import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.duke.orca.android.kotlin.biblelockscreen.application.color.toHexColor
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import kotlin.math.roundToInt
 
 fun View.enable() {
     isEnabled = true
@@ -29,6 +31,9 @@ fun View.enable() {
 fun View.disable() {
     isEnabled = false
 }
+
+val View.isNotVisible
+    get() = isVisible.not()
 
 fun FrameLayout.animateRipple(delayMillis: Long) {
     if (foreground is RippleDrawable) {
@@ -131,7 +136,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 }
 
 fun View.fadeIn(
-    duration: Long,
+    duration: Long = Duration.Animation.FADE_IN,
     alphaFrom: Float = 0.0f,
     onAnimationEnd: (() -> Unit)? = null
 ): ViewPropertyAnimator {
@@ -151,7 +156,11 @@ fun View.fadeIn(
     }
 }
 
-fun View.fadeOut(duration: Long, invisible: Boolean = false, onAnimationEnd: (() -> Unit)? = null): ViewPropertyAnimator {
+fun View.fadeOut(
+    duration: Long = Duration.Animation.FADE_OUT,
+    invisible: Boolean = false,
+    onAnimationEnd: (() -> Unit)? = null
+): ViewPropertyAnimator {
     this.apply {
         alpha = 1.0f
 
@@ -252,6 +261,37 @@ fun View.scale(
         .scaleX(scale)
         .scaleY(scale)
         .alpha(alpha)
+        .setDuration(duration)
+        .setListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                onAnimationEnd?.invoke()
+                super.onAnimationEnd(animation)
+            }
+        })
+
+    viewPropertyAnimator.start()
+
+    return viewPropertyAnimator
+}
+
+fun View.scale(
+    scaleFrom: Float,
+    scaleTo: Float,
+    alphaFrom: Float,
+    alphaTo: Float,
+    duration: Long = 150L,
+    onAnimationEnd: (() -> Unit)? = null
+): ViewPropertyAnimator {
+    scaleX = scaleFrom
+    scaleY = scaleFrom
+    alpha = alphaFrom
+
+    show()
+
+    val viewPropertyAnimator = this.animate()
+        .scaleX(scaleTo)
+        .scaleY(scaleTo)
+        .alpha(alphaTo)
         .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
@@ -427,7 +467,47 @@ fun AutoCompleteTextView.setStringArrayAdapter(stringArray: Array<String>, @Layo
 
 fun TextView.setHighlightedText(@ColorInt color: Int, text: String) {
     SpannableString(text).apply {
-        setSpan(BackgroundColorSpan(color), 0, text.length, 0)
-        setText(this)
+        setSpan(HighlightColorSpan(color), 0, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        setText(this, TextView.BufferType.SPANNABLE)
+    }
+}
+
+fun TextView.setTextWithFading(text: CharSequence) {
+    fadeOut {
+        this.text = text
+        fadeIn()
+    }
+}
+
+class HighlightColorSpan (@ColorInt val highlightColor: Int) : LineBackgroundSpan {
+    private val rect = Rect()
+
+    override fun drawBackground(
+        canvas: Canvas,
+        paint: Paint,
+        left: Int,
+        right: Int,
+        top: Int,
+        baseline: Int,
+        bottom: Int,
+        text: CharSequence,
+        start: Int,
+        end: Int,
+        lineNumber: Int
+    ) {
+        val bounds = Rect()
+        val color: Int = paint.color
+        val width = paint.measureText(text, start, end).roundToInt()
+
+        paint.getTextBounds(text.toString(), 0, text.length, bounds)
+
+        rect[left, baseline + bounds.top, left + width] = baseline + bounds.bottom
+
+        bounds.top = baseline + bounds.top
+        bounds.bottom = baseline + bounds.bottom
+
+        paint.color = highlightColor
+        canvas.drawRect(rect, paint)
+        paint.color = color
     }
 }

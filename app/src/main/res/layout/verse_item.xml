@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_8dp"
     app:cardCornerRadius="@dimen/radius_8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,7 +85,7 @@
             android:id="@+id/like_button_bookmark"
             android:layout_width="@dimen/width_24dp"
             android:layout_height="@dimen/height_24dp"
-            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             app:circle_end_color="@color/circle_end"
             app:circle_start_color="@color/circle_start"
             app:dots_primary_color="@color/dots_primary"
@@ -100,7 +101,7 @@
             android:id="@+id/like_button_favorite"
             android:layout_width="@dimen/width_24dp"
             android:layout_height="@dimen/height_24dp"
-            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_16dp"
             app:circle_end_color="@color/circle_end"
             app:circle_start_color="@color/circle_start"
             app:dots_primary_color="@color/dots_primary"
@@ -117,9 +118,9 @@
             android:id="@+id/image_view_more_vert"
             android:layout_width="@dimen/width_24dp"
             android:layout_height="@dimen/height_24dp"
-            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintEnd_toEndOf="@+id/text_view_word"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_word"
             app:srcCompat="@drawable/ic_round_more_vert_24"
             app:tint="@color/icon"

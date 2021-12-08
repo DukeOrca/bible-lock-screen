@@ -77,8 +77,8 @@ abstract class ViewStubFragment : Fragment() {
         if (onResumed.get() and isInflated.get().not()) {
             try {
                 viewStub?.inflate()?.let {
-                    viewStubBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
-                        delayOnLifecycle(Duration.Delay.SHORT) {
+                    viewStubBinding.circularProgressIndicator.fadeOut {
+                        delayOnLifecycle(Duration.Delay.DISMISS) {
                             onInflate(it)
                             isInflated.set(true)
                         }

@@ -33,6 +33,10 @@ class SubVerseDatasourceImpl @Inject constructor(private val database: SubDataba
         return database.verseDao().single(id)
     }
 
+    override fun loadBookmarks(): Flowable<List<Verse>> {
+        return database.verseDao().loadBookmarks()
+    }
+
     override fun loadHighlights(): Flowable<List<Verse>> {
         return database.verseDao().loadHighlights()
     }

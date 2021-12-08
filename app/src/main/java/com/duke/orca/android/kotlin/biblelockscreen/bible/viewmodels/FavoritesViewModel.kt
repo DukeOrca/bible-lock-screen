@@ -69,18 +69,18 @@ class FavoritesViewModel @Inject constructor(
 
         val adapterItems = arrayListOf<VerseAdapter.AdapterItem>()
 
-        adapterItems.addAll(bibleVerses.map { VerseAdapter.AdapterItem.AdapterVerse(it) })
+        adapterItems.addAll(bibleVerses.map { VerseAdapter.AdapterItem.VerseItem(it) })
 
         for (i in 0 until nativeAds.count()) {
             if (i == 0) {
-                adapterItems.add(0, VerseAdapter.AdapterItem.AdapterNativeAd(-1, nativeAds[0]))
+                adapterItems.add(0, VerseAdapter.AdapterItem.NativeAdItem(-1, nativeAds[0]))
             } else {
                 val index = i * AD_INTERVAL
 
                 if (index <= adapterItems.count()) {
                     adapterItems.add(
                         index,
-                        VerseAdapter.AdapterItem.AdapterNativeAd(-index, nativeAds[i])
+                        VerseAdapter.AdapterItem.NativeAdItem(-index, nativeAds[i])
                     )
                 } else {
                     break

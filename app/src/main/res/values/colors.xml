@@ -30,9 +30,12 @@
 
     <color name="accent">@color/secondary</color>
 
+    <color name="background_recycler_view">@color/grey_100</color>
+
     <color name="grey_50">#FAFAFA</color>
 
     <color name="purple_100">#E1BEE7</color>
+    <color name="grey_100">#F5F5F5</color>
 
     <color name="red_200">#EF9A9A</color>
     <color name="pink_200">#F48FB1</color>

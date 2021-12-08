@@ -171,7 +171,6 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:visibility="invisible"
                 tools:visibility="visible">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -208,10 +207,9 @@
                             android:layout_width="0dp"
                             android:layout_height="@dimen/height_36dp"
                             android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_marginStart="@dimen/margin_12dp"
                             android:layout_weight="1"
                             android:clickable="false"
-                            android:drawablePadding="@dimen/padding_8dp"
                             android:ellipsize="end"
                             android:focusable="false"
                             android:fontFamily="@font/font_family_nanum_myeongjo"
@@ -226,11 +224,10 @@
                         <ImageView
                             android:id="@+id/image_view_book"
                             style="@style/SelectableItemBackgroundBorderless"
-                            android:layout_width="@dimen/width_28dp"
-                            android:layout_height="@dimen/height_28dp"
-                            android:layout_marginStart="@dimen/margin_8dp"
-                            android:layout_marginEnd="@dimen/margin_8dp"
-                            app:srcCompat="@drawable/ic_round_arrow_drop_down_28"
+                            android:layout_width="@dimen/width_32dp"
+                            android:layout_height="@dimen/height_32dp"
+                            android:layout_marginEnd="@dimen/margin_12dp"
+                            app:srcCompat="@drawable/ic_round_arrow_drop_down_24"
                             app:tint="@color/white"
                             tools:ignore="ContentDescription" />
 
@@ -246,6 +243,7 @@
                         android:clipToPadding="false"
                         app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_verse"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:rippleDrawable="@drawable/ripple_rectangle"
                         app:textColor="@color/white"
                         app:tint="@color/white" />
 

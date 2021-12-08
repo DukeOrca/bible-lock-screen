@@ -21,6 +21,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentHighligh
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import jp.wasabeef.recyclerview.animators.FadeInAnimator
 
 @AndroidEntryPoint
 class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
@@ -38,17 +39,16 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
 
     private val highlightAdapter by lazy {
         HighlightAdapter { highlight ->
-            val adapterVerses = highlight.verses.map { VerseAdapter.AdapterItem.AdapterVerse(it) }
-            val map = adapterVerses.groupBy { VerseAdapter.AdapterItem.AdapterBook(it.verse.book) }
+            val adapterVerses = highlight.verses.map { VerseAdapter.AdapterItem.VerseItem(it) }
 
-            verseAdapter.submitMap(map)
+            verseAdapter.submitGroupedList(adapterVerses)
         }
     }
 
     private val verseAdapter by lazy {
         VerseAdapter(bible) {
             if (fragmentResultSetRequired) {
-                viewModel.insertPosition(it.toPosition())
+                viewModel.insertPosition(it.position)
 
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
@@ -85,6 +85,7 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
 
             recyclerViewVerse.apply {
                 adapter = verseAdapter
+                itemAnimator = FadeInAnimator()
                 layoutManager = LinearLayoutManagerWrapper(context)
                 setHasFixedSize(true)
             }
@@ -96,10 +97,8 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { list ->
-                val map = list.groupBy { it.highlightColor }
-
-                highlightAdapter.submitMap(map) {
-                    if (map.isNotEmpty() && selectedItem.`is`(-1)) {
+                highlightAdapter.submitList(list) {
+                    if (list.isNotEmpty() && selectedItem.`is`(-1)) {
                         highlightAdapter.select(0)
                     }
                 }

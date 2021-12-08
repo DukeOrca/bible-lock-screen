@@ -3,9 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTextWithSearchWord
@@ -40,18 +38,23 @@ class VerseAdapter(
         this.onIconClickListener = onIconClickListener
     }
 
-    fun submitMap(map: Map<AdapterItem.AdapterBook, List<AdapterItem.AdapterVerse>>) {
+    fun submitGroupedList(list: List<AdapterItem>, commitCallback: (() -> Unit)? = null) {
         val arrayList = arrayListOf<AdapterItem>()
+        val map = with(list.filterIsInstance<AdapterItem.VerseItem>()) {
+            groupBy { AdapterItem.BookItem(it.verse.book) }
+        }
 
         map.forEach { (book, verses) ->
             arrayList.add(book)
             arrayList.addAll(verses)
         }
 
-        submitList(arrayList)
+        submitList(arrayList) {
+            commitCallback?.invoke()
+        }
     }
 
-    fun submitList(
+    fun submitGroupedList(
         list: List<AdapterItem>,
         searchWord: String,
         @ColorInt color: Int,
@@ -59,8 +62,6 @@ class VerseAdapter(
     ) {
         this.searchWord = searchWord
         this.color = color
-
-        recyclerView?.scheduleLayoutAnimation()
 
         submitList(list) {
             commitCallback?.invoke()
@@ -70,12 +71,12 @@ class VerseAdapter(
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
-                is AdapterItem.AdapterBook -> {
+                is AdapterItem.BookItem -> {
                     if (viewBinding is BookItemBinding) {
                         viewBinding.root.text = bible.name(item.value)
                     }
                 }
-                is AdapterItem.AdapterVerse -> {
+                is AdapterItem.VerseItem -> {
                     if (viewBinding is VerseItemBinding) {
                         val verse = item.verse
                         val bookmark = verse.bookmark
@@ -98,11 +99,11 @@ class VerseAdapter(
                         viewBinding.likeButtonBookmark.isLiked = bookmark
                         viewBinding.likeButtonBookmark.setOnLikeListener(object : OnLikeListener {
                             override fun liked(likeButton: LikeButton?) {
-                                TODO("Not yet implemented")
+                                onIconClickListener?.onBookmarkClick(verse, true)
                             }
 
                             override fun unLiked(likeButton: LikeButton?) {
-                                TODO("Not yet implemented")
+                                onIconClickListener?.onBookmarkClick(verse, true)
                             }
                         })
 
@@ -128,7 +129,7 @@ class VerseAdapter(
                         }
                     }
                 }
-                is AdapterItem.AdapterNativeAd -> {
+                is AdapterItem.NativeAdItem -> {
                 }
             }
         }
@@ -137,13 +138,19 @@ class VerseAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         this.recyclerView = recyclerView
+
+        recyclerView.itemAnimator.also {
+            if (it is SimpleItemAnimator) {
+                it.supportsChangeAnimations = false
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)) {
-            is AdapterItem.AdapterBook -> ViewType.BOOK
-            is AdapterItem.AdapterNativeAd -> ViewType.NATIVE_AD
-            is AdapterItem.AdapterVerse -> ViewType.VERSE
+            is AdapterItem.BookItem -> ViewType.BOOK
+            is AdapterItem.NativeAdItem -> ViewType.NATIVE_AD
+            is AdapterItem.VerseItem -> ViewType.VERSE
         }
     }
 
@@ -155,7 +162,7 @@ class VerseAdapter(
             ViewType.BOOK -> BookItemBinding.inflate(inflater, parent, false)
             ViewType.VERSE -> VerseItemBinding.inflate(inflater, parent, false)
             ViewType.NATIVE_AD -> NativeAdBinding.inflate(inflater, parent, false)
-            else -> throw IllegalArgumentException()
+            else -> throw IllegalArgumentException("IllegalArgumentException :$viewType")
         }
 
         return ViewHolder(viewBinding)
@@ -186,15 +193,15 @@ class VerseAdapter(
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class AdapterBook(val value: Int): AdapterItem() {
+        data class BookItem(val value: Int): AdapterItem() {
             override val id = -1
         }
 
-        data class AdapterVerse(val verse: Verse): AdapterItem() {
+        data class VerseItem(val verse: Verse): AdapterItem() {
             override val id = verse.id
         }
 
-        data class AdapterNativeAd(
+        data class NativeAdItem(
             override val id: Int,
             val nativeAd: NativeAd
         ): AdapterItem()

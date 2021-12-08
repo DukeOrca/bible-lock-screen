@@ -327,7 +327,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
                 if (currentItem?.book.not(it.book)) {
                     viewBinding.dropdownMenuChapter.setAdapter(
                         DropdownMenu.ArrayAdapter(
-                            BookToChapters.get(it.book).toStringArray()
+                            BookToChapters.findChaptersByBookId(it.book).toStringArray()
                         ), it.chapter.dec()
                     )
                 }
@@ -374,10 +374,11 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         }
     }
 
-    private fun moveTo(book: Int, chapter: Int, verse: Int) {
+    private fun moveTo(book: Int, chapter: Int, verse: Int, onMove: (() -> Unit)? = null) {
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.get(book, chapter, verse)?.let {
                 viewBinding.viewPager2.setCurrentItem(it.id, false)
+                onMove?.invoke()
             }
         }
     }
@@ -508,14 +509,11 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
     }
 
     override fun onBookSelected(dialogFragment: BookSelectionDialogFragment, item: BookSelectionDialogFragment.AdapterItem.Book) {
-        val chapter = 1
-        val verse = 1
-
-        moveTo(item.index.inc(), chapter, verse)
-
         delayOnLifecycle(Duration.Delay.DISMISS) {
             dialogFragment.dismiss()
         }
+
+        moveTo(item.index.inc(), 1, 1)
     }
 
     override fun onDialogFragmentViewCreated() {

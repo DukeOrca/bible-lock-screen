@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_56dp"
     android:orientation="horizontal"
-    android:background="?attr/selectableItemBackground"
+    android:background="@color/background"
+    android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical">
 
     <TextView

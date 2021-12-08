@@ -16,6 +16,8 @@ open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
     protected val activity: BaseLockScreenActivity
         get() = this
 
+    private var keyguardManager: KeyguardManager? = null
+
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +27,15 @@ open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
                 setShowWhenLocked(true)
 
                 // https://stackoverflow.com/questions/60477120/keyguardmanager-memory-leak
-                with(getSystemService(KeyguardManager::class.java)) {
-                    if (isKeyguardLocked) {
-                        requestDismissKeyguard(activity, null)
+                keyguardManager = getSystemService(KeyguardManager::class.java)
+
+                keyguardManager?.let {
+                    if (it.isKeyguardLocked) {
+                        it.requestDismissKeyguard(activity, null)
                     }
                 }
+
+                keyguardManager = null
             } else {
                 @Suppress("DEPRECATION")
                 val flags = WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED

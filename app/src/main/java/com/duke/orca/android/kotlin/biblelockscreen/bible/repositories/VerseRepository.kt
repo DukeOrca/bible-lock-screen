@@ -13,6 +13,7 @@ interface VerseRepository {
     fun getFavorites(): Flow<List<Verse>>
     fun search(text: String): Flow<List<Verse>>
     fun single(id: Int): Single<Verse>
+    fun loadBookmarks(): Flowable<List<Verse>>
     fun loadHighlights(): Flowable<List<Verse>>
     suspend fun getVerseCount(book: Int, chapter: Int): Int
     suspend fun updateBookmark(id: Int, bookmark: Boolean)

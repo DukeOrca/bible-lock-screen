@@ -1,17 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-class BookChapter (
-    val id: Int,
-    val book: Int,
-    val chapter: Int
-) : Parcelable
-
 object BookToChapters {
-    fun get(book: Int) = map.getOrElse(book) { emptyArray() }
+    fun findChaptersByBookId(bookId: Int) = map.getOrElse(bookId) { emptyArray() }
 
     private val map = mapOf(
         1 to Array(50, Int::inc),

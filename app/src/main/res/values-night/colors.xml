@@ -19,6 +19,8 @@
     <color name="helper_text">#99FFFFFF</color>
     <color name="error_text">#CF6679</color>
 
+    <color name="background_recycler_view">#333333</color>
+
     <color name="card_background">#61000000</color>
     <color name="divider">#33FFFFFF</color>
     <color name="icon">@color/high_emphasis</color>

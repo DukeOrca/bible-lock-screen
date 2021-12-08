@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
+import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.color.ColorCalculator
-import com.duke.orca.android.kotlin.biblelockscreen.application.hide
-import com.duke.orca.android.kotlin.biblelockscreen.application.not
-import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.ColorItemBinding
 
 class ColorAdapter(
@@ -48,23 +46,32 @@ class ColorAdapter(
                 )
 
                 if (pickedColorPosition.`is`(position)) {
-                    imageView.show()
-                } else {
-                    imageView.hide()
+                    imageView.scale(
+                        0.5f,
+                        1.0f,
+                        0.0f,
+                        1.0f)
+                } else if (imageView.isVisible) {
+                    imageView.scale(
+                        1.0f,
+                        0.5f,
+                        1.0f,
+                        0.0f) {
+                        imageView.hide()
+                    }
                 }
 
                 frameLayout.backgroundTintList = ColorStateList.valueOf(color)
 
                 frameLayout.setOnClickListener {
-                    if (it is FrameLayout) {
-                        if (pickedColorPosition.`is`(position))
-                            return@setOnClickListener
+                    if (pickedColorPosition.`is`(position))
+                        return@setOnClickListener
 
-                        onColorPicked(color)
-                        notifyItemChanged(pickedColorPosition)
-                        notifyItemChanged(position)
-                        pickedColorPosition = position
-                    }
+                    notifyItemChanged(pickedColorPosition)
+                    notifyItemChanged(position)
+                    pickedColorPosition = position
+
+                    onColorPicked(color)
                 }
             }
         }

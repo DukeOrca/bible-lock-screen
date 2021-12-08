@@ -139,7 +139,7 @@ class SettingsFragment : PreferenceFragment(),
                             it.show(childFragmentManager, it.tag)
                         }
                     },
-                    summary = Translation.getName(requireContext()),
+                    summary = Translation.findNameByFileName(requireContext()),
                     body = getString(R.string.translations)
                 ),
                 AdapterItem.Space(),

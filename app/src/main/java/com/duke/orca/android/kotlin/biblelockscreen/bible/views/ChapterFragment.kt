@@ -60,7 +60,7 @@ class ChapterFragment : ViewStubFragment(),
                         is WordAdapter.OptionsItem.Bookmark -> viewModel.updateBookmark(item.id, optionsItem.liked)
                         is WordAdapter.OptionsItem.Favorite -> viewModel.updateFavorite(item.id, optionsItem.liked)
                         is WordAdapter.OptionsItem.More -> {
-                            OptionChoiceDialogFragment.newInstance(options, item.toVerse()).also {
+                            OptionChoiceDialogFragment.newInstance(options, item.content).also {
                                 it.show(childFragmentManager, it.tag)
                             }
                         }
@@ -155,11 +155,8 @@ class ChapterFragment : ViewStubFragment(),
 
 
     override fun onColorPicked(dialogFragment: DialogFragment, @ColorInt color: Int) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            DataStore.HighlightColor.putHighlightColor(requireContext(), color)
-            delay(Duration.Delay.DISMISS)
-            dialogFragment.dismiss()
-        }
+        DataStore.HighlightColor.putHighlightColor(requireContext(), color)
+        dialogFragment.dismiss()
     }
 
     private fun initData() {
@@ -178,20 +175,16 @@ class ChapterFragment : ViewStubFragment(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        verse: Verse?
+        content: Verse.Content
     ) {
         when(option) {
             options[0] -> {
-                verse?.let { copyToClipboard(requireContext(), viewModel.book, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                copyToClipboard(requireContext(), viewModel.book, content)
+                dialogFragment.dismiss()
             }
             options[1] -> {
-                verse?.let { share(requireContext(), viewModel.book, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                share(requireContext(), viewModel.book, content)
+                dialogFragment.dismiss()
             }
         }
     }

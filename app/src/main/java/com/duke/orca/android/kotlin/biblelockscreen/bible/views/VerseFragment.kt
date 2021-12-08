@@ -145,7 +145,7 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
         })
 
         binding.imageViewMoreVert.setOnClickListener {
-            OptionChoiceDialogFragment.newInstance(options, verse).also {
+            OptionChoiceDialogFragment.newInstance(options, verse.content).also {
                 it.show(childFragmentManager, it.tag)
             }
         }
@@ -166,20 +166,16 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        verse: Verse?
+        content: Verse.Content
     ) {
         when(option) {
             options[0] -> {
-                verse?.let { copyToClipboard(requireContext(), viewModel.bible, it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                copyToClipboard(requireContext(), viewModel.bible, content)
+                dialogFragment.dismiss()
             }
             options[1] -> {
-                verse?.let { share(requireContext(), viewModel.bible,  it) }
-                delayOnLifecycle(Duration.Delay.DISMISS) {
-                    dialogFragment.dismiss()
-                }
+                share(requireContext(), viewModel.bible,  content)
+                dialogFragment.dismiss()
             }
         }
     }
