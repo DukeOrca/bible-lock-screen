@@ -75,8 +75,6 @@ class ChapterFragment : ViewStubFragment(),
     private var _viewBinding: FragmentChapterBinding? = null
     private val viewBinding: FragmentChapterBinding get() = _viewBinding!!
 
-    private val scrolledToPosition = AtomicBoolean(false)
-
     override fun onInflate(view: View) {
         _viewBinding = FragmentChapterBinding.bind(view)
 
@@ -91,16 +89,7 @@ class ChapterFragment : ViewStubFragment(),
         })
 
         with(viewBinding) {
-            if (scrolledToPosition.compareAndSet(false, true)) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val position = viewModel.getPosition(book, chapter)
-
-                    delayOnLifecycle(Duration.SHORT) {
-                        recyclerViewChapter.scrollToPosition(position)
-                        recyclerViewChapter.fadeIn(Duration.FADE_IN)
-                    }
-                }
-            }
+            val position = viewModel.getPosition(book, chapter)
 
             recyclerViewChapter.apply {
                 adapter = wordAdapter
@@ -111,6 +100,11 @@ class ChapterFragment : ViewStubFragment(),
                     if (this is SimpleItemAnimator) {
                         supportsChangeAnimations = false
                     }
+                }
+
+                delayOnLifecycle(Duration.Delay.SCROLL) {
+                    scrollToPosition(position)
+                    fadeIn(Duration.FADE_IN)
                 }
             }
         }

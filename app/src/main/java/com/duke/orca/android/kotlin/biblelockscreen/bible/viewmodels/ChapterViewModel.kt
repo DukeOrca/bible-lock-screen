@@ -3,6 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 import android.app.Application
 import androidx.annotation.ColorInt
 import androidx.lifecycle.*
+import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,7 +73,7 @@ class ChapterViewModel @Inject constructor(
     private val subBook by lazy { subBookRepository?.get() }
 
     val highlightColor = preferencesDataStore.data.map {
-        it[PreferencesKeys.HighlightColor.highlightColor] ?: DataStore.HighlightColor.DEFAULT
+        it[PreferencesKeys.HighlightColor.highlightColor] ?: application.getColor(R.color.default_highlight_color)
     }.asLiveData(Dispatchers.IO)
 
     fun getVerses(book: Int, chapter: Int) {
@@ -108,8 +110,8 @@ class ChapterViewModel @Inject constructor(
         }
     }
 
-    suspend fun getPosition(book: Int, chapter: Int): Int {
-        return positionRepository.get(book, chapter) ?: 0
+    fun getPosition(book: Int, chapter: Int): Int = runBlocking {
+        positionRepository.get(book, chapter) ?: 0
     }
 
     fun insertPosition(book: Int, chapter: Int, value: Int) {

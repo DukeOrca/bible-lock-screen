@@ -1,14 +1,18 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
+import com.duke.orca.android.kotlin.biblelockscreen.application.color.ColorCalculator
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.scale
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Highlight
@@ -26,8 +30,17 @@ class HighlightAdapter(
             val item = getItem(position)
 
             with(viewBinding) {
+                val context = root.context
+                val dark = ContextCompat.getColor(context, R.color.surface_dark)
+                val light = ContextCompat.getColor(context, R.color.surface_light)
+
                 frameLayout.backgroundTintList = ColorStateList.valueOf(item.highlightColor)
                 textView.text = "${item.verses.count()}"
+
+                imageView.setColorFilter(
+                    ColorCalculator.onBackground(item.highlightColor, dark, light, true),
+                    PorterDuff.Mode.SRC_ATOP
+                )
 
                 if (selectedItemPosition.`is`(position)) {
                     imageView.scale(

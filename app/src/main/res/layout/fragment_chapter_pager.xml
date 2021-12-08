@@ -70,8 +70,8 @@
 
                 <ImageView
                     android:id="@+id/image_view_translation"
-                    android:layout_width="@dimen/width_28dp"
-                    android:layout_height="@dimen/height_28dp"
+                    android:layout_width="@dimen/width_32dp"
+                    android:layout_height="@dimen/height_32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -128,9 +128,10 @@
 
                 <ImageView
                     android:id="@+id/image_view_book"
-                    android:layout_width="@dimen/width_28dp"
-                    android:layout_height="@dimen/height_28dp"
+                    android:layout_width="@dimen/width_32dp"
+                    android:layout_height="@dimen/height_32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
                     app:srcCompat="@drawable/ic_round_arrow_drop_down_24"
                     app:tint="@color/icon"
                     tools:ignore="ContentDescription" />

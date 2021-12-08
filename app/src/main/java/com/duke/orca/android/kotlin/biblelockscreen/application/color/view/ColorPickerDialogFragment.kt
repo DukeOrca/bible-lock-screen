@@ -75,6 +75,6 @@ class ColorPickerDialogFragment : BaseDialogFragment<FragmentColorPickerDialogBi
     }
 
     companion object {
-        private const val SPAN_COUNT = 4
+        private const val SPAN_COUNT = 5
     }
 }

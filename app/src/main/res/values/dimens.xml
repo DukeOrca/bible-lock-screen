@@ -199,10 +199,10 @@
     <dimen name="text_size_64dp">64dp</dimen>
     <dimen name="text_size_72dp">72dp</dimen>
 
-    <dimen name="radius_2dp">2dp</dimen>
     <dimen name="radius_4dp">4dp</dimen>
     <dimen name="radius_8dp">8dp</dimen>
     <dimen name="radius_16dp">16dp</dimen>
+    <dimen name="radius_24dp">24dp</dimen>
 
     <dimen name="box_corner_radius_bottom_end">@dimen/radius_8dp</dimen>
     <dimen name="box_corner_radius_bottom_start">@dimen/radius_8dp</dimen>

@@ -44,15 +44,4 @@ open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
             }
         }
     }
-
-    protected fun delayOnLifecycle(
-        timeMillis: Long,
-        dispatcher: CoroutineDispatcher = Dispatchers.Main,
-        block: () -> Unit
-    ) {
-        lifecycle.coroutineScope.launch(dispatcher) {
-            delay(timeMillis)
-            block()
-        }
-    }
 }

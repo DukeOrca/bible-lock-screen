@@ -20,7 +20,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordItemBinding
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.like.LikeButton
 import com.like.OnLikeListener
 import kotlinx.parcelize.Parcelize
@@ -31,7 +30,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
     private var currentFocus: Int = -1
     private var currentFont: Font? = null
     @ColorInt
-    private var highlightColor: Int = DataStore.HighlightColor.DEFAULT
+    private var highlightColor: Int = 0
     private var recyclerView: RecyclerView? = null
     private var onOptionsItemSelectedListener: OnOptionsItemSelectedListener? = null
 
@@ -126,14 +125,28 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             optionsMenuBar.bind(item)
 
                             with(frameLayout) {
-                                if (isGone) {
-                                    expand(Duration.EXPAND)
+                                if (isNotVisible) {
+                                    if (item.expanded.not()) {
+                                        expand(Duration.EXPAND) {
+                                            item.expanded = true
+                                            item.collapsed = false
+                                        }
+                                    } else {
+                                        show()
+                                    }
                                 }
                             }
                         } else {
                             with(frameLayout) {
                                 if (isVisible) {
-                                    collapse(Duration.COLLAPSE)
+                                    if (item.collapsed.not()) {
+                                        collapse(Duration.COLLAPSE) {
+                                            item.expanded = false
+                                            item.collapsed = true
+                                        }
+                                    } else {
+                                        hide()
+                                    }
                                 }
                             }
                         }
@@ -253,6 +266,8 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
             val bookmark: Boolean,
             val favorite: Boolean,
             @ColorInt val highlightColor: Int,
+            var expanded: Boolean = false,
+            var collapsed: Boolean = true
         ): AdapterItem(), Parcelable {
             @Parcelize
             data class Book(

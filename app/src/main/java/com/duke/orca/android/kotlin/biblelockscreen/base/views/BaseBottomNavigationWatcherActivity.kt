@@ -3,10 +3,15 @@ package com.duke.orca.android.kotlin.biblelockscreen.base.views
 import android.content.Intent
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.coroutineScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.duke.orca.android.kotlin.biblelockscreen.bottomnavigation.BottomNavigationPressedListener
 import com.duke.orca.android.kotlin.biblelockscreen.bottomnavigation.BottomNavigationWatcher
 import com.duke.orca.android.kotlin.biblelockscreen.lockscreen.service.LockScreenService
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 open class BaseBottomNavigationWatcherActivity : AppCompatActivity(), BottomNavigationPressedListener {
     private val bottomNavigationWatcher by lazy { BottomNavigationWatcher(this) }
@@ -37,5 +42,16 @@ open class BaseBottomNavigationWatcherActivity : AppCompatActivity(), BottomNavi
 
     override fun onRecentAppsPressed() {
         localBroadcastManager.sendBroadcastSync(Intent(LockScreenService.Action.RECENT_APPS_PRESSED))
+    }
+
+    protected fun delayOnLifecycle(
+        timeMillis: Long,
+        dispatcher: CoroutineDispatcher = Dispatchers.Main,
+        block: () -> Unit
+    ) {
+        lifecycle.coroutineScope.launch(dispatcher) {
+            delay(timeMillis)
+            block()
+        }
     }
 }

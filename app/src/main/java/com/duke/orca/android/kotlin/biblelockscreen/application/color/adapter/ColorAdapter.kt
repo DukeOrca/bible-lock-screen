@@ -37,11 +37,11 @@ class ColorAdapter(
             with(viewBinding) {
                 val context = root.context
 
-                val dark = ContextCompat.getColor(context, R.color.dark_grey)
-                val light = ContextCompat.getColor(context, R.color.white)
+                val dark = ContextCompat.getColor(context, R.color.surface_dark)
+                val light = ContextCompat.getColor(context, R.color.surface_light)
 
                 imageView.setColorFilter(
-                    ColorCalculator.onBackground(color, dark, light, false),
+                    ColorCalculator.onBackground(color, dark, light, true),
                     PorterDuff.Mode.SRC_ATOP
                 )
 
@@ -61,9 +61,9 @@ class ColorAdapter(
                     }
                 }
 
-                frameLayout.backgroundTintList = ColorStateList.valueOf(color)
+                materialCardView.setCardBackgroundColor(color)
 
-                frameLayout.setOnClickListener {
+                materialCardView.setOnClickListener {
                     if (pickedColorPosition.`is`(position))
                         return@setOnClickListener
 

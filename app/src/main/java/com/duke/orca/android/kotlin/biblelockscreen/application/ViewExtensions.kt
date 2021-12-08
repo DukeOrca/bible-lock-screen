@@ -66,7 +66,7 @@ fun FrameLayout.showRipple() {
     }
 }
 
-fun View.collapse(duration: Long) {
+fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
     val measuredHeight: Int = this.measuredHeight
 
     visibility = View.VISIBLE
@@ -88,6 +88,24 @@ fun View.collapse(duration: Long) {
 
         override fun willChangeBounds(): Boolean = true
     }
+
+    animation.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation?) {
+        }
+
+        override fun onAnimationEnd(animation: Animation?) {
+            alpha = 0.0f
+            layoutParams.height = 0
+            visibility = View.GONE
+
+            requestLayout()
+
+            onAnimationEnd?.invoke()
+        }
+
+        override fun onAnimationRepeat(animation: Animation?) {
+        }
+    })
 
     animation.duration = duration
     animation.interpolator = DecelerateInterpolator()
@@ -116,6 +134,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
     valueAnimator.addUpdateListener {
         layoutParams.height = it.animatedValue as Int
         alpha = it.animatedValue as Int / to.toFloat()
+
         requestLayout()
     }
 
@@ -126,7 +145,14 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationCancel(animation: Animator?) {}
+        override fun onAnimationCancel(animation: Animator?) {
+            alpha = 1.0f
+            layoutParams.height = to
+
+            requestLayout()
+
+            onAnimationEnd?.invoke()
+        }
         override fun onAnimationRepeat(animation: Animator?) {}
     })
 

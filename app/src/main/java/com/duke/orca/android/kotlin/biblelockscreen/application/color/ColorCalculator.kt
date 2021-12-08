@@ -28,7 +28,9 @@ object ColorCalculator {
         var blue = Color.blue(background) / 255.0
 
         if (useSimpleFormula) {
-            return if (red * 0.299 + green * 0.587 + blue * 0.114 > 186)
+            val luminance = red * 0.299 + green * 0.587 + blue * 0.114
+
+            return if (luminance > 0.75)    // 0.5
                 dark
             else
                 light

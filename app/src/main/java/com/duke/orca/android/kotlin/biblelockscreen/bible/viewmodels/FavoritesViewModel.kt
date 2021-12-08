@@ -2,23 +2,19 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 
 import androidx.lifecycle.*
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Position
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.BookRepository
-import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.PositionRepository
 import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.VerseRepository
 import com.google.android.gms.ads.nativead.NativeAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
     private val bookRepository: BookRepository,
-    private val positionRepository: PositionRepository,
     private val verseRepository: VerseRepository
 ) : ViewModel() {
     private val favorites = MutableLiveData<List<Verse>>()
@@ -42,10 +38,6 @@ class FavoritesViewModel @Inject constructor(
                 favorites.value = it
             }
         }
-    }
-
-    fun insertPosition(position: Position) = runBlocking {
-        positionRepository.insert(position)
     }
 
     fun updateBookmark(id: Int, bookmark: Boolean) {

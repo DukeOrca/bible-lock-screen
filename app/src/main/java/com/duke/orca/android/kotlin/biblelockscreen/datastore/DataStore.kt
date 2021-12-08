@@ -10,6 +10,7 @@ import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Application
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.serializers.RecentlyReadSerializer
@@ -187,10 +188,11 @@ object DataStore {
 
     object HighlightColor {
         @ColorInt
-        const val DEFAULT = 0xEF9A9A
-
-        @ColorInt
-        fun getHighlightColor(context: Context): Int = getInt(context, PreferencesKeys.HighlightColor.highlightColor, DEFAULT)
+        fun getHighlightColor(context: Context): Int = getInt(
+            context,
+            PreferencesKeys.HighlightColor.highlightColor,
+            context.getColor(R.color.default_highlight_color)
+        )
 
         fun putHighlightColor(context: Context, @ColorInt value: Int) = runBlocking {
             putInt(context, PreferencesKeys.HighlightColor.highlightColor, value)

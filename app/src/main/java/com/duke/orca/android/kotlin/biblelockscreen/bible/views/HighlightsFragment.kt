@@ -10,8 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.RequestKey
+import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
+import com.duke.orca.android.kotlin.biblelockscreen.application.isNotVisible
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.HighlightAdapter
@@ -21,7 +24,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentHighligh
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
 
 @AndroidEntryPoint
 class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
@@ -41,15 +43,21 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
         HighlightAdapter { highlight ->
             val adapterVerses = highlight.verses.map { VerseAdapter.AdapterItem.VerseItem(it) }
 
-            verseAdapter.submitGroupedList(adapterVerses)
+            verseAdapter.submitGroupedList(adapterVerses) {
+                with(viewBinding.recyclerViewVerse) {
+                    if (isNotVisible) {
+                        delayOnLifecycle(Duration.Delay.SLIDE_IN) {
+                            fadeIn(Duration.Animation.FADE_IN)
+                        }
+                    }
+                }
+            }
         }
     }
 
     private val verseAdapter by lazy {
         VerseAdapter(bible) {
             if (fragmentResultSetRequired) {
-                viewModel.insertPosition(it.position)
-
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
                     bundleOf(Key.VERSE to it)
@@ -85,7 +93,6 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
 
             recyclerViewVerse.apply {
                 adapter = verseAdapter
-                itemAnimator = FadeInAnimator()
                 layoutManager = LinearLayoutManagerWrapper(context)
                 setHasFixedSize(true)
             }
@@ -100,6 +107,14 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
                 highlightAdapter.submitList(list) {
                     if (list.isNotEmpty() && selectedItem.`is`(-1)) {
                         highlightAdapter.select(0)
+                    }
+
+                    with(viewBinding.recyclerViewHighlight) {
+                        if (isNotVisible) {
+                            delayOnLifecycle(Duration.Delay.SLIDE_IN) {
+                                fadeIn(Duration.Animation.FADE_IN)
+                            }
+                        }
                     }
                 }
             }

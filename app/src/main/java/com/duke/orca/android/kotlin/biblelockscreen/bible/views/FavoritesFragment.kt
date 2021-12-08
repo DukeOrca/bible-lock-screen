@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -28,7 +25,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
 import dagger.hilt.android.AndroidEntryPoint
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
 
 @AndroidEntryPoint
 class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
@@ -47,8 +43,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     private val verseAdapter by lazy {
         VerseAdapter(viewModel.bibleBook) {
             if (fragmentResultSetRequired) {
-                viewModel.insertPosition(it.position)
-
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
                     bundleOf(Key.VERSE to it)
@@ -107,11 +101,6 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
 
         viewBinding.recyclerView.apply {
             adapter = verseAdapter
-            itemAnimator = FadeInAnimator().apply {
-                addDuration = 0L
-                moveDuration = Duration.ItemAnimator.MOVE
-                removeDuration = Duration.ItemAnimator.REMOVE
-            }
             layoutManager = LinearLayoutManagerWrapper(context)
             setHasFixedSize(true)
         }

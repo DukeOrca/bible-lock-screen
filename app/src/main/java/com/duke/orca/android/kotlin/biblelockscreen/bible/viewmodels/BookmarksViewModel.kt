@@ -13,18 +13,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarksViewModel @Inject constructor(
-    private val positionRepository: PositionRepository,
     private val verseRepository: VerseRepository
 ) : ViewModel() {
-    fun insertPosition(position: Position) = runBlocking {
-        positionRepository.insert(position)
-    }
+    val bookmarks = verseRepository.loadBookmarks()
 
     fun updateBookmark(id: Int, bookmark: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             verseRepository.updateBookmark(id, bookmark)
         }
     }
-
-    val bookmarks = verseRepository.loadBookmarks()
 }

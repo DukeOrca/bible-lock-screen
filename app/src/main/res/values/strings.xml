@@ -56,7 +56,7 @@
 
     <string name="blind_screen_000">보안정책에 따라 홈 버튼으로 잠금 해제할 수 없습니다.</string>
 
-    <string name="format_bible_chapter" translatable="false">%s %d : %d</string>
+    <string name="format_bible_chapter" translatable="false">%s  %d : %d</string>
 
     <string name="fragment_permission_rationale_dialog_000">앱의 모든 기능을 사용하려면 다음 권한을 허용해야 합니다.</string>
 

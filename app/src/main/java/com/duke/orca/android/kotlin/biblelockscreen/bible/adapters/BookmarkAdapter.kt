@@ -29,12 +29,12 @@ class BookmarkAdapter(
     private var onItemClickListener: OnItemClickListener? = null
 
     interface OnItemClickListener {
-        fun onItemClick(item: AdapterItem.BookmarkItem)
-        fun onIconClick(item: AdapterItem.BookmarkItem)
+        fun onItemClick(item: AdapterItem.Bookmark)
+        fun onIconClick(item: AdapterItem.Bookmark)
     }
 
     fun submitMap(
-        map: Map<AdapterItem.BookItem, List<AdapterItem.BookmarkItem>>,
+        map: Map<AdapterItem.Book, List<AdapterItem.Bookmark>>,
         commitCallback: (() -> Unit)? = null
     ) {
         val arrayList = arrayListOf<AdapterItem>()
@@ -69,22 +69,22 @@ class BookmarkAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)) {
-            is AdapterItem.BookItem -> ViewType.BOOK
-            is AdapterItem.BookmarkItem -> ViewType.BOOKMARK
+            is AdapterItem.Book -> ViewType.BOOK
+            is AdapterItem.Bookmark -> ViewType.BOOKMARK
         }
     }
 
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
-                is AdapterItem.BookItem -> {
+                is AdapterItem.Book -> {
                     with(viewBinding) {
                         if (this is BookItemBinding) {
                             bind(item)
                         }
                     }
                 }
-                is AdapterItem.BookmarkItem -> {
+                is AdapterItem.Bookmark -> {
                     with(viewBinding) {
                         if (this is BookmarkItemBinding) {
                             bind(item)
@@ -94,11 +94,11 @@ class BookmarkAdapter(
             }
         }
 
-        private fun BookItemBinding.bind(item: AdapterItem.BookItem) {
+        private fun BookItemBinding.bind(item: AdapterItem.Book) {
             root.text = item.name
         }
 
-        private fun BookmarkItemBinding.bind(item: AdapterItem.BookmarkItem) {
+        private fun BookmarkItemBinding.bind(item: AdapterItem.Bookmark) {
             val verse = item.verse
 
             val text = String.format(format, bible.name(verse.book), verse.chapter, verse.verse)
@@ -131,12 +131,12 @@ class BookmarkAdapter(
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class BookItem (
+        data class Book (
             override val id: Int = -1,
             val name: String,
         ) : AdapterItem()
 
-        data class BookmarkItem(
+        data class Bookmark(
             override val id: Int,
             val verse: Verse
         ) : AdapterItem()

@@ -1,8 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.base.views
 
 import android.os.Bundle
-import android.transition.Fade
-import android.view.Window
 import androidx.activity.viewModels
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatDelegate

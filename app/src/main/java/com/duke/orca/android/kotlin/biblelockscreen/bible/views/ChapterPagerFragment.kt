@@ -3,7 +3,6 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.transition.Fade
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BookToChapters
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Position
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterPagerBinding
@@ -75,12 +75,12 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         super.onCreateView(inflater, container, savedInstanceState)
 
         arguments?.getParcelable<Verse>(Key.VERSE)?.let {
-            setup(it.book, it.chapter)
+            setup(it.book, it.chapter, it.verse)
         } ?: run {
             runBlocking {
                 val recentlyRead = viewModel.recentlyReadDataStore.data.flowOn(Dispatchers.IO).first()
 
-                setup(recentlyRead.book, recentlyRead.chapter)
+                setup(recentlyRead.book, recentlyRead.chapter, 1)
             }
         }
 
@@ -97,7 +97,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
 
             verse?.let {
                 clear()
-                setup(it.book, it.chapter)
+                setup(it.book, it.chapter, it.verse)
             }
         }
 
@@ -106,7 +106,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
 
             verse?.let {
                 clear()
-                setup(it.book, it.chapter)
+                setup(it.book, it.chapter, it.verse)
             }
         }
 
@@ -115,7 +115,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
 
             verse?.let {
                 clear()
-                setup(it.book, it.chapter)
+                setup(it.book, it.chapter, it.verse)
             }
         }
     }
@@ -199,7 +199,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         chapterPagerAdapter = null
     }
 
-    private fun setup(book: Int, chapter: Int) {
+    private fun setup(book: Int, chapter: Int, verse: Int = -1) {
         with(viewBinding) {
             val fileName = DataStore.Translation.getFileName(requireContext())
             val subFileName = DataStore.Translation.getSubFileName(requireContext())
@@ -221,14 +221,19 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             val chapters =  BookToChapters.findChaptersByBookId(book).toStringArray()
 
             dropdownMenuChapter.setAdapter(DropdownMenu.ArrayAdapter(chapters))
-
             chapterPagerAdapter = ChapterPagerAdapter(fragment, book)
+
+            if (verse > 0) {
+                viewModel.insertPosition(Position(book, chapter, verse.dec()))
+            }
 
             viewPager2.apply {
                 adapter = chapterPagerAdapter
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(chapter.dec(), false)
             }
+
+
         }
 
         currentBook = book

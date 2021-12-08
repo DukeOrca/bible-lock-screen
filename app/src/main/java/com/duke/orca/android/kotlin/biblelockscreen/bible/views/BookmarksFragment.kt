@@ -56,15 +56,11 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
         return viewBinding.root
     }
 
-    override fun onItemClick(item: BookmarkAdapter.AdapterItem.BookmarkItem) {
+    override fun onItemClick(item: BookmarkAdapter.AdapterItem.Bookmark) {
         if (fragmentResultSetRequired) {
-            val verse = item.verse
-
-            viewModel.insertPosition(verse.position)
-
             setFragmentResult(
                 RequestKey.HIGHLIGHTS_FRAGMENT,
-                bundleOf(Key.VERSE to verse)
+                bundleOf(Key.VERSE to item.verse)
             )
 
             parentFragmentManager.popBackStackImmediate()
@@ -77,7 +73,7 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
         }
     }
 
-    override fun onIconClick(item: BookmarkAdapter.AdapterItem.BookmarkItem) {
+    override fun onIconClick(item: BookmarkAdapter.AdapterItem.Bookmark) {
         viewModel.updateBookmark(item.id, item.verse.bookmark.not())
     }
 
@@ -87,11 +83,11 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe { list ->
-                    val bookmarkItems = list.map { BookmarkAdapter.AdapterItem.BookmarkItem(it.id, it) }
+                    val bookmarkItems = list.map { BookmarkAdapter.AdapterItem.Bookmark(it.id, it) }
                     val map = bookmarkItems.groupBy {
                         val name = bible.name(it.verse.book)
 
-                        BookmarkAdapter.AdapterItem.BookItem(name = name)
+                        BookmarkAdapter.AdapterItem.Book(name = name)
                     }
 
                     bookmarkAdapter.submitMap(map) {
