@@ -85,7 +85,7 @@
         <entry key="app/src/main/res/layout/fragment_bookmarks.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_chapter.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_chapter_pager.xml" value="0.1018922114373546" />
+        <entry key="app/src/main/res/layout/fragment_chapter_pager.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_color_picker_dialog.xml" value="0.14130434782608695" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/fragment_font_settings_bottom_sheet_dialog.xml" value="0.1" />

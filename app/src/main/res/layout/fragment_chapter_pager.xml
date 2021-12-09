@@ -39,34 +39,38 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/margin_16dp">
 
-                <TextView
-                    android:id="@+id/text_view_translation"
+                <LinearLayout
+                    android:id="@+id/linear_layout_translation"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/font_family_nanum_myeongjo"
-                    android:textSize="@dimen/text_size_12dp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@id/text_view_sub_translation"
-                    app:layout_constraintEnd_toStartOf="@+id/image_view_translation"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed"
-                    tools:text="개역한글" />
-
-                <TextView
-                    android:id="@+id/text_view_sub_translation"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_4dp"
-                    android:fontFamily="@font/font_family_nanum_myeongjo"
-                    android:textSize="@dimen/text_size_12dp"
-                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/image_view_translation"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_view_translation"
-                    tools:visibility="visible"
-                    tools:text="King James Version"/>
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/text_view_translation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textSize="@dimen/text_size_14dp"
+                        android:textStyle="bold"
+                        tools:text="개역한글" />
+
+                    <TextView
+                        android:id="@+id/text_view_sub_translation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_4dp"
+                        android:fontFamily="@font/font_family_nanum_myeongjo"
+                        android:textSize="@dimen/text_size_14dp"
+                        android:textStyle="bold"
+                        tools:text="King James Version"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/image_view_translation"
@@ -248,11 +252,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="@dimen/elevation_6dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

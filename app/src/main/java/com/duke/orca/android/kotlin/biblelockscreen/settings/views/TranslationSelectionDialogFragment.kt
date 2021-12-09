@@ -91,7 +91,13 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleCallback?.onDialogFragmentViewCreated(TAG)
         observe()
+    }
+
+    override fun onDestroyView() {
+        lifecycleCallback?.onDialogFragmentViewDestroyed(TAG)
+        super.onDestroyView()
     }
 
     override fun onDetach() {
@@ -147,5 +153,9 @@ class TranslationSelectionDialogFragment : BaseDialogFragment<FragmentTranslatio
 
             viewBinding.textViewOk.isEnabled = it.count() > 0
         })
+    }
+
+    companion object {
+        const val TAG = "TranslationSelectionDialogFragment"
     }
 }

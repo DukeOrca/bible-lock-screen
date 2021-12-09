@@ -3,7 +3,6 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.views
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
 import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentContainerViewModel
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BookToChapters
@@ -37,7 +37,7 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
-    BookSelectionDialogFragment.LifecycleCallback,
+    BaseDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     TranslationSelectionDialogFragment.OnClickListener
 {
@@ -56,7 +56,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
     }
 
-    private val limit = 3
+    private val limit = 2
 
     private var chapterPagerAdapter: ChapterPagerAdapter? = null
     private var currentBook = 1
@@ -141,14 +141,34 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
     }
 
-    override fun onDialogFragmentViewCreated() {
-        delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
+    override fun onDialogFragmentViewCreated(tag: String) {
+        when(tag){
+            BookSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
+                }
+            }
+            TranslationSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewTranslation.rotate(180.0f, Duration.Animation.ROTATION)
+                }
+            }
         }
     }
 
-    override fun onDialogFragmentViewDestroyed() {
-        viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
+    override fun onDialogFragmentViewDestroyed(tag: String) {
+        when(tag) {
+            BookSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
+                }
+            }
+            TranslationSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewTranslation.rotate(0.0f, Duration.Animation.ROTATION)
+                }
+            }
+        }
     }
 
     override fun onNegativeButtonClick(dialogFragment: DialogFragment) {
@@ -209,11 +229,9 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             textViewTranslation.text = Translation.findNameByFileName(fileName)
 
             if (subFileName.isNotBlank()) {
-                textViewTranslation.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12.0f)
                 textViewSubTranslation.show()
                 textViewSubTranslation.text = Translation.findNameByFileName(subFileName)
             } else {
-                textViewTranslation.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16.0f)
                 textViewSubTranslation.hide()
                 textViewSubTranslation.text = BLANK
             }
@@ -226,7 +244,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             chapterPagerAdapter = ChapterPagerAdapter(fragment, book)
 
             if (verse > 0) {
-                viewModel.insertPosition(Position(book, chapter, verse.dec()))
+                viewModel.insertPosition(Position(book, chapter, verse))
             }
 
             viewPager2.apply {
@@ -235,8 +253,6 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(chapter.dec(), false)
             }
-
-
         }
 
         currentBook = book

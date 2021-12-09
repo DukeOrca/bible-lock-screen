@@ -51,12 +51,6 @@ class TranslationSelectionDialogViewModel(application: Application) : AndroidVie
                     `is`(currentFileName) or `is`(currentSubFileName)
                 )
             },
-            with(Translation.FileName.LUTHER_BIBLE) {
-                Translation.createFromFileName(
-                    this,
-                    `is`(currentFileName) or `is`(currentSubFileName)
-                )
-            },
             with(Translation.FileName.KOREAN_REVISED_VERSION) {
                 Translation.createFromFileName(
                     this,

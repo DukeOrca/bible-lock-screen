@@ -34,11 +34,6 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         return FragmentBookSelectionDialogBinding.inflate(inflater, container, false)
     }
 
-    interface LifecycleCallback {
-        fun onDialogFragmentViewCreated()
-        fun onDialogFragmentViewDestroyed()
-    }
-
     interface OnBookSelectedListener {
         fun onBookSelected(dialogFragment: BookSelectionDialogFragment, item: AdapterItem.Book)
     }
@@ -61,31 +56,22 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
         BookSelectionAdapter()
     }
 
-    private var lifecycleCallback: LifecycleCallback? = null
     private var onBookSelectedListener: OnBookSelectedListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         parentFragment?.let {
-            if (it is LifecycleCallback) {
-                lifecycleCallback = it
-            }
-
             if (it is OnBookSelectedListener) {
                 onBookSelectedListener = it
             }
         }
 
         with(context) {
-                if (this is LifecycleCallback) {
-                    lifecycleCallback = this
-                }
-
-                if (this is OnBookSelectedListener) {
-                    onBookSelectedListener = this
-                }
+            if (this is OnBookSelectedListener) {
+                onBookSelectedListener = this
             }
+        }
     }
 
     override fun onCreateView(
@@ -101,11 +87,11 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleCallback?.onDialogFragmentViewCreated()
+        lifecycleCallback?.onDialogFragmentViewCreated(TAG)
     }
 
     override fun onDestroyView() {
-        lifecycleCallback?.onDialogFragmentViewDestroyed()
+        lifecycleCallback?.onDialogFragmentViewDestroyed(TAG)
         super.onDestroyView()
     }
 
@@ -201,6 +187,8 @@ class BookSelectionDialogFragment : BaseDialogFragment<FragmentBookSelectionDial
     }
 
     companion object {
+        const val TAG = "BookSelectionDialogFragment"
+
         private const val PACKAGE_NAME = "${Application.PACKAGE_NAME}.bible.views"
 
         private object Key {

@@ -23,6 +23,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.admob.AdLoader
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
+import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.FragmentContainerActivity
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VersePagerAdapter
@@ -60,7 +61,7 @@ import kotlin.math.abs
 @AndroidEntryPoint
 @RequireDeviceCredential
 class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
-    BookSelectionDialogFragment.LifecycleCallback,
+    BaseDialogFragment.LifecycleCallback,
     BookSelectionDialogFragment.OnBookSelectedListener,
     NavigationView.OnNavigationItemSelectedListener {
     override fun inflate(
@@ -522,15 +523,23 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         moveTo(item.index.inc(), 1, 1)
     }
 
-    override fun onDialogFragmentViewCreated() {
-        delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
+    override fun onDialogFragmentViewCreated(tag: String) {
+        when(tag) {
+            BookSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
+                }
+            }
         }
     }
 
-    override fun onDialogFragmentViewDestroyed() {
-        delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
+    override fun onDialogFragmentViewDestroyed(tag: String) {
+        when(tag) {
+            BookSelectionDialogFragment.TAG -> {
+                delayOnLifecycle(Duration.Delay.ROTATE) {
+                    viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
+                }
+            }
         }
     }
 

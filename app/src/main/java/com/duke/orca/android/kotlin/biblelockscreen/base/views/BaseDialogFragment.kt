@@ -1,5 +1,6 @@
 package com.duke.orca.android.kotlin.biblelockscreen.base.views
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,7 +13,6 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.coroutineScope
 import androidx.viewbinding.ViewBinding
-import com.duke.orca.android.kotlin.biblelockscreen.R
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -23,8 +23,32 @@ abstract class BaseDialogFragment<VB : ViewBinding> : DialogFragment() {
     protected val viewBinding: VB
         get() = _viewBinding!!
 
+    protected var lifecycleCallback: LifecycleCallback? = null
+
     abstract val setWindowAnimation: Boolean
     abstract fun inflate(inflater: LayoutInflater, container: ViewGroup?): VB
+
+    interface LifecycleCallback {
+        fun onDialogFragmentViewCreated(tag: String)
+        fun onDialogFragmentViewDestroyed(tag: String)
+    }
+
+    @CallSuper
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        parentFragment?.let {
+            if (it is LifecycleCallback) {
+                lifecycleCallback = it
+            }
+        }
+
+        with(context) {
+            if (this is LifecycleCallback) {
+                lifecycleCallback = this
+            }
+        }
+    }
 
     @CallSuper
     override fun onCreateView(

@@ -58,7 +58,7 @@ object Translation {
         fun String.toDisplayName(): String {
             return when(this) {
                 ENGLISH -> DisplayName.ENGLISH
-                // FRENCH -> DisplayName.FRENCH
+                FRENCH -> DisplayName.FRENCH
                 GERMAN -> DisplayName.GERMAN
                 ITALIAN -> DisplayName.ITALIAN
                 KOREAN -> DisplayName.KOREAN
@@ -84,7 +84,7 @@ object Translation {
             FileName.AMERICAN_STANDARD_VERSION -> Name.AMERICAN_STANDARD_VERSION
             FileName.KING_JAMES_VERSION -> Name.KING_JAMES_VERSION
             FileName.KOREAN_REVISED_VERSION -> Name.KOREAN_REVISED_VERSION
-            // FileName.LOUIS_SEGOND -> DisplayName.LOUIS_SEGOND
+            FileName.LOUIS_SEGOND -> Name.LOUIS_SEGOND
             FileName.LUTHER_BIBLE -> Name.LUTHER_BIBLE
             FileName.UPDATED_KING_JAMES_VERSION -> Name.UPDATED_KING_JAMES_VERSION
             FileName.NEW_KOREAN_REVISED_VERSION -> Name.NEW_KOREAN_REVISED_VERSION
@@ -101,7 +101,7 @@ object Translation {
 
         return when (language) {
             Language.ENGLISH -> FileName.KING_JAMES_VERSION
-            // Language.FRENCH -> FileName.LOUIS_SEGOND
+            Language.FRENCH -> FileName.LOUIS_SEGOND
             Language.GERMAN -> FileName.LUTHER_BIBLE
             Language.KOREAN -> FileName.KOREAN_REVISED_VERSION
             else -> FileName.KING_JAMES_VERSION
@@ -114,7 +114,7 @@ object Translation {
             FileName.AMERICAN_STANDARD_VERSION -> Abbreviation.AMERICAN_STANDARD_VERSION
             FileName.KING_JAMES_VERSION -> Abbreviation.KING_JAMES_VERSION
             FileName.KOREAN_REVISED_VERSION -> Abbreviation.KOREAN_REVISED_VERSION
-            // FileName.LOUIS_SEGOND -> Abbreviation.LOUIS_SEGOND
+            FileName.LOUIS_SEGOND -> Abbreviation.LOUIS_SEGOND
             FileName.LUTHER_BIBLE -> Abbreviation.LUTHER_BIBLE
             FileName.UPDATED_KING_JAMES_VERSION -> Abbreviation.UPDATED_KING_JAMES_VERSION
             FileName.NEW_KOREAN_REVISED_VERSION -> Abbreviation.NEW_KOREAN_REVISED_VERSION
@@ -128,7 +128,7 @@ object Translation {
             FileName.AMERICAN_STANDARD_VERSION -> Name.AMERICAN_STANDARD_VERSION
             FileName.KING_JAMES_VERSION -> Name.KING_JAMES_VERSION
             FileName.KOREAN_REVISED_VERSION -> Name.KOREAN_REVISED_VERSION
-            // FileName.LOUIS_SEGOND -> DisplayName.LOUIS_SEGOND
+            FileName.LOUIS_SEGOND -> Name.LOUIS_SEGOND
             FileName.LUTHER_BIBLE -> Name.LUTHER_BIBLE
             FileName.UPDATED_KING_JAMES_VERSION -> Name.UPDATED_KING_JAMES_VERSION
             FileName.NEW_KOREAN_REVISED_VERSION -> Name.NEW_KOREAN_REVISED_VERSION
@@ -145,8 +145,8 @@ object Translation {
 
         return when (language) {
             Language.ENGLISH -> Name.KING_JAMES_VERSION
-            // Language.FRENCH -> DisplayName.LOUIS_SEGOND
-            Language.GERMAN -> Name.LUTHER_BIBLE
+             Language.FRENCH -> Name.LOUIS_SEGOND
+             Language.GERMAN -> Name.LUTHER_BIBLE
             Language.KOREAN -> Name.KOREAN_REVISED_VERSION
             else -> Name.KING_JAMES_VERSION
         }
@@ -158,7 +158,7 @@ object Translation {
             FileName.AMERICAN_STANDARD_VERSION -> Language.ENGLISH
             FileName.KING_JAMES_VERSION -> Language.ENGLISH
             FileName.KOREAN_REVISED_VERSION -> Language.KOREAN
-            // FileName.LOUIS_SEGOND -> Language.FRENCH
+            FileName.LOUIS_SEGOND -> Language.FRENCH
             FileName.LUTHER_BIBLE -> Language.GERMAN
             FileName.UPDATED_KING_JAMES_VERSION -> Language.ENGLISH
             FileName.NEW_KOREAN_REVISED_VERSION -> Language.KOREAN
