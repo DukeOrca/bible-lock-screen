@@ -41,9 +41,19 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
 
     private val highlightAdapter by lazy {
         HighlightAdapter { highlight ->
-            val adapterVerses = highlight.verses.map { VerseAdapter.AdapterItem.VerseItem(it) }
+            val list = highlight.verses.map {
+                VerseAdapter.AdapterItem.Verse(
+                    id = it.id,
+                    book = it.book,
+                    chapter = it.chapter,
+                    verse = it.verse,
+                    word = it.word,
+                    bookmark = it.bookmark,
+                    favorite = it.favorite
+                )
+            }
 
-            verseAdapter.submitGroupedList(adapterVerses) {
+            verseAdapter.submitGroupedList(list) {
                 with(viewBinding.recyclerViewVerse) {
                     if (isNotVisible) {
                         delayOnLifecycle(Duration.Delay.SLIDE_IN) {
@@ -60,7 +70,7 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
             if (fragmentResultSetRequired) {
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
-                    bundleOf(Key.VERSE to it)
+                    bundleOf(Key.CONTENT to it.content)
                 )
 
                 parentFragmentManager.popBackStackImmediate()
@@ -68,7 +78,7 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
                 addFragment(
                     R.id.fragment_container_view,
                     parentFragmentManager,
-                    ChapterPagerFragment.newInstance(it)
+                    ChapterPagerFragment.newInstance(it.content)
                 )
             }
         }

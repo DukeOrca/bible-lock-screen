@@ -17,9 +17,9 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.viewmodels.FragmentCont
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.ChapterPagerAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.BookToChapters
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Translation
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Position
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterPagerViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterPagerBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
@@ -56,6 +56,8 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
     }
 
+    private val limit = 3
+
     private var chapterPagerAdapter: ChapterPagerAdapter? = null
     private var currentBook = 1
     private var currentChapter = 1
@@ -74,7 +76,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        arguments?.getParcelable<Verse>(Key.VERSE)?.let {
+        arguments?.getParcelable<Content>(Key.CONTENT)?.let {
             setup(it.book, it.chapter, it.verse)
         } ?: run {
             runBlocking {
@@ -93,7 +95,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         observe()
 
         setFragmentResultListener(RequestKey.HIGHLIGHTS_FRAGMENT) { _, bundle ->
-            val verse = bundle.getParcelable<Verse>(Key.VERSE)
+            val verse = bundle.getParcelable<Content>(Key.CONTENT)
 
             verse?.let {
                 clear()
@@ -102,7 +104,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
 
         setFragmentResultListener(RequestKey.BOOKMARKS_FRAGMENT) { _, bundle ->
-            val verse = bundle.getParcelable<Verse>(Key.VERSE)
+            val verse = bundle.getParcelable<Content>(Key.CONTENT)
 
             verse?.let {
                 clear()
@@ -111,7 +113,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
 
         setFragmentResultListener(RequestKey.FAVORITES_FRAGMENT) { _, bundle ->
-            val verse = bundle.getParcelable<Verse>(Key.VERSE)
+            val verse = bundle.getParcelable<Content>(Key.CONTENT)
 
             verse?.let {
                 clear()
@@ -141,12 +143,12 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
 
     override fun onDialogFragmentViewCreated() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0f, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
         }
     }
 
     override fun onDialogFragmentViewDestroyed() {
-        viewBinding.imageViewBook.rotate(0.0f, Duration.ROTATION)
+        viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
     }
 
     override fun onNegativeButtonClick(dialogFragment: DialogFragment) {
@@ -175,18 +177,18 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         if (isTranslationChanged || isSubTranslationChanged) {
             clear()
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
+
+            if (isTranslationChanged) {
+                Database.refresh(requireContext())
+            }
+
+            if (isSubTranslationChanged) {
+                SubDatabase.refresh(requireContext())
+            }
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {
             if (isTranslationChanged || isSubTranslationChanged) {
-                if (isTranslationChanged) {
-                    Database.refresh(requireContext())
-                }
-
-                if (isSubTranslationChanged) {
-                    SubDatabase.refresh(requireContext())
-                }
-
                 onTranslationChanged()
             }
 
@@ -229,6 +231,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
 
             viewPager2.apply {
                 adapter = chapterPagerAdapter
+                offscreenPageLimit = limit
                 registerOnPageChangeCallback(onPageChangeCallback)
                 setCurrentItem(chapter.dec(), false)
             }
@@ -278,9 +281,11 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             }
 
             dropdownMenuChapter.setOnItemClickListener { position, _ ->
-                val smoothScroll = abs(viewPager2.currentItem - position) < 3
+                with(viewPager2) {
+                    val smoothScroll = abs(currentItem - position) < limit
 
-                viewPager2.setCurrentItem(position, smoothScroll)
+                    setCurrentItem(position, smoothScroll)
+                }
             }
 
             imageViewHighlight.setOnClickListener {
@@ -339,10 +344,10 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
     }
 
     companion object {
-        fun newInstance(verse: Verse): ChapterPagerFragment {
+        fun newInstance(content: Content): ChapterPagerFragment {
             return ChapterPagerFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(Key.VERSE, verse)
+                    putParcelable(Key.CONTENT, content)
                 }
             }
         }

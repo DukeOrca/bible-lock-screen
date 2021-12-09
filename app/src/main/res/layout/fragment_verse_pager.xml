@@ -227,6 +227,7 @@
                             android:layout_width="@dimen/width_32dp"
                             android:layout_height="@dimen/height_32dp"
                             android:layout_marginEnd="@dimen/margin_12dp"
+                            android:scaleType="centerInside"
                             app:srcCompat="@drawable/ic_round_arrow_drop_down_24"
                             app:tint="@color/white"
                             tools:ignore="ContentDescription" />

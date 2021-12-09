@@ -5,6 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import kotlinx.parcelize.Parcelize
 
 @Entity(tableName = "verse")
@@ -26,12 +27,4 @@ data class Verse(
 
     val content: Content
         get() = Content(book, chapter, verse, word)
-
-    @Parcelize
-    data class Content(
-        val book: Int,
-        val chapter: Int,
-        val verse: Int,
-        val word: String
-    ) : Parcelable
 }

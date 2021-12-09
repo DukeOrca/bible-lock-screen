@@ -20,7 +20,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.FavoritesViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentFavoritesBinding
@@ -45,7 +45,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
             if (fragmentResultSetRequired) {
                 setFragmentResult(
                     RequestKey.HIGHLIGHTS_FRAGMENT,
-                    bundleOf(Key.VERSE to it)
+                    bundleOf(Key.CONTENT to it.content)
                 )
 
                 parentFragmentManager.popBackStackImmediate()
@@ -53,7 +53,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
                 addFragment(
                     R.id.fragment_container_view,
                     parentFragmentManager,
-                    ChapterPagerFragment.newInstance(it)
+                    ChapterPagerFragment.newInstance(it.content)
                 )
             }
         }
@@ -106,16 +106,16 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
         }
     }
 
-    override fun onBookmarkClick(verse: Verse, bookmark: Boolean) {
-        viewModel.updateBookmark(verse.id, bookmark)
+    override fun onBookmarkClick(id: Int, bookmark: Boolean) {
+        viewModel.updateBookmark(id, bookmark)
     }
 
-    override fun onFavoriteClick(verse: Verse, favorite: Boolean) {
-        viewModel.updateFavorites(verse.id, favorite)
+    override fun onFavoriteClick(id: Int, favorite: Boolean) {
+        viewModel.updateFavorites(id, favorite)
     }
 
-    override fun onMoreVertClick(verse: Verse) {
-        OptionChoiceDialogFragment.newInstance(options, verse.content).also {
+    override fun onMoreVertClick(item: VerseAdapter.AdapterItem.Verse) {
+        OptionChoiceDialogFragment.newInstance(options, item.content).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -123,7 +123,7 @@ class FavoritesFragment : BaseFragment<FragmentFavoritesBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        content: Verse.Content
+        content: Content
     ) {
         when(option) {
             options[0] -> {

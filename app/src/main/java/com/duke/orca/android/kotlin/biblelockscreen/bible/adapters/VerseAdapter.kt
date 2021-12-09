@@ -3,12 +3,15 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.setTextWithSearchWord
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.NativeAdBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.VerseItemBinding
@@ -18,7 +21,7 @@ import com.like.OnLikeListener
 
 class VerseAdapter(
     private val bible: Bible,
-    private val onItemClick: ((item: Verse) -> Unit)? = null
+    private val onItemClick: ((item: AdapterItem.Verse) -> Unit)? = null
 ) : ListAdapter<VerseAdapter.AdapterItem, VerseAdapter.ViewHolder>(DiffCallback()) {
     private var inflater: LayoutInflater? = null
     private var onIconClickListener: OnIconClickListener? = null
@@ -29,9 +32,9 @@ class VerseAdapter(
     private var color = 0
 
     interface OnIconClickListener {
-        fun onBookmarkClick(verse: Verse, bookmark: Boolean)
-        fun onFavoriteClick(verse: Verse, favorite: Boolean)
-        fun onMoreVertClick(verse: Verse)
+        fun onBookmarkClick(id: Int, bookmark: Boolean)
+        fun onFavoriteClick(id: Int, favorite: Boolean)
+        fun onMoreVertClick(item: AdapterItem.Verse)
     }
 
     fun setOnIconClickListener(onIconClickListener: OnIconClickListener) {
@@ -40,8 +43,8 @@ class VerseAdapter(
 
     fun submitGroupedList(list: List<AdapterItem>, commitCallback: (() -> Unit)? = null) {
         val arrayList = arrayListOf<AdapterItem>()
-        val map = with(list.filterIsInstance<AdapterItem.VerseItem>()) {
-            groupBy { AdapterItem.BookItem(it.verse.book) }
+        val map = with(list.filterIsInstance<AdapterItem.Verse>()) {
+            groupBy { AdapterItem.Book(it.book) }
         }
 
         map.forEach { (book, verses) ->
@@ -63,7 +66,7 @@ class VerseAdapter(
         this.searchWord = searchWord
         this.color = color
 
-        submitList(list) {
+        submitGroupedList(list) {
             commitCallback?.invoke()
         }
     }
@@ -71,60 +74,56 @@ class VerseAdapter(
     inner class ViewHolder(private val viewBinding: ViewBinding): RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: AdapterItem) {
             when(item) {
-                is AdapterItem.BookItem -> {
+                is AdapterItem.Book -> {
                     if (viewBinding is BookItemBinding) {
                         viewBinding.root.text = bible.name(item.value)
                     }
                 }
-                is AdapterItem.VerseItem -> {
+                is AdapterItem.Verse -> {
                     if (viewBinding is VerseItemBinding) {
-                        val verse = item.verse
-                        val bookmark = verse.bookmark
-                        val favorite = verse.favorite
-
-                        viewBinding.textViewBook.text = bible.name(verse.book)
-                        viewBinding.textViewChapter.text = "${verse.chapter}"
-                        viewBinding.textViewVerse.text = "${verse.verse}"
+                        viewBinding.textViewBook.text = bible.name(item.book)
+                        viewBinding.textViewChapter.text = "${item.chapter}"
+                        viewBinding.textViewVerse.text = "${item.verse}"
 
                         if (searchWord.isBlank()) {
-                            viewBinding.textViewWord.text = verse.word
+                            viewBinding.textViewWord.text = item.word
                         } else {
                             viewBinding.textViewWord.setTextWithSearchWord(
-                                verse.word,
+                                item.word,
                                 searchWord,
                                 color
                             )
                         }
 
-                        viewBinding.likeButtonBookmark.isLiked = bookmark
+                        viewBinding.likeButtonBookmark.isLiked = item.bookmark
                         viewBinding.likeButtonBookmark.setOnLikeListener(object : OnLikeListener {
                             override fun liked(likeButton: LikeButton?) {
-                                onIconClickListener?.onBookmarkClick(verse, true)
+                                onIconClickListener?.onBookmarkClick(item.id, true)
                             }
 
                             override fun unLiked(likeButton: LikeButton?) {
-                                onIconClickListener?.onBookmarkClick(verse, true)
+                                onIconClickListener?.onBookmarkClick(item.id, true)
                             }
                         })
 
-                        viewBinding.likeButtonFavorite.isLiked = favorite
+                        viewBinding.likeButtonFavorite.isLiked = item.favorite
                         viewBinding.likeButtonFavorite.setOnLikeListener(object : OnLikeListener {
                             override fun liked(likeButton: LikeButton?) {
-                                onIconClickListener?.onFavoriteClick(verse, true)
+                                onIconClickListener?.onFavoriteClick(item.id, true)
                             }
 
                             override fun unLiked(likeButton: LikeButton?) {
-                                onIconClickListener?.onFavoriteClick(verse, false)
+                                onIconClickListener?.onFavoriteClick(item.id, false)
                             }
                         })
 
                         viewBinding.imageViewMoreVert.setOnClickListener {
-                            onIconClickListener?.onMoreVertClick(verse)
+                            onIconClickListener?.onMoreVertClick(item)
                         }
 
                         onItemClick?.let { onItemClick ->
                             viewBinding.root.setOnClickListener {
-                                onItemClick(verse)
+                                onItemClick(item)
                             }
                         }
                     }
@@ -148,9 +147,9 @@ class VerseAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(getItem(position)) {
-            is AdapterItem.BookItem -> ViewType.BOOK
+            is AdapterItem.Book -> ViewType.BOOK
             is AdapterItem.NativeAdItem -> ViewType.NATIVE_AD
-            is AdapterItem.VerseItem -> ViewType.VERSE
+            is AdapterItem.Verse -> ViewType.VERSE
         }
     }
 
@@ -193,17 +192,31 @@ class VerseAdapter(
     sealed class AdapterItem {
         abstract val id: Int
 
-        data class BookItem(val value: Int): AdapterItem() {
+        data class Book(val value: Int) : AdapterItem() {
             override val id = -1
         }
 
-        data class VerseItem(val verse: Verse): AdapterItem() {
-            override val id = verse.id
+        data class Verse(
+            override val id: Int,
+            val book: Int,
+            val chapter: Int,
+            val verse: Int,
+            val word: String,
+            val bookmark: Boolean,
+            val favorite: Boolean
+        ) : AdapterItem() {
+            val content: Content
+                get() = Content(
+                    book = book,
+                    chapter = chapter,
+                    verse = verse,
+                    word = word
+                )
         }
 
         data class NativeAdItem(
             override val id: Int,
             val nativeAd: NativeAd
-        ): AdapterItem()
+        ) : AdapterItem()
     }
 }

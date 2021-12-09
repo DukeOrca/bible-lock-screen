@@ -54,14 +54,11 @@ class DropdownMenu : FrameLayout {
         onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(position: Int, item: String) {
                 coroutineScope.launch {
-                    onItemClick(position, item)
-
-                    coroutineScope.launch {
-                        delay(Duration.Delay.DISMISS)
-                        popupWindow.dismiss()
-                        setText(item)
-                    }
+                    delay(Duration.Delay.DISMISS)
+                    popupWindow.dismiss()
                 }
+
+                onItemClick(position, item)
             }
         }
 
@@ -76,7 +73,11 @@ class DropdownMenu : FrameLayout {
     private val popupWindow by lazy {
         PopupWindow().apply {
             setOnDismissListener {
-                viewBinding.imageView.rotate(180.0f, 0.0f, Duration.ROTATION)
+                coroutineScope.launch {
+                    delay(Duration.Delay.ROTATE)
+                    viewBinding.imageView.rotate(180.0f, 0.0f, Duration.Animation.ROTATION)
+                }
+
             }
         }
     }
@@ -150,7 +151,7 @@ class DropdownMenu : FrameLayout {
 
             popupWindow.height = height + marginBottom + marginTop
 
-            viewBinding.imageView.rotate(0.0f, 180.0f, Duration.ROTATION)
+            viewBinding.imageView.rotate(0.0f, 180.0f, Duration.Animation.ROTATION)
             popupWindow.showAsDropDown(this)
         }
     }

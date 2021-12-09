@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -16,9 +15,11 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
+import com.duke.orca.android.kotlin.biblelockscreen.application.isNotVisible
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
@@ -27,12 +28,14 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentVerseBin
 import com.like.LikeButton
 import com.like.OnLikeListener
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class VerseFragment : BaseFragment<FragmentVerseBinding>(),
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     private val viewModel by viewModels<VerseViewModel>()
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
+    private val onResumed = AtomicBoolean(false)
 
     private var currentFont: Font? = null
 
@@ -57,6 +60,16 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
         viewModel.loadSubVerseById(id)
 
         return viewBinding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onResumed.set(true)
+    }
+
+    override fun onPause() {
+        onResumed.set(false)
+        super.onPause()
     }
 
     private fun observe(binding: FragmentVerseBinding) {
@@ -150,8 +163,16 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
             }
         }
 
-        if (binding.nestedScrollView.isVisible.not()) {
-            binding.nestedScrollView.fadeIn(Duration.FADE_IN)
+        with(binding.nestedScrollView) {
+            if (isNotVisible) {
+                if (onResumed.get()) {
+                    delayOnLifecycle(Duration.Delay.SCROLL) {
+                        fadeIn(Duration.Animation.FADE_IN)
+                    }
+                } else {
+                    show()
+                }
+            }
         }
     }
 
@@ -166,7 +187,7 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        content: Verse.Content
+        content: Content
     ) {
         when(option) {
             options[0] -> {

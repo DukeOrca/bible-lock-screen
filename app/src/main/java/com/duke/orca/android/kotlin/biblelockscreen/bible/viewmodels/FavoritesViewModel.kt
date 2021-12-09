@@ -61,7 +61,19 @@ class FavoritesViewModel @Inject constructor(
 
         val adapterItems = arrayListOf<VerseAdapter.AdapterItem>()
 
-        adapterItems.addAll(bibleVerses.map { VerseAdapter.AdapterItem.VerseItem(it) })
+        adapterItems.addAll(
+            bibleVerses.map {
+                VerseAdapter.AdapterItem.Verse(
+                    id = it.id,
+                    book = it.book,
+                    chapter = it.chapter,
+                    verse = it.verse,
+                    word = it.word,
+                    bookmark = it.bookmark,
+                    favorite = it.favorite
+                )
+            }
+        )
 
         for (i in 0 until nativeAds.count()) {
             if (i == 0) {

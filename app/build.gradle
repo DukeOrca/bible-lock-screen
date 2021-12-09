@@ -117,7 +117,7 @@ dependencies {
 
     implementation 'com.google.protobuf:protobuf-javalite:4.0.0-rc-2'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }
 
 protobuf {

@@ -57,10 +57,12 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
     }
 
     override fun onItemClick(item: BookmarkAdapter.AdapterItem.Bookmark) {
+        val content = item.verse.content
+
         if (fragmentResultSetRequired) {
             setFragmentResult(
                 RequestKey.HIGHLIGHTS_FRAGMENT,
-                bundleOf(Key.VERSE to item.verse)
+                bundleOf(Key.CONTENT to content)
             )
 
             parentFragmentManager.popBackStackImmediate()
@@ -68,13 +70,13 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
             addFragment(
                 R.id.fragment_container_view,
                 parentFragmentManager,
-                ChapterPagerFragment.newInstance(item.verse)
+                ChapterPagerFragment.newInstance(content)
             )
         }
     }
 
-    override fun onIconClick(item: BookmarkAdapter.AdapterItem.Bookmark) {
-        viewModel.updateBookmark(item.id, item.verse.bookmark.not())
+    override fun onIconClick(item: BookmarkAdapter.AdapterItem.Bookmark, isLiked: Boolean) {
+        viewModel.updateBookmark(item.id, isLiked)
     }
 
     private fun observe() {
@@ -93,11 +95,11 @@ class BookmarksFragment : BaseFragment<FragmentBookmarksBinding>(),
                     bookmarkAdapter.submitMap(map) {
                         delayOnLifecycle(Duration.SHORT) {
                             if (map.isEmpty()) {
-                                viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
+                                viewBinding.linearLayout.fadeIn(Duration.Animation.FADE_IN)
                             } else {
                                 with(viewBinding.recyclerView) {
                                     if (isInvisible) {
-                                        fadeIn(Duration.FADE_IN)
+                                        fadeIn(Duration.Animation.FADE_IN)
                                     }
                                 }
                             }

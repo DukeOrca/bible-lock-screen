@@ -6,30 +6,19 @@ internal object Duration {
     const val LONG = 500L
 
     object Animation{
-        const val COLLAPSE = 300L
-        const val EXPAND = 300L
-        const val FADE_IN = 500L
-        const val FADE_OUT = 400L
-        const val ROTATION = 300L
+        const val COLLAPSE = 250L
+        const val EXPAND = 250L
+        const val FADE_IN = LONG
+        const val FADE_OUT = MEDIUM
+        const val ROTATION = 250L
     }
 
     object Delay {
-        const val DISMISS = 200L
+        const val DISMISS = 150L
         const val RECREATE = 150L
         const val ROTATE = 50L
-        const val SCROLL = 150L
-        const val SLIDE_IN = 400L
-        const val START_ACTIVITY = 200L
+        const val SCROLL = 120L
+        const val SLIDE_IN = 360L
+        const val START_ACTIVITY = SHORT
     }
-
-    object ItemAnimator {
-        const val MOVE = 240L
-        const val REMOVE = 160L
-    }
-
-    const val COLLAPSE = 250L
-    const val EXPAND = 250L
-    const val FADE_IN = LONG
-    const val FADE_OUT = MEDIUM
-    const val ROTATION = 300L
 }

@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.setTint
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookItemBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.BookmarkItemBinding
+import com.like.LikeButton
+import com.like.OnLikeListener
 
 class BookmarkAdapter(
     context: Context,
@@ -30,7 +31,7 @@ class BookmarkAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(item: AdapterItem.Bookmark)
-        fun onIconClick(item: AdapterItem.Bookmark)
+        fun onIconClick(item: AdapterItem.Bookmark, isLiked: Boolean)
     }
 
     fun submitMap(
@@ -105,11 +106,18 @@ class BookmarkAdapter(
 
             textView.text = text
 
-            with(imageViewBookmark) {
-                setOnClickListener {
-                    setTint(R.color.unbookmarked)
-                    onItemClickListener?.onIconClick(item)
-                }
+            with(likeButtonBookmark) {
+                isLiked = verse.bookmark
+
+                setOnLikeListener(object : OnLikeListener {
+                    override fun liked(likeButton: LikeButton?) {
+                        onItemClickListener?.onIconClick(item, true)
+                    }
+
+                    override fun unLiked(likeButton: LikeButton?) {
+                        onItemClickListener?.onIconClick(item, false)
+                    }
+                })
             }
 
             root.setOnClickListener {

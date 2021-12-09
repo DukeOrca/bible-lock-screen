@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
@@ -127,7 +128,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             with(frameLayout) {
                                 if (isNotVisible) {
                                     if (item.expanded.not()) {
-                                        expand(Duration.EXPAND) {
+                                        expand(Duration.Animation.EXPAND) {
                                             item.expanded = true
                                             item.collapsed = false
                                         }
@@ -140,7 +141,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             with(frameLayout) {
                                 if (isVisible) {
                                     if (item.collapsed.not()) {
-                                        collapse(Duration.COLLAPSE) {
+                                        collapse(Duration.Animation.COLLAPSE) {
                                             item.expanded = false
                                             item.collapsed = true
                                         }
@@ -275,8 +276,8 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                 val name: String
             ) : Parcelable
 
-            val content: Verse.Content
-                get() = Verse.Content(book.id, chapter, verse, word)
+            val content: Content
+                get() = Content(book.id, chapter, verse, word)
         }
     }
 

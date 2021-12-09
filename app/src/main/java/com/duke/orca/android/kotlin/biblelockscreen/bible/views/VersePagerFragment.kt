@@ -95,7 +95,9 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         })
     }
 
-    private var currentItem: Verse? = null
+    private val limit = 2
+
+    private var currentVerse: Verse? = null
     private var currentPageMargin = 0.0f
     private var nativeAd: NativeAd? = null
     private var nativeAdBinding: NativeAdBinding? = null
@@ -140,11 +142,11 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
                     hide(true)
                     viewBinding.viewNextFake.hide(true)
                 } else {
-                    if (currentItem?.id.isNonZero()) {
+                    if (currentVerse?.id.isNonZero()) {
                         show()
                     }
 
-                    if (currentItem?.id.not(VERSE_COUNT.dec())) {
+                    if (currentVerse?.id.not(VERSE_COUNT.dec())) {
                         viewBinding.viewNextFake.show()
                     }
 
@@ -264,7 +266,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
 
         viewBinding.linearLayoutBook.setOnClickListener {
             BookSelectionDialogFragment.newInstance(
-                currentItem?.book ?: 0
+                currentVerse?.book ?: 0
             ).also {
                 it.show(childFragmentManager, it.tag)
             }
@@ -275,15 +277,14 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         }
 
         viewBinding.dropdownMenuChapter.setOnItemClickListener { position, _ ->
-            val book = currentItem?.book ?: 1
-            val verse = 1
+            val book = currentVerse?.book ?: 1
 
-            moveTo(book, position.inc(), verse)
+            moveTo(book, position.inc(), 1)
         }
 
         viewBinding.dropdownMenuVerse.setOnItemClickListener { position, _ ->
-            val book = currentItem?.book ?: 1
-            val chapter = currentItem?.chapter ?: 1
+            val book = currentVerse?.book ?: 1
+            val chapter = currentVerse?.chapter ?: 1
 
             moveTo(book, chapter, position.inc())
         }
@@ -291,7 +292,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         setPageTransformer(PageMargin.medium, false)
 
         viewBinding.viewPager2.adapter = versePagerAdapter
-        viewBinding.viewPager2.offscreenPageLimit = 4
+        viewBinding.viewPager2.offscreenPageLimit = limit
         viewBinding.viewPager2.registerOnPageChangeCallback(onPageChangeCallback)
         viewBinding.viewPager2.setCurrentItem(DataStore.Verse.getCurrentVerse(requireContext()), false)
 
@@ -305,7 +306,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         ) {
             compositeDisposable.add(Observable.zip(it[0], it[1]) { _, _ ->
             }.subscribe ({
-                viewBinding.constraintLayoutContent.fadeIn(Duration.FADE_IN) {
+                viewBinding.constraintLayoutContent.fadeIn(Duration.Animation.FADE_IN) {
                     setPageTransformer(PageMargin.small, true) {
                         viewBinding.viewPreviousFake.viewTreeObserver.addOnDrawListener(onDrawListener)
                     }
@@ -320,11 +321,9 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
-                viewBinding.textViewBook.text = viewModel.bibleBook.name(it.book)
-                viewBinding.dropdownMenuChapter.setText(it.chapter.toString())
-                viewBinding.dropdownMenuVerse.setText(it.verse.toString())
+                if (currentVerse?.book.not(it.book)) {
+                    viewBinding.textViewBook.text = viewModel.bibleBook.name(it.book)
 
-                if (currentItem?.book.not(it.book)) {
                     viewBinding.dropdownMenuChapter.setAdapter(
                         DropdownMenu.ArrayAdapter(
                             BookToChapters.findChaptersByBookId(it.book).toStringArray()
@@ -332,7 +331,15 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
                     )
                 }
 
-                if (currentItem?.book.not(it.book) or currentItem?.chapter.not(it.chapter)) {
+                if (currentVerse?.chapter.not(it.chapter)) {
+                    viewBinding.dropdownMenuChapter.setText("${it.chapter}")
+                }
+
+                if (currentVerse?.verse.not(it.verse)) {
+                    viewBinding.dropdownMenuVerse.setText("${it.verse}")
+                }
+
+                if (currentVerse?.book.not(it.book) or currentVerse?.chapter.not(it.chapter)) {
                     lifecycleScope.launch {
                         val itemCount = viewModel.getVerseCount(it.book, it.chapter)
 
@@ -344,7 +351,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
                     }
                 }
 
-                currentItem = it
+                currentVerse = it
 
                 getBehaviourSubject(Key.DROPDOWN_MENU)?.onNext(Unit)
             }
@@ -374,11 +381,10 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
         }
     }
 
-    private fun moveTo(book: Int, chapter: Int, verse: Int, onMove: (() -> Unit)? = null) {
+    private fun moveTo(book: Int, chapter: Int, verse: Int) {
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.get(book, chapter, verse)?.let {
                 viewBinding.viewPager2.setCurrentItem(it.id, false)
-                onMove?.invoke()
             }
         }
     }
@@ -518,13 +524,13 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
 
     override fun onDialogFragmentViewCreated() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(180.0f, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(180.0f, Duration.Animation.ROTATION)
         }
     }
 
     override fun onDialogFragmentViewDestroyed() {
         delayOnLifecycle(Duration.Delay.ROTATE) {
-            viewBinding.imageViewBook.rotate(0.0f, Duration.ROTATION)
+            viewBinding.imageViewBook.rotate(0.0f, Duration.Animation.ROTATION)
         }
     }
 

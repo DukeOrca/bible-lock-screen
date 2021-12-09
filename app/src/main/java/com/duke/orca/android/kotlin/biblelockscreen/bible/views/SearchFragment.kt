@@ -22,16 +22,17 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.VerseAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.BibleVerseSearchViewModel
-import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentBibleVerseSearchBinding
+import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
+class SearchFragment : BaseFragment<FragmentSearchBinding>(),
     VerseAdapter.OnIconClickListener,
     OptionChoiceDialogFragment.OnOptionChoiceListener {
     override val toolbar: Toolbar? = null
@@ -39,12 +40,21 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     override fun inflate(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentBibleVerseSearchBinding {
-        return FragmentBibleVerseSearchBinding.inflate(inflater, container, false)
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
     private val viewModel by viewModels<BibleVerseSearchViewModel>()
-    private val verseAdapter by lazy { VerseAdapter(viewModel.bibleBook) }
+    private val verseAdapter by lazy {
+        VerseAdapter(viewModel.bibleBook) {
+            addFragment(
+                R.id.fragment_container_view,
+                parentFragmentManager,
+                ChapterPagerFragment.newInstance(it.content)
+            )
+        }
+    }
+
     private val color by lazy { ContextCompat.getColor(requireContext(), R.color.secondary) }
     private val options by lazy { arrayOf(getString(R.string.copy), getString(R.string.share)) }
 
@@ -77,15 +87,15 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
             val searchResults = searchResult.searchResults
             val searchWord = searchResult.searchWord
 
-            viewBinding.circularProgressIndicator.fadeOut(Duration.FADE_OUT) {
+            viewBinding.circularProgressIndicator.fadeOut(Duration.Animation.FADE_OUT) {
                 verseAdapter.submitGroupedList(
                     searchResults.map { it.toAdapterItem() }, searchWord, color
                 ) {
                     delayOnLifecycle(Duration.Delay.DISMISS) {
                         if (searchResults.isEmpty()) {
-                            viewBinding.linearLayout.fadeIn(Duration.FADE_IN)
+                            viewBinding.linearLayout.fadeIn(Duration.Animation.FADE_IN)
                         } else {
-                            viewBinding.recyclerView.fadeIn(Duration.FADE_IN)
+                            viewBinding.recyclerView.fadeIn(Duration.Animation.FADE_IN)
                         }
                     }
                 }
@@ -150,14 +160,14 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
 
         lifecycleScope.launch {
             if (viewBinding.linearLayout.isVisible) {
-                viewBinding.linearLayout.fadeOut(Duration.FADE_OUT) {
-                    viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
+                viewBinding.linearLayout.fadeOut(Duration.Animation.FADE_OUT) {
+                    viewBinding.circularProgressIndicator.fadeIn(Duration.Animation.FADE_IN)
                     verseAdapter.submitList(null)
                     viewModel.search(text)
                 }
             } else {
-                viewBinding.recyclerView.fadeOut(Duration.FADE_OUT, true) {
-                    viewBinding.circularProgressIndicator.fadeIn(Duration.FADE_IN)
+                viewBinding.recyclerView.fadeOut(Duration.Animation.FADE_OUT, true) {
+                    viewBinding.circularProgressIndicator.fadeIn(Duration.Animation.FADE_IN)
                     verseAdapter.submitList(null)
                     viewModel.search(text)
                 }
@@ -165,16 +175,16 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
         }
     }
 
-    override fun onBookmarkClick(verse: Verse, bookmark: Boolean) {
-        viewModel.updateBookmark(verse.id, bookmark)
+    override fun onBookmarkClick(id: Int, bookmark: Boolean) {
+        viewModel.updateBookmark(id, bookmark)
     }
 
-    override fun onFavoriteClick(verse: Verse, favorite: Boolean) {
-        viewModel.updateFavorite(verse.id, favorite)
+    override fun onFavoriteClick(id: Int, favorite: Boolean) {
+        viewModel.updateFavorite(id, favorite)
     }
 
-    override fun onMoreVertClick(verse: Verse) {
-        OptionChoiceDialogFragment.newInstance(options, verse.content).also {
+    override fun onMoreVertClick(item: VerseAdapter.AdapterItem.Verse) {
+        OptionChoiceDialogFragment.newInstance(options, item.content).also {
             it.show(childFragmentManager, it.tag)
         }
     }
@@ -182,7 +192,7 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        content: Verse.Content
+        content: Content
     ) {
         when(option) {
             options[0] -> {
@@ -196,5 +206,13 @@ class SearchFragment : BaseFragment<FragmentBibleVerseSearchBinding>(),
         }
     }
 
-    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.VerseItem(this)
+    private fun Verse.toAdapterItem() = VerseAdapter.AdapterItem.Verse(
+        id = id,
+        book = book,
+        chapter = chapter,
+        verse = verse,
+        word = word,
+        bookmark = bookmark,
+        favorite = favorite
+    )
 }

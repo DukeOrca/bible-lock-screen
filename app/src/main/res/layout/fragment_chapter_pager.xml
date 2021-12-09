@@ -73,6 +73,7 @@
                     android:layout_width="@dimen/width_32dp"
                     android:layout_height="@dimen/height_32dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:scaleType="centerInside"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -252,6 +253,6 @@
         android:id="@+id/fragment_container_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:elevation="@dimen/elevation_8dp"/>
+        android:elevation="@dimen/elevation_6dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,11 +9,11 @@ import android.widget.Toast
 import androidx.annotation.MainThread
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.NEWLINE
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Bible
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 
 @MainThread
-fun copyToClipboard(context: Context, bible: Bible, content: Verse.Content) {
+fun copyToClipboard(context: Context, bible: Bible, content: Content) {
     val clipboard: ClipboardManager? = context.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
     val stringBuilder = StringBuilder()
 
@@ -27,7 +27,7 @@ fun copyToClipboard(context: Context, bible: Bible, content: Verse.Content) {
     }
 }
 
-fun share(context: Context, bible: Bible, content: Verse.Content) {
+fun share(context: Context, bible: Bible, content: Content) {
     val intent = Intent(Intent.ACTION_SEND)
     val stringBuilder = StringBuilder()
 

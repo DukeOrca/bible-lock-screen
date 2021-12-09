@@ -85,13 +85,14 @@
         <entry key="app/src/main/res/layout/fragment_bookmarks.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_bookmarks_dialog.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_chapter.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_chapter_pager.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_chapter_pager.xml" value="0.1018922114373546" />
         <entry key="app/src/main/res/layout/fragment_color_picker_dialog.xml" value="0.14130434782608695" />
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/fragment_font_settings_bottom_sheet_dialog.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_highlights.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_permission_rationale_dialog.xml" value="0.45" />
         <entry key="app/src/main/res/layout/fragment_preference.xml" value="0.1453804347826087" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/fragment_translation_selection_dialog.xml" value="0.38095238095238093" />
         <entry key="app/src/main/res/layout/fragment_verse.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_verse_pager.xml" value="0.28112605061503365" />

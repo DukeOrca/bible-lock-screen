@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -20,15 +19,14 @@ import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrap
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.ViewStubFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.copyToClipboard
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
+import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.share
 import com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels.ChapterViewModel
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterBinding
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.FlowPreview
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 
 @FlowPreview
 @AndroidEntryPoint
@@ -104,7 +102,7 @@ class ChapterFragment : ViewStubFragment(),
 
                 delayOnLifecycle(Duration.Delay.SCROLL) {
                     scrollToPosition(position)
-                    fadeIn(Duration.FADE_IN)
+                    fadeIn(Duration.Animation.FADE_IN)
                 }
             }
         }
@@ -169,7 +167,7 @@ class ChapterFragment : ViewStubFragment(),
     override fun onOptionChoice(
         dialogFragment: DialogFragment,
         option: String,
-        content: Verse.Content
+        content: Content
     ) {
         when(option) {
             options[0] -> {

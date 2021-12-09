@@ -108,9 +108,11 @@
     <color name="grey_400">#BDBDBD</color>
     <color name="blue_grey_400">#78909C</color>
 
+    <color name="pink_500">#E91E63</color>
     <color name="deep_purple_500">#673AB7</color>
     <color name="indigo_500">#3F51B5</color>
     <color name="green_500">#4CAF50</color>
+    <color name="yellow_500">#FFEB3B</color>
 
     <color name="indigo_600">#3949AB</color>
     <color name="light_blue_600">#039BE5</color>
