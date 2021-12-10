@@ -67,33 +67,23 @@ fun FrameLayout.showRipple() {
 }
 
 fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
-    val measuredHeight: Int = this.measuredHeight
+    val from: Int = this.measuredHeight
 
     visibility = View.VISIBLE
 
-    val animation = object : Animation() {
-        override fun applyTransformation(interpolatedTime: Float, t: Transformation?) {
-            if (interpolatedTime == 1F) {
-                layoutParams.height = 0
-                visibility = View.GONE
-            } else {
-                val animatedValue = measuredHeight - (measuredHeight * interpolatedTime).toInt()
-                val height = if (animatedValue > 0) animatedValue else 0
+    val valueAnimator = ValueAnimator.ofInt(from, 0)
 
-                layoutParams.height = height
-                alpha = height.toFloat() / measuredHeight.toFloat()
-                requestLayout()
-            }
-        }
+    valueAnimator.addUpdateListener { animation ->
+        layoutParams.height = animation.animatedValue as Int
+        alpha = animation.animatedValue as Int / from.toFloat()
 
-        override fun willChangeBounds(): Boolean = true
+        requestLayout()
     }
 
-    animation.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation?) {
-        }
+    valueAnimator.addListener(object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator?) {}
 
-        override fun onAnimationEnd(animation: Animation?) {
+        override fun onAnimationEnd(animation: Animator?) {
             alpha = 0.0f
             layoutParams.height = 0
             visibility = View.GONE
@@ -103,13 +93,21 @@ fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationRepeat(animation: Animation?) {
+        override fun onAnimationCancel(animation: Animator?) {
+            alpha = 0.0f
+            layoutParams.height = 0
+            visibility = View.GONE
+
+            requestLayout()
+
+            onAnimationEnd?.invoke()
         }
+        override fun onAnimationRepeat(animation: Animator?) {}
     })
 
-    animation.duration = duration
-    animation.interpolator = DecelerateInterpolator()
-    startAnimation(animation)
+    valueAnimator.interpolator = DecelerateInterpolator()
+    valueAnimator.duration = duration
+    valueAnimator.start()
 }
 
 fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
@@ -142,6 +140,11 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
         override fun onAnimationStart(animation: Animator?) {}
 
         override fun onAnimationEnd(animation: Animator?) {
+            alpha = 1.0f
+            layoutParams.height = to
+
+            requestLayout()
+
             onAnimationEnd?.invoke()
         }
 
@@ -375,10 +378,10 @@ fun View.collapse(duration: Long, to: Int, hide: Boolean = true, onAnimationEnd:
     val from = height
     val valueAnimator = ValueAnimator.ofInt(from, to)
 
-    valueAnimator.interpolator = DecelerateInterpolator()
     valueAnimator.addUpdateListener { animation ->
         layoutParams.height = animation.animatedValue as Int
         alpha = animation.animatedValue as Int / from.toFloat()
+
         requestLayout()
     }
 

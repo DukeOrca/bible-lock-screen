@@ -16,11 +16,16 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import timber.log.Timber
+import java.lang.ref.WeakReference
 
 object AdLoader {
     fun loadNativeAd(context: Context, onLoadAd: (NativeAd) -> Unit) {
+        val applicationContext = context.applicationContext
         val adUnitID = if (BuildConfig.DEBUG) R.string.native_advanced_sample_ad_unit_id else R.string.native_advanced_ad_unit_id
-        val adLoader = AdLoader.Builder(context, context.getString(adUnitID))
+        val adLoader = AdLoader.Builder(
+            applicationContext,
+            applicationContext.getString(adUnitID)
+        )
             .forNativeAd { nativeAd ->
                 onLoadAd(nativeAd)
             }
@@ -36,33 +41,35 @@ object AdLoader {
         adLoader.loadAd(adRequest)
     }
 
-    fun populateNativeAdView(binding: NativeAdBinding, nativeAd: NativeAd) {
-        binding.headline.text = nativeAd.headline
+    fun populateNativeAdView(weakReference: WeakReference<NativeAdBinding>, nativeAd: NativeAd) {
+        val nativeAdBinding = weakReference.get() ?: return
+
+        nativeAdBinding.headline.text = nativeAd.headline
 
         nativeAd.advertiser?.let {
-            binding.advertiser.text = it
-            binding.advertiser.show()
-        } ?: let { binding.advertiser.hide() }
+            nativeAdBinding.advertiser.text = it
+            nativeAdBinding.advertiser.show()
+        } ?: let { nativeAdBinding.advertiser.hide() }
 
         nativeAd.icon?.let {
-            Glide.with(binding.icon)
+            Glide.with(nativeAdBinding.icon)
                 .load(it.drawable)
                 .transform(CenterCrop(), RoundedCorners(4.toPx))
-                .into(binding.icon)
-            binding.icon.show()
-        } ?: let { binding.icon.hide() }
+                .into(nativeAdBinding.icon)
+            nativeAdBinding.icon.show()
+        } ?: let { nativeAdBinding.icon.hide() }
 
         nativeAd.callToAction?.let {
-            binding.callToAction.text = it
-            binding.callToAction.show()
-        } ?: let { binding.callToAction.hide() }
+            nativeAdBinding.callToAction.text = it
+            nativeAdBinding.callToAction.show()
+        } ?: let { nativeAdBinding.callToAction.hide() }
 
         nativeAd.store?.let {
-            binding.store.text = it
-            binding.store.show()
-        } ?: let { binding.store.hide() }
+            nativeAdBinding.store.text = it
+            nativeAdBinding.store.show()
+        } ?: let { nativeAdBinding.store.hide() }
 
-        binding.nativeAdView.callToActionView = binding.callToAction
-        binding.nativeAdView.setNativeAd(nativeAd)
+        nativeAdBinding.nativeAdView.callToActionView = nativeAdBinding.callToAction
+        nativeAdBinding.nativeAdView.setNativeAd(nativeAd)
     }
 }

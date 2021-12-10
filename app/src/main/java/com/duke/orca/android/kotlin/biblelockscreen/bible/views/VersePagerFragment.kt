@@ -55,6 +55,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -452,7 +453,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
                     with(NativeAdBinding.bind(viewBinding.nativeAd.root)) {
                         nativeAd = it
                         nativeAdBinding = NativeAdBinding.bind(viewBinding.nativeAd.root)
-                        AdLoader.populateNativeAdView(this, it)
+                        AdLoader.populateNativeAdView(WeakReference(this), it)
                     }
 
                     showNativeAdView()

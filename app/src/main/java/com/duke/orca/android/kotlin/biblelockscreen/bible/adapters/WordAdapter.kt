@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,7 +17,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Content
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
-import com.duke.orca.android.kotlin.biblelockscreen.bible.models.entries.Verse
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.OptionsMenuBarBinding
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.WordItemBinding
 import com.like.LikeButton
@@ -127,27 +125,13 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
 
                             with(frameLayout) {
                                 if (isNotVisible) {
-                                    if (item.expanded.not()) {
-                                        expand(Duration.Animation.EXPAND) {
-                                            item.expanded = true
-                                            item.collapsed = false
-                                        }
-                                    } else {
-                                        show()
-                                    }
+                                    expand(Duration.Animation.EXPAND)
                                 }
                             }
                         } else {
                             with(frameLayout) {
                                 if (isVisible) {
-                                    if (item.collapsed.not()) {
-                                        collapse(Duration.Animation.COLLAPSE) {
-                                            item.expanded = false
-                                            item.collapsed = true
-                                        }
-                                    } else {
-                                        hide()
-                                    }
+                                    collapse(Duration.Animation.COLLAPSE)
                                 }
                             }
                         }
@@ -266,9 +250,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
             val subWord: String? = null,
             val bookmark: Boolean,
             val favorite: Boolean,
-            @ColorInt val highlightColor: Int,
-            var expanded: Boolean = false,
-            var collapsed: Boolean = true
+            @ColorInt val highlightColor: Int
         ): AdapterItem(), Parcelable {
             @Parcelize
             data class Book(

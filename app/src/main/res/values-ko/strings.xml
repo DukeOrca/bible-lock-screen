@@ -35,6 +35,7 @@
     <string name="lock_type">잠금 방식</string>
     <string name="new_testament">신약</string>
     <string name="no_bookmarks">북마크가 없습니다.</string>
+    <string name="no_highlights">하이라이트가 없습니다.</string>
     <string name="no_favorites">즐겨찾기가 없습니다.</string>
     <string name="no_results_found">검색 결과가 없습니다.</string>
     <string name="ok">확인</string>

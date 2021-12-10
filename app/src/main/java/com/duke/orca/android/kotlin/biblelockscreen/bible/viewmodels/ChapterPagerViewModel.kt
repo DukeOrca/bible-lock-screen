@@ -11,18 +11,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-@HiltViewModel
-class ChapterPagerViewModel @Inject constructor(
-    private val positionRepository: PositionRepository,
-    application: Application
-) : AndroidViewModel(application) {
+class ChapterPagerViewModel (application: Application) : AndroidViewModel(application) {
     private val _currentChapter = MutableLiveData<Int>()
     val currentChapter: LiveData<Int>
         get() = _currentChapter
 
+    private val positionRepository: PositionRepository
+        get() = PositionRepository.from(getApplication())
+
     val recentlyReadDataStore = application.recentlyReadDataStore
 
     fun insertPosition(position: Position) = runBlocking {
+        if (position.value < 0) return@runBlocking
+
         positionRepository.insert(position)
     }
 

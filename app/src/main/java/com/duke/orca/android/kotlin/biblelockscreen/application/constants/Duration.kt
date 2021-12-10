@@ -14,8 +14,8 @@ internal object Duration {
     }
 
     object Delay {
-        const val DISMISS = 150L
-        const val RECREATE = 150L
+        const val DISMISS = 160L
+        const val RECREATE = 160L
         const val ROTATE = 50L
         const val SCROLL = 120L
         const val SLIDE_IN = 360L

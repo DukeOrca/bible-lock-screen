@@ -11,9 +11,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.COMMA
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.EXTRA_RECREATE
 import com.duke.orca.android.kotlin.biblelockscreen.application.getVersionName
 import com.duke.orca.android.kotlin.biblelockscreen.application.shareApplication
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
@@ -24,6 +25,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import com.duke.orca.android.kotlin.biblelockscreen.persistence.database.SubDatabase
 import com.duke.orca.android.kotlin.biblelockscreen.review.Review
 import com.duke.orca.android.kotlin.biblelockscreen.settings.adapters.PreferenceAdapter.AdapterItem
+import java.lang.StringBuilder
 
 class SettingsFragment : PreferenceFragment(),
     TranslationSelectionDialogFragment.OnClickListener {
@@ -51,9 +53,6 @@ class SettingsFragment : PreferenceFragment(),
     ) {
        if (isTranslationChanged) {
             DataStore.Translation.putFileName(requireContext(), translation.fileName)
-
-            activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
-            preferenceAdapter.updateSummary(Id.TRANSLATION, translation.name)
         }
 
         if (isSubTranslationChanged) {
@@ -64,6 +63,21 @@ class SettingsFragment : PreferenceFragment(),
             }
 
             SubDatabase.refresh(requireContext())
+        }
+
+        if (isTranslationChanged || isSubTranslationChanged) {
+            val stringBuilder = StringBuilder()
+
+            stringBuilder.append(translation.name)
+
+            subTranslation?.let {
+                stringBuilder.append("$COMMA ")
+                stringBuilder.append(it.name)
+            }
+
+            val summary = stringBuilder.toString()
+
+            preferenceAdapter.updateSummary(Id.TRANSLATION, summary)
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
         }
 
@@ -85,6 +99,18 @@ class SettingsFragment : PreferenceFragment(),
     }
 
     private fun initData() {
+        val stringBuilder = StringBuilder()
+        val subFileName = DataStore.Translation.getSubFileName(requireContext())
+
+        stringBuilder.append(Translation.getName(requireContext()))
+
+        if (subFileName.isNotBlank()) {
+            stringBuilder.append("$COMMA ")
+            stringBuilder.append(Translation.findNameByFileName(subFileName))
+        }
+
+        val translationSummary = stringBuilder.toString()
+
         preferenceAdapter.submitList(
             arrayListOf(
                 AdapterItem.Preference(
@@ -135,7 +161,7 @@ class SettingsFragment : PreferenceFragment(),
                             it.show(childFragmentManager, it.tag)
                         }
                     },
-                    summary = Translation.findNameByFileName(requireContext()),
+                    summary = translationSummary,
                     body = getString(R.string.translations)
                 ),
                 AdapterItem.Space(),

@@ -33,7 +33,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.runBlocking
-import kotlin.math.abs
 
 @AndroidEntryPoint
 class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
@@ -243,9 +242,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             dropdownMenuChapter.setAdapter(DropdownMenu.ArrayAdapter(chapters))
             chapterPagerAdapter = ChapterPagerAdapter(fragment, book)
 
-            if (verse > 0) {
-                viewModel.insertPosition(Position(book, chapter, verse))
-            }
+            viewModel.insertPosition(Position(book, chapter, verse))
 
             viewPager2.apply {
                 adapter = chapterPagerAdapter
@@ -297,11 +294,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             }
 
             dropdownMenuChapter.setOnItemClickListener { position, _ ->
-                with(viewPager2) {
-                    val smoothScroll = abs(currentItem - position) < limit
-
-                    setCurrentItem(position, smoothScroll)
-                }
+                viewPager2.setCurrentItem(position, false)
             }
 
             imageViewHighlight.setOnClickListener {

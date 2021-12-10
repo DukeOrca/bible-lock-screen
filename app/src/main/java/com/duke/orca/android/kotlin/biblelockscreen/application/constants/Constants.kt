@@ -1,6 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.application.constants
 
 internal const val BLANK = ""
+internal const val COMMA = ","
 internal const val ONE_SECOND = 1000L
 internal const val NEWLINE = "\n"
 
