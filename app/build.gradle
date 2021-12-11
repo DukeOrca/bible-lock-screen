@@ -18,14 +18,21 @@ android {
         minSdk 23
         targetSdk 31
         versionCode 3
-        versionName "1.1.2"
+        versionName "2.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -82,13 +89,13 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.3.5"
 
-    implementation "androidx.room:room-runtime:2.4.0-beta02"
-    implementation "androidx.room:room-ktx:2.4.0-beta02"
-    implementation 'androidx.room:room-rxjava3:2.4.0-beta02'
+    implementation "androidx.room:room-runtime:2.4.0-rc01"
+    implementation "androidx.room:room-ktx:2.4.0-rc01"
+    implementation 'androidx.room:room-rxjava3:2.4.0-rc01'
 
     kapt "android.arch.persistence.room:compiler:1.1.1"
-    kapt "androidx.room:room-compiler:2.4.0-beta02"
-    kapt "androidx.room:room-ktx:2.4.0-beta02"
+    kapt "androidx.room:room-compiler:2.4.0-rc01"
+    kapt "androidx.room:room-ktx:2.4.0-rc01"
 
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 

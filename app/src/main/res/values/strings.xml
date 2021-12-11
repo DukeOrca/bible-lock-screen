@@ -6,25 +6,25 @@
     <string name="align_left">Align left</string>
     <string name="align_right">Align right</string>
     <string name="allow">Allow</string>
-    <string name="allow_appear_on_top_permission">다른 앱 위에 표시 권한을 허용하세요.</string>
+    <string name="allow_appear_on_top_permission">Allow appear on top permission.</string>
     <string name="appear_on_top">Appear on top</string>
     <string name="bible">Bible</string>
-    <string name="bible_lock_screen_is_running">성경 잠금화면이 실행 중입니다.</string>
+    <string name="bible_lock_screen_is_running">The Bible in You is running.</string>
     <string name="bold">Bold</string>
     <string name="bookmarks">Bookmarks</string>
     <string name="cancel">Cancel</string>
-    <string name="copied_to_clipboard">클립보드에 복사되었습니다.</string>
+    <string name="copied_to_clipboard">Copied to clipboard.</string>
     <string name="colon">:</string>
     <string name="copy">Copy</string>
     <string name="dark_mode">Dark mode</string>
     <string name="deny">Deny</string>
     <string name="display">Display</string>
-    <string name="display_after_unlocking">잠금 해제 후 표시</string>
-    <string name="drag_to_unlock">드래그해서 잠금 해제</string>
+    <string name="display_after_unlocking">Display after unlocking</string>
+    <string name="drag_to_unlock">Drag to unlock</string>
     <string name="draw_unlock_pattern">Draw unlock pattern.</string>
     <string name="enter_password_or_pin">Enter password or PIN.</string>
-    <string name="enter_two_or_more_characters">두 글자 이상 입력하세요.</string>
-    <string name="enter_your_search_term">검색어를 입력하세요.</string>
+    <string name="enter_two_or_more_characters">Enter two or more characters.</string>
+    <string name="enter_your_search_term">Enter your search term.</string>
     <string name="favorites">Favorites</string>
     <string name="font">Font</string>
     <string name="font_size">Font size</string>
@@ -55,15 +55,15 @@
         com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
     </string>
 
-    <string name="blind_screen_000">보안정책에 따라 홈 버튼으로 잠금 해제할 수 없습니다.</string>
+    <string name="blind_screen_000">Due to security policy, it cannot be unlocked with the Home button.</string>
 
     <string name="format_bible_chapter" translatable="false">%s&#160;&#160;%d : %d</string>
 
-    <string name="fragment_permission_rationale_dialog_000">앱의 모든 기능을 사용하려면 다음 권한을 허용해야 합니다.</string>
+    <string name="fragment_permission_rationale_dialog_000">To use all features of the app, you must allow the following permissions.</string>
 
-    <string name="review_000">소중한 리뷰 감사합니다.</string>
+    <string name="review_000">Thank you for your valuable review.</string>
 
-    <string name="pattern_format_12_hour_000">M월 d일 EEEE</string>
+    <string name="pattern_format_12_hour_000">EEE, MMMM d</string>
     <string name="pattern_format_12_hour_001">h:mm</string>
     <string name="pattern_format_12_hour_002">h:mm:ss</string>
 </resources>

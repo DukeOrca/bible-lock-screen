@@ -9,7 +9,7 @@ import java.io.OutputStream
 
 object RecentlyReadSerializer : Serializer<RecentlyRead> {
     override val defaultValue: RecentlyRead
-        get() = RecentlyRead.getDefaultInstance().toBuilder()
+        get() = RecentlyRead.newBuilder()
             .setBook(1)
             .setChapter(1)
             .build()

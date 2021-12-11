@@ -56,4 +56,39 @@
         app:layout_behavior="@string/scrolling_view_behavior"
         tools:visibility="visible" />
 
+    <LinearLayout
+        android:id="@+id/linear_layout_nothing_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:elevation="@dimen/elevation_8dp"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="UseCompoundDrawables"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/width_48dp"
+            android:layout_height="@dimen/height_48dp"
+            app:srcCompat="@drawable/ic_nothing_found_96px"
+            app:tint="@color/nothing_found"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/no_highlights"
+            android:textColor="@color/nothing_found"
+            android:textSize="@dimen/text_size_24dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

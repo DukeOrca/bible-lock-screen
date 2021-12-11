@@ -194,8 +194,8 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
         }
 
         if (isTranslationChanged || isSubTranslationChanged) {
-            clear()
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
+            clear()
 
             if (isTranslationChanged) {
                 Database.refresh(requireContext())
@@ -242,7 +242,7 @@ class ChapterPagerFragment : BaseFragment<FragmentChapterPagerBinding>(),
             dropdownMenuChapter.setAdapter(DropdownMenu.ArrayAdapter(chapters))
             chapterPagerAdapter = ChapterPagerAdapter(fragment, book)
 
-            viewModel.insertPosition(Position(book, chapter, verse))
+            viewModel.insertPosition(Position(book, chapter, verse.dec()))
 
             viewPager2.apply {
                 adapter = chapterPagerAdapter

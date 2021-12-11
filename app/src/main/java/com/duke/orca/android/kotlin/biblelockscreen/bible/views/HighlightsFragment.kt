@@ -9,12 +9,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
-import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
+import com.duke.orca.android.kotlin.biblelockscreen.application.*
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.RequestKey
-import com.duke.orca.android.kotlin.biblelockscreen.application.fadeIn
-import com.duke.orca.android.kotlin.biblelockscreen.application.isNotVisible
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseFragment
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.HighlightAdapter
@@ -114,15 +112,22 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe { list ->
-                highlightAdapter.submitList(list) {
-                    if (list.isNotEmpty() && selectedItem.`is`(-1)) {
-                        highlightAdapter.select(0)
+                if (list.isEmpty()) {
+                    with(viewBinding) {
+                        recyclerViewHighlight.collapse(Duration.Animation.COLLAPSE)
+                        linearLayoutNothingFound.fadeIn()
                     }
+                } else {
+                    highlightAdapter.submitList(list) {
+                        if (list.isNotEmpty() && selectedItem.`is`(-1)) {
+                            highlightAdapter.select(0)
+                        }
 
-                    with(viewBinding.recyclerViewHighlight) {
-                        if (isNotVisible) {
-                            delayOnLifecycle(Duration.Delay.SLIDE_IN) {
-                                fadeIn(Duration.Animation.FADE_IN)
+                        with(viewBinding.recyclerViewHighlight) {
+                            if (isNotVisible) {
+                                delayOnLifecycle(Duration.Delay.SLIDE_IN) {
+                                    fadeIn(Duration.Animation.FADE_IN)
+                                }
                             }
                         }
                     }

@@ -77,8 +77,8 @@ class SettingsFragment : PreferenceFragment(),
 
             val summary = stringBuilder.toString()
 
-            preferenceAdapter.updateSummary(Id.TRANSLATION, summary)
             activityViewModel.setResult(Activity.RESULT_OK, Intent().putExtra(EXTRA_RECREATE, true))
+            preferenceAdapter.updateSummary(Id.TRANSLATION, summary)
         }
 
         delayOnLifecycle(Duration.Delay.DISMISS) {

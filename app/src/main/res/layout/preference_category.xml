@@ -9,4 +9,5 @@
     android:paddingEnd="@dimen/margin_16dp"
     android:paddingStart="@dimen/margin_16dp"
     android:textColor="@color/medium_emphasis"
+    android:textSize="@dimen/text_size_12dp"
     tools:text="Category" />

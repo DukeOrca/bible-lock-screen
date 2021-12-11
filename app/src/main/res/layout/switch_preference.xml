@@ -31,7 +31,7 @@
             android:layout_marginEnd="@dimen/margin_16dp"
             android:layout_marginStart="@dimen/margin_32dp"
             android:gravity="center_vertical"
-            android:textSize="@dimen/text_size_16dp"
+            android:textSize="@dimen/text_size_14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/switch_material"
             app:layout_constraintStart_toEndOf="@+id/image_view_icon"
