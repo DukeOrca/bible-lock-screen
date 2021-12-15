@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.duke.orca.android.kotlin.biblelockscreen.R
@@ -26,6 +27,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentChapterB
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @FlowPreview

@@ -9,6 +9,7 @@ import com.duke.orca.android.kotlin.biblelockscreen.bible.repositories.PositionR
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.recentlyReadDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
 
 class ChapterPagerViewModel (application: Application) : AndroidViewModel(application) {
@@ -24,7 +25,11 @@ class ChapterPagerViewModel (application: Application) : AndroidViewModel(applic
     fun insertPosition(position: Position) = runBlocking {
         if (position.value < 0) return@runBlocking
 
-        positionRepository.insert(position)
+        try {
+            positionRepository.insert(position)
+        } catch (e: IllegalStateException) {
+            Timber.e("IllegalStateException :$position")
+        }
     }
 
     fun setCurrentChapter(value: Int) {

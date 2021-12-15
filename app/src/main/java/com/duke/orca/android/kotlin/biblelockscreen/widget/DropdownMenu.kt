@@ -77,7 +77,6 @@ class DropdownMenu : FrameLayout {
                     delay(Duration.Delay.ROTATE)
                     viewBinding.imageView.rotate(180.0f, 0.0f, Duration.Animation.ROTATION)
                 }
-
             }
         }
     }
@@ -116,7 +115,7 @@ class DropdownMenu : FrameLayout {
             viewBinding.linearLayout.background = it
         }
 
-        viewBinding.textView.setTextColor(textColor)
+        viewBinding.rollingTextView.setTextColor(textColor)
         viewBinding.imageView.setColorFilter(tint)
 
         typedArray.recycle()
@@ -160,7 +159,7 @@ class DropdownMenu : FrameLayout {
         setAdapter(arrayAdapter)
 
         try {
-            viewBinding.textView.text = arrayAdapter.getItem(currentItem)
+            viewBinding.rollingTextView.currentItem = arrayAdapter.getItem(currentItem).toIntOrNull() ?: 1
         } catch (e: IndexOutOfBoundsException) {
             Timber.e(e)
         }
@@ -178,7 +177,7 @@ class DropdownMenu : FrameLayout {
     }
 
     fun setText(text: String) {
-        viewBinding.textView.text = text
+        viewBinding.rollingTextView.currentItem = text.toIntOrNull() ?: 1
     }
 
     class ArrayAdapter(private val array: Array<String>) : RecyclerView.Adapter<ArrayAdapter.ViewHolder>() {

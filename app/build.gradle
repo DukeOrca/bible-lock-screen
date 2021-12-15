@@ -19,7 +19,7 @@ android {
         targetSdk 31
         versionCode 3
         versionName "2.0.0"
-
+        setProperty("archivesBaseName", "the-bible-in-you" + "-" + versionCode + "-(" + versionName + ")")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -125,6 +125,8 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-javalite:4.0.0-rc-2'
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
+
+    implementation 'com.github.wing-tree:rolling-text-view:1.0.2'
 }
 
 protobuf {

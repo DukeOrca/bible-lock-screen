@@ -105,7 +105,7 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
     private var nativeAdBinding: NativeAdBinding? = null
 
     private val adFreePeriod: Int
-        get() = if (BuildConfig.DEBUG) -1 else 7
+        get() = if (BuildConfig.DEBUG) 1 else 7
 
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {

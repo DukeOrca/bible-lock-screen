@@ -8,6 +8,7 @@ import android.view.ViewStub
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
 import com.duke.orca.android.kotlin.biblelockscreen.application.fadeOut
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentViewStubBinding
@@ -76,10 +77,12 @@ abstract class ViewStubFragment : Fragment() {
     private fun inflate() {
         if (onResumed.get() and isInflated.get().not()) {
             try {
-                viewStub?.inflate()?.let {
-                    viewStubBinding.circularProgressIndicator.fadeOut {
-                        delayOnLifecycle(Duration.Delay.DISMISS) {
-                            onInflate(it)
+                val view = viewStub?.inflate() ?: return
+
+                viewStubBinding.circularProgressIndicator.fadeOut {
+                    delayOnLifecycle(Duration.Delay.DISMISS) {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            onInflate(view)
                             isInflated.set(true)
                         }
                     }
