@@ -19,7 +19,7 @@
     <color name="surface">@color/white</color>
 
     <color name="surface_light">@color/white</color>
-    <color name="surface_dark">#2E2E2E</color>
+    <color name="surface_dark">#666666</color>
 
     <color name="high_emphasis">#212121</color> <!-- #DE000000 -->
     <color name="medium_emphasis">#666666</color> <!-- #99000000 -->
@@ -146,7 +146,9 @@
     <color name="dots_secondary">@color/yellow_300</color>
 
     <color name="bookmarked">@color/secondary</color>
-    <color name="unbookmarked">#61000000</color>
+    <color name="unbookmarked">#9E9E9E</color>
+
+    <color name="unhighlighted">#9E9E9E</color>
 
     <color name="advertiser">#99FFFFFF</color>
     <color name="header">#DEFFFFFF</color>

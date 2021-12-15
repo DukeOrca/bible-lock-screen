@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -31,6 +32,9 @@ class HighlightsFragment : BaseFragment<FragmentHighlightsBinding>() {
     ): FragmentHighlightsBinding {
         return FragmentHighlightsBinding.inflate(inflater, container, false)
     }
+
+    override val toolbar: Toolbar
+        get() = viewBinding.toolbar
 
     private val viewModel by viewModels<HighlightsViewModel>()
     private val fragmentResultSetRequired by lazy {

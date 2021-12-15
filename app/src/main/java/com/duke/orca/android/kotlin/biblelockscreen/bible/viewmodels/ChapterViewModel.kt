@@ -3,7 +3,7 @@ package com.duke.orca.android.kotlin.biblelockscreen.bible.viewmodels
 import android.app.Application
 import androidx.annotation.ColorInt
 import androidx.lifecycle.*
-import com.duke.orca.android.kotlin.biblelockscreen.R
+import com.duke.orca.android.kotlin.biblelockscreen.application.`is`
 import com.duke.orca.android.kotlin.biblelockscreen.application.constants.BLANK
 import com.duke.orca.android.kotlin.biblelockscreen.bible.adapters.WordAdapter
 import com.duke.orca.android.kotlin.biblelockscreen.bible.models.datamodels.Font
@@ -17,7 +17,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -72,10 +71,6 @@ class ChapterViewModel @Inject constructor(
     val book by lazy { bookRepository.get() }
     private val subBook by lazy { subBookRepository?.get() }
 
-    val highlightColor = preferencesDataStore.data.map {
-        it[PreferencesKeys.HighlightColor.highlightColor] ?: application.getColor(R.color.default_highlight_color)
-    }.asLiveData(Dispatchers.IO)
-
     fun getVerses(book: Int, chapter: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             verseRepository.get(book, chapter).collect {
@@ -105,6 +100,8 @@ class ChapterViewModel @Inject constructor(
     }
 
     fun updateHighlightColor(id: Int, @ColorInt highlightColor: Int) {
+        if (id.`is`(-1)) return
+
         viewModelScope.launch(Dispatchers.IO) {
             verseRepository.updateHighlightColor(id, highlightColor)
         }

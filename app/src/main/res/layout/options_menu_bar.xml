@@ -24,23 +24,14 @@
 
     <ImageView
         android:id="@+id/image_view_highlight"
+        style="@style/Icon.OptionBar"
         android:layout_width="@dimen/width_40dp"
         android:layout_height="@dimen/height_40dp"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/text_view_verse"
         android:layout_marginStart="@dimen/margin_16dp"
+        android:layout_toEndOf="@+id/text_view_verse"
         app:srcCompat="@drawable/ic_highlight_64px"
-        style="@style/Icon.OptionBar"
-        tools:ignore="ContentDescription" />
-
-    <ImageView
-        android:id="@+id/image_view_highlight_color"
-        android:layout_width="@dimen/width_40dp"
-        android:layout_height="@dimen/height_40dp"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/image_view_highlight"
-        app:srcCompat="@drawable/ic_fill_color_96px"
-        style="@style/Icon.OptionBar"
+        app:tint="@color/unhighlighted"
         tools:ignore="ContentDescription" />
 
     <com.like.LikeButton

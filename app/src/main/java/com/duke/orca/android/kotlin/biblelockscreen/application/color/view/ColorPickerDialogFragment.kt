@@ -6,27 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.application.color.adapter.ColorAdapter
-import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Duration
+import com.duke.orca.android.kotlin.biblelockscreen.application.constants.Key
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentColorPickerDialogBinding
-import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 
 class ColorPickerDialogFragment : BaseDialogFragment<FragmentColorPickerDialogBinding>() {
     override val setWindowAnimation: Boolean
         get() = false
 
+    private val pickedColor by lazy {
+        arguments?.getInt(Key.PICKED_COLOR) ?: 0
+    }
+
     private val colorAdapter by lazy {
         ColorAdapter(
             resources.getIntArray(R.array.highlight_colors),
-            DataStore.HighlightColor.getHighlightColor(requireContext()),
+            pickedColor,
         ) {
-            delayOnLifecycle(Duration.Delay.DISMISS) {
-                onColorPickedListener?.onColorPicked(this, it)
-            }
+            onColorPickedListener?.onColorPicked(this, it)
         }
     }
 
@@ -69,12 +71,25 @@ class ColorPickerDialogFragment : BaseDialogFragment<FragmentColorPickerDialogBi
         with(viewBinding) {
             recyclerView.apply {
                 adapter = colorAdapter
-                layoutManager = GridLayoutManager(context, SPAN_COUNT)
+                layoutManager = GridLayoutManager(context, SPAN_COUNT).apply {
+                    isItemPrefetchEnabled = true
+                    initialPrefetchItemCount = colorAdapter.itemCount
+                }
             }
         }
     }
 
     companion object {
         private const val SPAN_COUNT = 5
+
+        fun newInstance(@ColorInt pickedColor: Int): ColorPickerDialogFragment {
+            return ColorPickerDialogFragment().apply {
+                val bundle = Bundle()
+
+                bundle.putInt(Key.PICKED_COLOR, pickedColor)
+
+                arguments = bundle
+            }
+        }
     }
 }

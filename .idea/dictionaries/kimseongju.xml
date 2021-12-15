@@ -16,6 +16,7 @@
       <w>snackbar</w>
       <w>textinput</w>
       <w>unbookmarked</w>
+      <w>unhighlighted</w>
     </words>
   </dictionary>
 </component>

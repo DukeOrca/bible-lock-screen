@@ -1,6 +1,7 @@
 package com.duke.orca.android.kotlin.biblelockscreen.bible.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Parcelable
 import android.util.TypedValue
@@ -28,10 +29,11 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
 
     private var currentFocus: Int = -1
     private var currentFont: Font? = null
-    @ColorInt
-    private var highlightColor: Int = 0
     private var recyclerView: RecyclerView? = null
     private var onOptionsItemSelectedListener: OnOptionsItemSelectedListener? = null
+
+    val currentFocusedItem: AdapterItem
+        get() = getItem(currentFocus)
 
     interface OnOptionsItemSelectedListener {
         fun onOptionsItemSelected(item: AdapterItem.Word, optionsItem: OptionsItem)
@@ -70,15 +72,6 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
         } ?: run {
             this.currentFont = font
             notifyItemRangeChanged(0, itemCount)
-        }
-    }
-
-    fun setHighlightColor(@ColorInt highlightColor: Int, onNotifyItemChanged: (AdapterItem) -> Unit) {
-        this.highlightColor = highlightColor
-
-        if (currentFocus.not(-1)) {
-            notifyItemChanged(currentFocus)
-            onNotifyItemChanged.invoke(getItem(currentFocus))
         }
     }
 
@@ -136,9 +129,8 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                             }
                         }
 
-                        constraintLayout.setOnLongClickListener {
+                        constraintLayout.setOnClickListener {
                             setCurrentFocus(position)
-                            true
                         }
                     }
                 }
@@ -157,7 +149,7 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                 )
             } else {
                 imageViewHighlight.setColorFilter(
-                    ContextCompat.getColor(context, R.color.icon),
+                    ContextCompat.getColor(context, R.color.unhighlighted),
                     PorterDuff.Mode.SRC_ATOP
                 )
             }
@@ -167,21 +159,12 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
                     item,
                     OptionsItem.Highlight(
                         if (item.highlightColor.isZero()) {
-                            highlightColor
+                            item.highlightColor
                         } else {
                             0
                         }
                     )
                 )
-            }
-
-            imageViewHighlightColor.setColorFilter(
-                highlightColor,
-                PorterDuff.Mode.SRC_ATOP
-            )
-
-            imageViewHighlightColor.setOnClickListener {
-                onOptionsItemSelectedListener?.onOptionsItemSelected(item, OptionsItem.HighlightColor)
             }
 
             likeButtonBookmark.isLiked = item.bookmark
@@ -265,7 +248,6 @@ class WordAdapter(context: Context) : ListAdapter<WordAdapter.AdapterItem, WordA
 
     sealed class OptionsItem {
         class Highlight(@ColorInt val highlightColor: Int) : OptionsItem()
-        object HighlightColor: OptionsItem()
         class Bookmark(val liked: Boolean) : OptionsItem()
         class Favorite(val liked: Boolean) : OptionsItem()
         object More : OptionsItem()

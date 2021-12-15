@@ -57,7 +57,6 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
         val id = arguments?.getInt(Key.ID) ?: 0
 
         viewModel.loadVerseById(id)
-        viewModel.loadSubVerseById(id)
 
         return viewBinding.root
     }

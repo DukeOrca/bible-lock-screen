@@ -67,14 +67,18 @@ class VerseViewModel @Inject constructor(
     fun loadVerseById(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             verseRepository.get(id).flowOn(Dispatchers.IO).collect {
-                verse.postValue(it)
+                it?.let {
+                    verse.postValue(it)
+                    loadSubVerse(it.book, it.chapter, it.verse)
+                }
+
             }
         }
     }
 
-    fun loadSubVerseById(id: Int) {
+    fun loadSubVerse(book: Int, chapter: Int, verse: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            subVerseRepository?.get(id)?.flowOn(Dispatchers.IO)?.collect {
+            subVerseRepository?.get(book, chapter, verse)?.flowOn(Dispatchers.IO)?.collect {
                 subVerse.postValue(it)
             }
         }

@@ -1,10 +1,8 @@
 package com.duke.orca.android.kotlin.biblelockscreen.application.color.adapter
 
-import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -19,7 +17,7 @@ class ColorAdapter(
     @ColorInt private var pickedColor: Int,
     private val onColorPicked: (color: Int) -> Unit
 ) : RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
-    private var pickedColorPosition = 0
+    private var pickedColorPosition = -1
     private var recyclerView: RecyclerView? = null
 
     init {
@@ -47,16 +45,16 @@ class ColorAdapter(
 
                 if (pickedColorPosition.`is`(position)) {
                     imageView.scale(
-                        0.5f,
-                        1.0f,
-                        0.0f,
-                        1.0f)
+                        0.5F,
+                        1.0F,
+                        0.0F,
+                        1.0F)
                 } else if (imageView.isVisible) {
                     imageView.scale(
-                        1.0f,
-                        0.5f,
-                        1.0f,
-                        0.0f) {
+                        1.0F,
+                        0.5F,
+                        1.0F,
+                        0.0F) {
                         imageView.hide()
                     }
                 }
@@ -64,14 +62,22 @@ class ColorAdapter(
                 materialCardView.setCardBackgroundColor(color)
 
                 materialCardView.setOnClickListener {
-                    if (pickedColorPosition.`is`(position))
-                        return@setOnClickListener
+                    val previousPickedColorPosition = pickedColorPosition
 
-                    notifyItemChanged(pickedColorPosition)
-                    notifyItemChanged(position)
-                    pickedColorPosition = position
+                    if (pickedColorPosition.`is`(position)) {
+                        pickedColorPosition = -1
 
-                    onColorPicked(color)
+                        notifyItemChanged(previousPickedColorPosition)
+
+                        onColorPicked(0)
+                    } else {
+                        pickedColorPosition = position
+
+                        notifyItemChanged(previousPickedColorPosition)
+                        notifyItemChanged(position)
+
+                        onColorPicked(color)
+                    }
                 }
             }
         }

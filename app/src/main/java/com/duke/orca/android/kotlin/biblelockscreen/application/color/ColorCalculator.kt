@@ -30,7 +30,7 @@ object ColorCalculator {
         if (useSimpleFormula) {
             val luminance = red * 0.299 + green * 0.587 + blue * 0.114
 
-            return if (luminance > 0.75)    // 0.5
+            return if (luminance > 0.5)
                 dark
             else
                 light

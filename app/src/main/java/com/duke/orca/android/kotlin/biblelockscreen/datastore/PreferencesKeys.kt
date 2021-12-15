@@ -49,9 +49,4 @@ object PreferencesKeys {
         val fileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.fileName")
         val subFileName = stringPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.subFileName")
     }
-
-    object HighlightColor {
-        private const val OBJECT_NAME = "HighlightColor"
-        val highlightColor = intPreferencesKey("$PACKAGE_NAME.$OBJECT_NAME.highlightColor")
-    }
 }

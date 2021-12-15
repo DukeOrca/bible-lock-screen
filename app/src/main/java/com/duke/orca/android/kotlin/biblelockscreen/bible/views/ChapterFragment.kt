@@ -51,9 +51,8 @@ class ChapterFragment : ViewStubFragment(),
                     optionsItem: WordAdapter.OptionsItem
                 ) {
                     when(optionsItem) {
-                        is WordAdapter.OptionsItem.Highlight -> viewModel.updateHighlightColor(item.id, optionsItem.highlightColor)
-                        is WordAdapter.OptionsItem.HighlightColor -> {
-                            ColorPickerDialogFragment().also {
+                        is WordAdapter.OptionsItem.Highlight -> {
+                            ColorPickerDialogFragment.newInstance(item.highlightColor).also {
                                 it.show(childFragmentManager, it.tag)
                             }
                         }
@@ -78,15 +77,15 @@ class ChapterFragment : ViewStubFragment(),
     override fun onInflate(view: View) {
         _viewBinding = FragmentChapterBinding.bind(view)
 
-        viewModel.highlightColor.observe(viewLifecycleOwner, { highlightColor ->
-            wordAdapter.setHighlightColor(highlightColor) { adapterItem ->
-                adapterItem.also {
-                    if (it is WordAdapter.AdapterItem.Word && it.highlightColor.isNonZero()) {
-                        viewModel.updateHighlightColor(it.id, highlightColor)
-                    }
-                }
-            }
-        })
+//        viewModel.highlightColor.observe(viewLifecycleOwner, { highlightColor ->
+//            wordAdapter.setHighlightColor(highlightColor) { adapterItem ->
+//                adapterItem.also {
+//                    if (it is WordAdapter.AdapterItem.Word && it.highlightColor.isNonZero()) {
+//                        viewModel.updateHighlightColor(it.id, highlightColor)
+//                    }
+//                }
+//            }
+//        })
 
         with(viewBinding) {
             val position = viewModel.getPosition(book, chapter)
@@ -149,8 +148,11 @@ class ChapterFragment : ViewStubFragment(),
 
 
     override fun onColorPicked(dialogFragment: DialogFragment, @ColorInt color: Int) {
-        DataStore.HighlightColor.putHighlightColor(requireContext(), color)
-        dialogFragment.dismiss()
+        viewModel.updateHighlightColor(wordAdapter.currentFocusedItem.id, color)
+
+        delayOnLifecycle(Duration.Delay.DISMISS) {
+            dialogFragment.dismiss()
+        }
     }
 
     private fun initData() {

@@ -185,17 +185,4 @@ object DataStore {
             putString(context, PreferencesKeys.Translation.subFileName, value)
         }
     }
-
-    object HighlightColor {
-        @ColorInt
-        fun getHighlightColor(context: Context): Int = getInt(
-            context,
-            PreferencesKeys.HighlightColor.highlightColor,
-            context.getColor(R.color.default_highlight_color)
-        )
-
-        fun putHighlightColor(context: Context, @ColorInt value: Int) = runBlocking {
-            putInt(context, PreferencesKeys.HighlightColor.highlightColor, value)
-        }
-    }
 }

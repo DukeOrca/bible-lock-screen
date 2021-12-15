@@ -244,7 +244,7 @@
                         android:clipToPadding="false"
                         app:layout_constraintEnd_toStartOf="@+id/dropdown_menu_verse"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:rippleDrawable="@drawable/ripple_rectangle"
+                        app:rippleDrawable="@drawable/ripple_rectangle_dark"
                         app:textColor="@color/white"
                         app:tint="@color/white" />
 
