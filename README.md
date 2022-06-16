@@ -1,4 +1,4 @@
-# The Bible In Ypu
+# The Bible In You
 <img src="https://lh3.googleusercontent.com/exaqHr4GnFwYbtBxEuBtNLG7aSWGK59p3CmlBsjzczWRpqFu-smbt3QCLmYB-hBwZKI" alt="image" width="512"/></br>
 [_**Google Play**_](https://play.google.com/store/apps/details?id=com.duke.orca.android.kotlin.biblelockscreen)
 
