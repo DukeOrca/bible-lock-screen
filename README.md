@@ -22,10 +22,9 @@ https://user-images.githubusercontent.com/80195353/173956917-c61016ac-1d9c-4dd5-
 - 다양한 방법으로 구절을 강조 및 저장할 수 있습니다.
 
 # Tech Stack
-
-# Release Note
-| version | log |
-| --- | --- |
-|  |  |
-|  |  |
-|  |  |
+- AAC (Android Architecture Components)
+- Hilt
+- Kotlin Coroutine
+- Room
+- Firebase(Crashlytics)
+- RxJava
