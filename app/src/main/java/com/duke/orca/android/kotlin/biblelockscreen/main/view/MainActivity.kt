@@ -22,7 +22,6 @@ import com.duke.orca.android.kotlin.biblelockscreen.networkstatus.NetworkStatusT
 import com.duke.orca.android.kotlin.biblelockscreen.permission.PermissionChecker
 import com.duke.orca.android.kotlin.biblelockscreen.permission.view.PermissionRationaleDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment.OnPermissionAllowClickListener {
@@ -51,8 +50,6 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
                     }
                 }
             }
-
-        startService()
     }
 
     override fun onStart() {
@@ -84,11 +81,7 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
     private fun startService() {
         val intent = Intent(applicationContext, LockScreenService::class.java)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent)
-        } else {
-            startService(intent)
-        }
+        startForegroundService(intent)
     }
 
     private fun checkManageOverlayPermission() {
@@ -110,6 +103,7 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
                     if (Settings.canDrawOverlays(this@MainActivity)) {
                         Intent(this@MainActivity, MainActivity::class.java).run {
                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
                             val customAnimation = ActivityOptions.makeCustomAnimation(
                                 this@MainActivity,
                                 R.anim.slide_in_right,

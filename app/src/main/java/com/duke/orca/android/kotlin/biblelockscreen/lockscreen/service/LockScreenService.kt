@@ -89,7 +89,7 @@ class LockScreenService : Service() {
                     val showOnLockScreen = DataStore.LockScreen.getShowOnLockScreen(context)
 
                     if (showOnLockScreen && Settings.canDrawOverlays(context)) {
-                        blindScreenPresenter.show()
+                        // blindScreenPresenter.show()
                     }
                 }
                 else -> {

@@ -38,7 +38,8 @@ open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
                 keyguardManager = null
             } else {
                 @Suppress("DEPRECATION")
-                val flags = WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                val flags = WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 
                 window.addFlags(flags)
             }
