@@ -64,7 +64,7 @@ class MainActivity : BaseLockScreenActivity(), PermissionRationaleDialogFragment
             when {
                 checkPermission(permission) -> checkManageOverlayPermission()
                 shouldShowRequestPermissionRationale(permission) -> PermissionRationaleDialogFragment().also {
-                    if (DataStore.isFirstTime(this)) {
+                    if (LockScreenService.isRunning.not()) {
                         it.show(supportFragmentManager, it.tag)
                     }
                 }

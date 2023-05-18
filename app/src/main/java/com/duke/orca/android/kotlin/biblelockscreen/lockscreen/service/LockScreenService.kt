@@ -101,6 +101,7 @@ class LockScreenService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        isRunning = true
 
         localBroadcastManager.registerReceiver(bottomNavigationBroadcastReceiver, IntentFilter().apply {
             addAction(Action.HOME_KEY_PRESSED)
@@ -132,6 +133,8 @@ class LockScreenService : Service() {
     }
 
     override fun onDestroy() {
+        isRunning = false
+
         try {
             blindScreenPresenter.hide()
             localBroadcastManager.unregisterReceiver(bottomNavigationBroadcastReceiver)
@@ -148,4 +151,8 @@ class LockScreenService : Service() {
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
+
+    companion object {
+        var isRunning = false
+    }
 }
