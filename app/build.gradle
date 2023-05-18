@@ -17,8 +17,8 @@ android {
         applicationId "com.duke.orca.android.kotlin.biblelockscreen"
         minSdk 26
         targetSdk 33
-        versionCode 6
-        versionName "2.1.0"
+        versionCode 7
+        versionName "2.1.1"
         setProperty("archivesBaseName", "the-bible-in-you" + "-" + versionCode + "-(" + versionName + ")")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
