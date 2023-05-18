@@ -158,7 +158,7 @@ object DataStore {
     object LockScreen {
         fun getDisplayAfterUnlocking(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, false)
         fun getShowOnLockScreen(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.showOnLockScreen, true)
-        fun getUnlockWithBackKey(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, false)
+        fun getUnlockWithBackKey(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, true)
 
         suspend fun putDisplayAfterUnlocking(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, value)

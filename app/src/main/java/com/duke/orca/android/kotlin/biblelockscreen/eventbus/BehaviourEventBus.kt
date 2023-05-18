@@ -15,7 +15,7 @@ class BehaviourEventBus private constructor() {
         behaviorSubject.onNext(value)
     }
 
-    private fun <T> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable {
+    private fun <T: Any> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable {
         return behaviorSubject
             .ofType(clazz)
             .subscribeOn(Schedulers.io())
@@ -34,7 +34,7 @@ class BehaviourEventBus private constructor() {
             INSTANCE?.post(value)
         }
 
-        fun <T> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable? {
+        fun <T: Any> subscribe(clazz: Class<T>, subscribe: (T) -> Unit): Disposable? {
             return INSTANCE?.subscribe(clazz, subscribe)
         }
 

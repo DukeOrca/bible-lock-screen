@@ -28,6 +28,8 @@
     <string name="favorites">Favorites</string>
     <string name="font">Font</string>
     <string name="font_size">Font size</string>
+    <string name="hide_notification_content_title">Hide Notification</string>
+    <string name="hide_notification_content_text">To hide notification, tap here and uncheck \'Allow notifications\'.</string>
     <string name="highlights">Highlights</string>
     <string name="lock_screen">Lock screen</string>
     <string name="lock_setting">Lock setting</string>
@@ -39,6 +41,7 @@
     <string name="no_results_found">No result found.</string>
     <string name="ok">OK</string>
     <string name="old_testament">Old testament</string>
+    <string name="post_notifications">Post notifications</string>
     <string name="request_app_permissions">Request app permissions</string>
     <string name="search">Search</string>
     <string name="share">Share</string>

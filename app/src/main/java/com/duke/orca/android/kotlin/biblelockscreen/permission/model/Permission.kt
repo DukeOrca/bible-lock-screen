@@ -1,4 +1,4 @@
-package com.duke.orca.android.kotlin.simpledonelist.permission.model
+package com.duke.orca.android.kotlin.biblelockscreen.permission.model
 
 import androidx.annotation.DrawableRes
 
@@ -6,6 +6,7 @@ data class Permission(
     @DrawableRes
     val icon: Int,
     val isRequired: Boolean,
-    val permissions: List<String>,
+    val permission: String,
     val permissionName: String,
+    val priority: Int,
 )

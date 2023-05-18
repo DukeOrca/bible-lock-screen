@@ -17,8 +17,8 @@ android {
         applicationId "com.duke.orca.android.kotlin.biblelockscreen"
         minSdk 26
         targetSdk 33
-        versionCode 4
-        versionName "2.0.1"
+        versionCode 6
+        versionName "2.2.0"
         setProperty("archivesBaseName", "the-bible-in-you" + "-" + versionCode + "-(" + versionName + ")")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,11 +36,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
         freeCompilerArgs += [
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=kotlinx.coroutines.ObsoleteCoroutinesApi"
@@ -58,7 +58,7 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -75,8 +75,6 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-android-compiler:2.44"
-
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
@@ -88,13 +86,13 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:2.5.3"
 
-    implementation "androidx.room:room-runtime:2.6.0-alpha01"
-    implementation "androidx.room:room-ktx:2.6.0-alpha01"
-    implementation 'androidx.room:room-rxjava3:2.6.0-alpha01'
+    implementation "androidx.room:room-runtime:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    implementation 'androidx.room:room-rxjava3:2.5.1'
 
     kapt "android.arch.persistence.room:compiler:1.1.1"
-    kapt "androidx.room:room-compiler:2.6.0-alpha01"
-    kapt "androidx.room:room-ktx:2.6.0-alpha01"
+    kapt "androidx.room:room-compiler:2.5.1"
+    kapt "androidx.room:room-ktx:2.5.1"
 
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
@@ -110,7 +108,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
-    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
 

@@ -10,6 +10,6 @@ class PositionDatasourceImpl @Inject constructor(private val database: Database)
     }
 
     override suspend fun get(book: Int, chapter: Int): Int? {
-        return database.positionDao().get(book, chapter)
+        return database.positionDao().get(book, chapter)?.value
     }
 }

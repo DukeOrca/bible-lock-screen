@@ -27,27 +27,31 @@ object NotificationBuilder {
 
     fun single(context: Context, notificationManager: NotificationManager): Single<NotificationCompat.Builder> {
         return Single.create {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val name = context.getString(R.string.app_name)
-                val importance = NotificationManager.IMPORTANCE_MIN
-                val notificationChannel = NotificationChannel(CHANNEL_ID, name, importance)
+            val name = context.getString(R.string.app_name)
+            val importance = NotificationManager.IMPORTANCE_MIN
+            val notificationChannel = NotificationChannel(CHANNEL_ID, name, importance)
 
-                notificationChannel.setShowBadge(false)
-                notificationManager.createNotificationChannel(notificationChannel)
+            notificationChannel.setShowBadge(false)
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+                putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             }
 
             val pendingIntent = PendingIntent.getActivity(
                 context,
                 0,
-                Intent(context, MainActivity::class.java),
+                intent,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
 
             CoroutineScope(Dispatchers.IO).launch {
                 val smallIcon = R.drawable.ic_holy_bible_100px
                 val color = ContextCompat.getColor(context, R.color.notification)
-                val contentTitle = context.getString(R.string.app_name)
-                val contentText = context.getString(R.string.bible_lock_screen_is_running)
+                val contentTitle = context.getString(R.string.hide_notification_content_title)
+                val contentText = context.getString(R.string.hide_notification_content_text)
 
                 val builder = NotificationCompat.Builder(context, CHANNEL_ID)
                     .setSmallIcon(smallIcon)

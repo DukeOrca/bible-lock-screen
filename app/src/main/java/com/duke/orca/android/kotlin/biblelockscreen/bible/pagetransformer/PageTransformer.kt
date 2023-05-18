@@ -26,10 +26,10 @@ class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean)
                     .translationX(position * pageMargin)
                     .setDuration(Duration.SHORT)
                     .setListener(object : Animator.AnimatorListener {
-                        override fun onAnimationStart(animation: Animator?) {
+                        override fun onAnimationStart(animation: Animator) {
                         }
 
-                        override fun onAnimationEnd(animation: Animator?) {
+                        override fun onAnimationEnd(animation: Animator) {
                             if (position >= 1.0f) {
                                 pageAnimatorListener?.onPageAnimationEnd()
                                 pageAnimatorListener = null
@@ -37,10 +37,10 @@ class PageTransformer(private val pageMargin: Float, scheduleAnimation: Boolean)
                             }
                         }
 
-                        override fun onAnimationCancel(animation: Animator?) {
+                        override fun onAnimationCancel(animation: Animator) {
                         }
 
-                        override fun onAnimationRepeat(animation: Animator?) {
+                        override fun onAnimationRepeat(animation: Animator) {
                         }
                     })
                     .start()

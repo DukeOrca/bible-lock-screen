@@ -392,31 +392,22 @@ class VersePagerFragment : BaseFragment<FragmentVersePagerBinding>(),
     }
 
     private fun confirmDeviceCredential() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DeviceCredential.confirmDeviceCredential(requireActivity(), object : KeyguardManager.KeyguardDismissCallback() {
-                override fun onDismissCancelled() {
-                    super.onDismissCancelled()
-                    unlockController.restore()
-                }
+        DeviceCredential.confirmDeviceCredential(requireActivity(), object : KeyguardManager.KeyguardDismissCallback() {
+            override fun onDismissCancelled() {
+                super.onDismissCancelled()
+                unlockController.restore()
+            }
 
-                override fun onDismissError() {
-                    super.onDismissError()
-                    unlockController.restore()
-                }
+            override fun onDismissError() {
+                super.onDismissError()
+                unlockController.restore()
+            }
 
-                override fun onDismissSucceeded() {
-                    super.onDismissSucceeded()
-                    requireActivity().finish()
-                }
-            })
-        } else {
-            DeviceCredential.confirmDeviceCredential(
-                this,
-                getActivityResultLauncher(Key.DEVICE_CREDENTIAL)
-            )
-
-            unlockController.restore()
-        }
+            override fun onDismissSucceeded() {
+                super.onDismissSucceeded()
+                requireActivity().finish()
+            }
+        })
     }
 
     private fun setPageTransformer(

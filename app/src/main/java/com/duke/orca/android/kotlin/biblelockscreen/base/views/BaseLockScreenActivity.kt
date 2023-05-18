@@ -5,12 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.annotation.CallSuper
-import androidx.lifecycle.coroutineScope
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
     protected val activity: BaseLockScreenActivity

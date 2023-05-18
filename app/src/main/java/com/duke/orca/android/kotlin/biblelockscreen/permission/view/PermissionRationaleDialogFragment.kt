@@ -1,6 +1,8 @@
 package com.duke.orca.android.kotlin.biblelockscreen.permission.view
 
+import android.Manifest
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -10,8 +12,9 @@ import com.duke.orca.android.kotlin.biblelockscreen.R
 import com.duke.orca.android.kotlin.biblelockscreen.base.LinearLayoutManagerWrapper
 import com.duke.orca.android.kotlin.biblelockscreen.base.views.BaseDialogFragment
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.FragmentPermissionRationaleDialogBinding
+import com.duke.orca.android.kotlin.biblelockscreen.extension.checkPermission
 import com.duke.orca.android.kotlin.biblelockscreen.permission.adapter.PermissionAdapter
-import com.duke.orca.android.kotlin.simpledonelist.permission.model.Permission
+import com.duke.orca.android.kotlin.biblelockscreen.permission.model.Permission
 
 class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRationaleDialogBinding>() {
     private val permissionsDenied = mutableListOf<Permission>()
@@ -21,8 +24,7 @@ class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRa
         get() = true
 
     interface OnPermissionAllowClickListener {
-        fun onPermissionAllowClick()
-        fun onPermissionDenyClick()
+        fun onPermissionAllowClick(permission: Permission)
     }
 
     override fun inflate(inflater: LayoutInflater, container: ViewGroup?): FragmentPermissionRationaleDialogBinding {
@@ -32,8 +34,9 @@ class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRa
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        if (context is OnPermissionAllowClickListener)
+        if (context is OnPermissionAllowClickListener) {
             onPermissionAllowClickListener = context
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,25 +48,43 @@ class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRa
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = super.onCreateView(inflater, container, savedInstanceState)
 
-        val permissions = arrayOf(
-            Permission(
-                icon = R.drawable.ic_mobile_48px,
-                isRequired = true,
-                permissions = listOf(Settings.ACTION_MANAGE_OVERLAY_PERMISSION),
-                permissionName = getString(R.string.appear_on_top),
+        val permissions = buildList {
+            add(
+                Permission(
+                    icon = R.drawable.ic_mobile_48px,
+                    isRequired = true,
+                    permission = Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    permissionName = getString(R.string.appear_on_top),
+                    priority = 0
+                )
             )
-        )
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                add(
+                    Permission(
+                        icon = R.drawable.round_notifications_24,
+                        isRequired = true,
+                        permission = Manifest.permission.POST_NOTIFICATIONS,
+                        permissionName = getString(R.string.post_notifications),
+                        priority = 1
+                    )
+                )
+            }
+        }
 
         for (permission in permissions) {
-            if (permission.permissions.contains(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)) {
-                if (Settings.canDrawOverlays(requireContext()).not()) {
+            when (permission.permission) {
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION -> if (Settings.canDrawOverlays(requireContext()).not()) {
                     permissionsDenied.add(permission)
                 }
-
-                continue
+                Manifest.permission.POST_NOTIFICATIONS -> if (
+                    requireContext()
+                        .checkPermission(permission.permission)
+                        .not()
+                ) {
+                    permissionsDenied.add(permission)
+                }
             }
-
-            permissionsDenied.add(permission)
         }
 
         viewBinding.recyclerView.apply {
@@ -72,12 +93,16 @@ class PermissionRationaleDialogFragment: BaseDialogFragment<FragmentPermissionRa
         }
 
         viewBinding.textViewAllow.setOnClickListener {
-            onPermissionAllowClickListener?.onPermissionAllowClick()
+            permissionsDenied.maxByOrNull {
+                it.priority
+            }?.let {
+                onPermissionAllowClickListener?.onPermissionAllowClick(it)
+            }
+
             dismiss()
         }
 
         viewBinding.textViewDeny.setOnClickListener {
-            onPermissionAllowClickListener?.onPermissionDenyClick()
             dismiss()
         }
 

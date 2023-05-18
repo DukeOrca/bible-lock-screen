@@ -9,12 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.duke.orca.android.kotlin.biblelockscreen.application.hide
 import com.duke.orca.android.kotlin.biblelockscreen.application.show
 import com.duke.orca.android.kotlin.biblelockscreen.databinding.PermissionBinding
-import com.duke.orca.android.kotlin.simpledonelist.permission.model.Permission
+import com.duke.orca.android.kotlin.biblelockscreen.permission.model.Permission
 import timber.log.Timber
 
 class PermissionAdapter(private val items: List<Permission>): RecyclerView.Adapter<PermissionAdapter.ViewHolder>() {
-    private var inflater: LayoutInflater? = null
-
     inner class ViewHolder (private val binding: PermissionBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Permission) {
             val icon = try {
@@ -24,7 +22,9 @@ class PermissionAdapter(private val items: List<Permission>): RecyclerView.Adapt
                 null
             }
 
-            icon?.let { binding.imageViewIcon.setImageDrawable(it) }
+            icon?.let {
+                binding.imageViewIcon.setImageDrawable(it)
+            }
 
             binding.textViewPermission.text = item.permissionName
 
@@ -43,9 +43,7 @@ class PermissionAdapter(private val items: List<Permission>): RecyclerView.Adapt
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = this.inflater ?: LayoutInflater.from(parent.context)
-
-        this.inflater = inflater
+        val inflater = LayoutInflater.from(parent.context)
 
         return ViewHolder(PermissionBinding.inflate(inflater, parent, false))
     }

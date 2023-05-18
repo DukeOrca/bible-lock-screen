@@ -81,9 +81,9 @@ fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
     }
 
     valueAnimator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator) {}
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             alpha = 0.0f
             layoutParams.height = 0
             visibility = View.GONE
@@ -93,7 +93,7 @@ fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationCancel(animation: Animator?) {
+        override fun onAnimationCancel(animation: Animator) {
             alpha = 0.0f
             layoutParams.height = 0
             visibility = View.GONE
@@ -102,7 +102,7 @@ fun View.collapse(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
             onAnimationEnd?.invoke()
         }
-        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationRepeat(animation: Animator) {}
     })
 
     valueAnimator.interpolator = DecelerateInterpolator()
@@ -137,9 +137,9 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
     }
 
     valueAnimator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator) {}
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             alpha = 1.0f
             layoutParams.height = to
 
@@ -148,7 +148,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationCancel(animation: Animator?) {
+        override fun onAnimationCancel(animation: Animator) {
             alpha = 1.0f
             layoutParams.height = to
 
@@ -156,7 +156,7 @@ fun View.expand(duration: Long, onAnimationEnd: (() -> Unit)? = null) {
 
             onAnimationEnd?.invoke()
         }
-        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationRepeat(animation: Animator) {}
     })
 
     valueAnimator.duration = duration
@@ -178,7 +178,7 @@ fun View.fadeIn(
             .setDuration(duration)
             .setInterpolator(DecelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     onAnimationEnd?.invoke()
                 }
             }).withLayer()
@@ -198,7 +198,7 @@ fun View.fadeOut(
             .setDuration(duration)
             .setInterpolator(AccelerateInterpolator())
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     this@fadeOut.visibility = if (invisible)
                         View.INVISIBLE
                     else
@@ -267,7 +267,7 @@ fun View.fade(
         .alpha(alpha)
         .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 onAnimationEnd?.invoke()
                 super.onAnimationEnd(animation)
             }
@@ -292,7 +292,7 @@ fun View.scale(
         .alpha(alpha)
         .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 onAnimationEnd?.invoke()
                 super.onAnimationEnd(animation)
             }
@@ -323,7 +323,7 @@ fun View.scale(
         .alpha(alphaTo)
         .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 onAnimationEnd?.invoke()
                 super.onAnimationEnd(animation)
             }
@@ -359,14 +359,14 @@ fun View.expand(duration: Long, to: Int, onAnimationEnd: (() -> Unit)? = null) {
     }
 
     valueAnimator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator) {}
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationCancel(animation: Animator?) {}
-        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationCancel(animation: Animator) {}
+        override fun onAnimationRepeat(animation: Animator) {}
     })
 
     valueAnimator.interpolator = DecelerateInterpolator()
@@ -386,17 +386,17 @@ fun View.collapse(duration: Long, to: Int, hide: Boolean = true, onAnimationEnd:
     }
 
     valueAnimator.addListener(object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator?) {}
+        override fun onAnimationStart(animation: Animator) {}
 
-        override fun onAnimationEnd(animation: Animator?) {
+        override fun onAnimationEnd(animation: Animator) {
             if (hide)
                 hide()
 
             onAnimationEnd?.invoke()
         }
 
-        override fun onAnimationCancel(animation: Animator?) {}
-        override fun onAnimationRepeat(animation: Animator?) {}
+        override fun onAnimationCancel(animation: Animator) {}
+        override fun onAnimationRepeat(animation: Animator) {}
     })
 
     valueAnimator.interpolator = DecelerateInterpolator()
@@ -464,7 +464,7 @@ fun View.translateX(
         .alpha(alpha)
         .setDuration(duration)
         .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
                 onAnimationEnd?.invoke()
                 super.onAnimationEnd(animation)
             }

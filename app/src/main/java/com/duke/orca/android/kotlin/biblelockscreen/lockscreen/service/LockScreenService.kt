@@ -47,7 +47,7 @@ class LockScreenService : Service() {
                 Action.MAIN_ACTIVITY_DESTROYED -> {
                     if (PermissionChecker.hasManageOverlayPermission().not()) {
                         NotificationBuilder.ManageOverlayPermission.create(context).build().run {
-                            notificationManager.notify(NotificationBuilder.ManageOverlayPermission.ID, this)
+                            // notificationManager.notify(NotificationBuilder.ManageOverlayPermission.ID, this)
                         }
                     }
                 }
@@ -116,7 +116,9 @@ class LockScreenService : Service() {
                 addAction(Intent.ACTION_USER_PRESENT)
             }
         )
+    }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         disposable = NotificationBuilder.single(this, notificationManager)
             .observeOn(Schedulers.io())
             .subscribeOn(AndroidSchedulers.mainThread())
@@ -125,9 +127,7 @@ class LockScreenService : Service() {
             }) {
                 Timber.e(it)
             }
-    }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         return START_STICKY
     }
 

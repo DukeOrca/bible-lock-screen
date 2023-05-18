@@ -147,10 +147,10 @@
     </style>
 
     <style name="BottomSheet" parent="Widget.MaterialComponents.BottomSheet">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.BottomSheet</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedBottomSheet</item>
     </style>
 
-    <style name="ShapeAppearanceOverlay.BottomSheet">
+    <style name="RoundedBottomSheet">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">@dimen/radius_16dp</item>
         <item name="cornerSizeTopLeft">@dimen/radius_16dp</item>
