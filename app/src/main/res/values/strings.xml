@@ -48,6 +48,7 @@
     <string name="settings">Settings</string>
     <string name="share_the_app">Share the app</string>
     <string name="show_on_lock_screen">Show on lock screen</string>
+    <string name="swipe_on_touch">Swipe on touch</string>
     <string name="text_alignment">Text alignment</string>
     <string name="translations">Translations</string>
     <string name="unlock_with_back_button">Unlock with back button</string>

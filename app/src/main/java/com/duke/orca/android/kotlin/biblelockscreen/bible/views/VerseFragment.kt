@@ -72,7 +72,7 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
     }
 
     private fun observe(binding: FragmentVerseBinding) {
-        viewModel.triple.observe(viewLifecycleOwner, { triple ->
+        viewModel.triple.observe(viewLifecycleOwner) { triple ->
             triple?.let { (verse, subVerse, font) ->
                 val typeface = binding.textViewWord.typeface
 
@@ -84,20 +84,24 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
                     }
 
                     binding.textViewWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
-                    binding.textViewWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+                    binding.textViewWord.typeface =
+                        Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
                     binding.textViewWord.gravity = textAlignment
 
                     binding.textViewSubWord.setTextSize(TypedValue.COMPLEX_UNIT_DIP, size)
-                    binding.textViewSubWord.typeface = Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
+                    binding.textViewSubWord.typeface =
+                        Typeface.create(typeface, if (bold) Typeface.BOLD else Typeface.NORMAL)
                     binding.textViewSubWord.gravity = textAlignment
 
-                    with(size.minus(
-                        when {
-                            size > 16.0f -> 4
-                            size > 24.0f -> 8
-                            else -> 2
-                        }
-                    )) {
+                    with(
+                        size.minus(
+                            when {
+                                size > 16.0f -> 4
+                                size > 24.0f -> 8
+                                else -> 2
+                            }
+                        )
+                    ) {
                         binding.textViewBook.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
                         binding.textViewChapter.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
                         binding.textViewColon.setTextSize(TypedValue.COMPLEX_UNIT_DIP, this)
@@ -123,7 +127,7 @@ class VerseFragment : BaseFragment<FragmentVerseBinding>(),
 
                 bind(binding, verse, subVerse)
             }
-        })
+        }
     }
 
     private fun bind(binding: FragmentVerseBinding, verse: Verse, subVerse: Verse?) {

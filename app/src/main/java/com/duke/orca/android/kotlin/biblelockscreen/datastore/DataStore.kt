@@ -31,6 +31,11 @@ object DataStore {
         }.first()
     }
 
+    fun getBooleanFlow(context: Context, key: Preferences.Key<Boolean>, defValue: Boolean) =
+        context.preferencesDataStore.data.map {
+            it[key] ?: defValue
+        }
+
     private fun getInt(context: Context, key: Preferences.Key<Int>, defValue: Int): Int = runBlocking {
         context.preferencesDataStore.data.map {
             it[key] ?: defValue
@@ -159,6 +164,17 @@ object DataStore {
         fun getDisplayAfterUnlocking(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, false)
         fun getShowOnLockScreen(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.showOnLockScreen, true)
         fun getUnlockWithBackKey(context: Context) = getBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, true)
+//        fun isSwipeOnTouch(context: Context) = getBoolean(
+//            context = context,
+//            key = PreferencesKeys.LockScreen.swipeOnTouch,
+//            defValue = false,
+//        )
+//
+//        fun swipeOnTouchFlow(context: Context) = getBooleanFlow(
+//            context = context,
+//            key = PreferencesKeys.LockScreen.swipeOnTouch,
+//            defValue = false,
+//        )
 
         suspend fun putDisplayAfterUnlocking(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.displayAfterUnlocking, value)
@@ -167,9 +183,14 @@ object DataStore {
         suspend fun putShowOnLockScreen(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.showOnLockScreen, value)
         }
+
         suspend fun putUnlockWithBackKey(context: Context, value: Boolean) {
             putBoolean(context, PreferencesKeys.LockScreen.unlockWithBackKey, value)
         }
+
+//        suspend fun putSwipeOnTouch(context: Context, value: Boolean) {
+//            putBoolean(context, PreferencesKeys.LockScreen.swipeOnTouch, value)
+//        }
     }
 
     object Translation {

@@ -41,6 +41,7 @@ class LockScreenSettingsFragment : PreferenceFragment() {
         val displayAfterUnlocking = DataStore.LockScreen.getDisplayAfterUnlocking(requireContext())
         val showOnLockScreen = DataStore.LockScreen.getShowOnLockScreen(requireContext())
         val unlockWithBackKey = DataStore.LockScreen.getUnlockWithBackKey(requireContext())
+        // val swipeToTouch = DataStore.LockScreen.isSwipeOnTouch(requireContext())
 
         with(items) {
             add(
@@ -96,6 +97,22 @@ class LockScreenSettingsFragment : PreferenceFragment() {
                     body = getString(R.string.unlock_with_back_button)
                 )
             )
+
+//            add(
+//                AdapterItem.SwitchPreference(
+//                    drawable = ContextCompat.getDrawable(
+//                        requireContext(),
+//                        R.drawable.round_touch_app_24
+//                    ),
+//                    isChecked = swipeToTouch,
+//                    onCheckedChange = {
+//                        lifecycleScope.launch(Dispatchers.IO) {
+//                            DataStore.LockScreen.putSwipeOnTouch(requireContext(), it)
+//                        }
+//                    },
+//                    body = getString(R.string.unlock_with_back_button)
+//                )
+//            )
         }
 
         with(items.toMutableList()) {
