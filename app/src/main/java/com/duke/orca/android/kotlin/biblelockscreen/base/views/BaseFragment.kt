@@ -79,8 +79,8 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
 
     @CallSuper
     override fun onDestroyView() {
-        _viewBinding = null
         compositeDisposable.dispose()
+        _viewBinding = null
         super.onDestroyView()
     }
 
