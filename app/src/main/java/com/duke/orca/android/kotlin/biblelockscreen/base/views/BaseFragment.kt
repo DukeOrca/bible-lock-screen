@@ -25,9 +25,7 @@ import kotlinx.coroutines.*
 import timber.log.Timber
 
 abstract class BaseFragment<VB: ViewBinding> : Fragment() {
-    private var _viewBinding: VB? = null
-    protected val viewBinding: VB
-        get() = _viewBinding!!
+    protected lateinit var viewBinding: VB
 
     open val toolbar: Toolbar? = null
 
@@ -68,7 +66,7 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _viewBinding = inflate(inflater, container)
+        viewBinding = inflate(inflater, container)
 
         toolbar?.setNavigationOnClickListener {
             requireActivity().onBackPressed()
@@ -80,7 +78,6 @@ abstract class BaseFragment<VB: ViewBinding> : Fragment() {
     @CallSuper
     override fun onDestroyView() {
         compositeDisposable.dispose()
-        _viewBinding = null
         super.onDestroyView()
     }
 

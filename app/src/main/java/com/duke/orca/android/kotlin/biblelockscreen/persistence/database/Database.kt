@@ -40,7 +40,7 @@ abstract class Database: RoomDatabase() {
         fun getInstance(context: Context): Database {
             synchronized(this) {
                 return INSTANCE ?: let {
-                    getBuilder(context).build().also {
+                    getBuilder(context.applicationContext).build().also {
                         INSTANCE = it
                     }
                 }
