@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.duke.orca.android.kotlin.biblelockscreen">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -39,7 +40,9 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:taskAffinity="com.duke.orca.android.kotlin.biblelockscreen.main.view.MainActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing">
+
+        </activity>
 
         <activity
             android:name=".base.views.FragmentContainerActivity"
@@ -70,11 +73,21 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".lockscreen.service.LockScreenService" />
+        <service
+            android:name=".lockscreen.service.LockScreenService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:ignore="ForegroundServicePermission" />
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/admob_app_id" />
+
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/ga_ad_services_config"
+            tools:replace="android:resource" />
+
     </application>
 
 </manifest>

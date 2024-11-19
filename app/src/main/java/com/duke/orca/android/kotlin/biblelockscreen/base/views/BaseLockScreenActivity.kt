@@ -5,9 +5,10 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.annotation.CallSuper
+import androidx.appcompat.app.AppCompatActivity
 import com.duke.orca.android.kotlin.biblelockscreen.datastore.DataStore
 
-open class BaseLockScreenActivity : BaseBottomNavigationWatcherActivity() {
+open class BaseLockScreenActivity : AppCompatActivity() {
     protected val activity: BaseLockScreenActivity
         get() = this
 
